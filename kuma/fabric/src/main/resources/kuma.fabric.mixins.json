@@ -7,10 +7,6 @@
   "mixins": [
   ],
   "client": [
-    "KeyMappingMixin",
-    "OptionsMixin",
-    "KeyboardHandlerMixin",
-    "MouseHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,24 +1,23 @@
-package net.blay09.mods.kuma.neoforge;
+package net.blay09.mods.kuma.forge;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.event.ScreenEvent;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(value = "kuma_api", dist = Dist.CLIENT)
-public class NeoForgeKuma {
+@Mod(value = "kuma_api")
+public class ForgeKumaAPI {
 
-    public NeoForgeKuma(IEventBus modEventBus) {
+    public ForgeKumaAPI() {
+        final var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof VanillaManagedKeyMapping vanillaManagedKeyMapping) {
@@ -27,7 +26,7 @@ public class NeoForgeKuma {
             }
         });
 
-        NeoForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
+        MinecraftForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
             if (Minecraft.getInstance().screen != null) {
                 return;
             }
@@ -42,7 +41,7 @@ public class NeoForgeKuma {
             }
         });
 
-        NeoForge.EVENT_BUS.addListener((InputEvent.Key event) -> {
+        MinecraftForge.EVENT_BUS.addListener((InputEvent.Key event) -> {
             if (Minecraft.getInstance().screen != null) {
                 return;
             }
@@ -55,7 +54,7 @@ public class NeoForgeKuma {
             }
         });
 
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.KeyPressed.Pre event) -> {
+        MinecraftForge.EVENT_BUS.addListener((ScreenEvent.KeyPressed.Pre event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.isActiveAndMatchesKey(event.getKeyCode(), event.getScanCode(), event.getModifiers())) {
                     final var client = Minecraft.getInstance();
@@ -70,7 +69,7 @@ public class NeoForgeKuma {
             }
         });
 
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
+        MinecraftForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
                     if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getMouseX(), event.getMouseY()))) {

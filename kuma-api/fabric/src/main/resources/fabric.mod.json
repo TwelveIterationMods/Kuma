@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "net.blay09.mods.kuma.fabric.FabricKuma"
+      "net.blay09.mods.kuma.fabric.FabricKumaAPI"
     ],
     "modmenu": [
     ]

@@ -59,9 +59,10 @@ dependencies {
 For NeoForge:
 
 ```groovy
+jarJar.enable() // Enable the Jar-in-Jar system
+
 dependencies {
-    // TODO need to figure out how to do jar-in-jar or shadow on NeoForge
-    implementation "net.blay09.mods:kuma-api-neoforge:${kuma_version}"
+    jarJar(group: "net.blay09.mods", name: "kuma-api-neoforge", version: "[${kuma_version},)")
 }
 ```
 

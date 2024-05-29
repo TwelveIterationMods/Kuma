@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.util.Mth;
 
-public class FabricKuma implements ClientModInitializer {
+public class FabricKumaAPI implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {

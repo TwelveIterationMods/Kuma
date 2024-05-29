@@ -1,4 +1,4 @@
-package net.blay09.mods.kuma.neoforge;
+package net.blay09.mods.kuma.forge;
 
 import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.api.KeyModifiers;
