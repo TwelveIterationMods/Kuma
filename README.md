@@ -7,7 +7,7 @@ key mappings with multi-loader, context and (multi-) modifier support.
 
 `kuma` is a companion mod built upon `kuma-api` that extends the Controls menu with the ability to manage key mappings 
 that otherwise would not be supported within the given loader, such as key modifiers on Fabric, 
-multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
+multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`). Unlike the API, it is not yet available.
 
 - [Modpack Permissions](https://mods.twelveiterations.com/permissions)
 
@@ -18,7 +18,7 @@ multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
 
 ## Who needs this?
 
-This mod is useful for mod developers targeting both Fabric and (Neo)Forge at once, or for those who wish to use the 
+This library is useful for mod developers targeting both Fabric and (Neo)Forge at once, or for those who wish to use the 
 same API for their key mappings even when depending on more advanced features like multiple modifiers or 
 custom modifier keys. Kuma API is designed to progressively upgrade or fallback to match the capabilities of its 
 environment.
