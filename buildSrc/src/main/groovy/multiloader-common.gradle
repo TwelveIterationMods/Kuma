@@ -73,7 +73,7 @@ jar {
 processResources {
     def expandProps = [
             "version": version,
-            "group": project.group, //Else we target the task's group.
+            "group": group,
             "minecraft_version": minecraft_version,
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
@@ -107,7 +107,8 @@ publishing {
     publications {
         register('mavenJava', MavenPublication) {
             version = project.version + (!project.version.endsWith("SNAPSHOT") ? "+" + minecraft_version : "")
-            artifactId "${mod_id}-${project.name}"
+            artifactId "${mod_id.replace('_', '-')}-${project.name}"
+            group = project.group
             from components.java
         }
     }
