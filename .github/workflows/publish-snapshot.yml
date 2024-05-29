@@ -24,10 +24,20 @@ jobs:
           distribution: temurin
       - name: Make gradle wrapper executable
         run: chmod +x ./gradlew
+      - name: Extracting API version from properties
+        shell: bash
+        run: echo "version=$(cat kuma-api/gradle.properties | grep -w "\bversion" | cut -d= -f2)" >> $GITHUB_OUTPUT
+        id: extract-api-version
       - name: Extracting version from properties
         shell: bash
-        run: echo "version=$(cat gradle.properties | grep -w "\bversion" | cut -d= -f2)" >> $GITHUB_OUTPUT
+        run: echo "version=$(cat kuma/gradle.properties | grep -w "\bversion" | cut -d= -f2)" >> $GITHUB_OUTPUT
         id: extract-version
+      - name: Bumping API version
+        uses: TwelveIterationMods/bump-version@v1
+        with:
+          version: ${{ steps.extract-api-version.outputs.version }}
+          bump: patch
+        id: bump-api-version
       - name: Bumping version
         uses: TwelveIterationMods/bump-version@v1
         with:
@@ -35,6 +45,6 @@ jobs:
           bump: minor
         id: bump-version
       - name: Publish API
-        run: ./gradlew :kuma-api:${{ matrix.loader }}:publish '-Pversion=${{ steps.bump-version.outputs.version }}-SNAPSHOT' '-PtwelveIterationsNexusUsername=${{ secrets.NEXUS_USER }}' '-PtwelveIterationsNexusPassword=${{ secrets.NEXUS_PASSWORD }}'
+        run: ./gradlew :kuma-api:${{ matrix.loader }}:publish '-Pversion=${{ steps.bump-api-version.outputs.version }}-SNAPSHOT' '-PtwelveIterationsNexusUsername=${{ secrets.NEXUS_USER }}' '-PtwelveIterationsNexusPassword=${{ secrets.NEXUS_PASSWORD }}'
       - name: Publish
         run: ./gradlew :kuma:${{ matrix.loader }}:publish '-Pversion=${{ steps.bump-version.outputs.version }}-SNAPSHOT' '-PtwelveIterationsNexusUsername=${{ secrets.NEXUS_USER }}' '-PtwelveIterationsNexusPassword=${{ secrets.NEXUS_PASSWORD }}'
