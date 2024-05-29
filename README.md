@@ -16,9 +16,20 @@ multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
 [![Versions](http://cf.way2muchnoise.eu/versions/1027078_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
 [![Downloads](http://cf.way2muchnoise.eu/full_1027078_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
 
-## Adding Kuma to a development environment
+## Who needs this?
 
-### Using Twelve Iterations Maven (includes snapshot versions)
+This mod is useful for mod developers targeting both Fabric and (Neo)Forge at once, or for those who wish to use the 
+same API for their key mappings even when depending on more advanced features like multiple modifiers or 
+custom modifier keys. Kuma API is designed to progressively upgrade or fallback to match the capabilities of its 
+environment.
+
+I created it because both Crafting Tweaks and Inventory Essentials have plenty of modifier-based key mappings that were 
+difficult to properly support across the different mod loaders and repeatedly ran into limitations with the Vanilla 
+KeyMapping system. 
+
+## How to use as a Mod Developer
+
+1\. Start by changing your gradle files to have `kuma-api` be embedded in your mod's jar.
 
 Add the following to your `build.gradle`:
 
@@ -32,15 +43,105 @@ repositories {
         }
     }
 }
+```
 
+When defining the dependency below, replace ${kuma_version} with the version you want to depend on.
+You can find the latest version for a given Minecraft version at https://maven.twelveiterations.com/service/rest/repository/browse/maven-public/net/blay09/mods/kuma-common/
+
+For Common / Mojmap:
+
+```groovy
 dependencies {
-    // Replace ${kuma_version} with the version you want to depend on. 
-    // You may also have to change the Minecraft version in the artifact name.
-    // You can find the latest version for a given Minecraft version at https://maven.twelveiterations.com/service/rest/repository/browse/maven-public/net/blay09/mods/kuma-common/
-    // Common (mojmap): compileOnly "net.blay09.mods:kuma-api-common:${kuma_version}"
-    // NeoForge: implementation "net.blay09.mods:kuma-api-neoforge:${kuma_version}"
-    // Fabric: include modApi("net.blay09.mods:kuma-api-fabric:${kuma_version}")
-    // Forge: implementation "net.blay09.mods:kuma-api-forge:${kuma_version}"
+    // compileOnly "net.blay09.mods:kuma-api-common:${kuma_version}"
+}
+```
+
+For NeoForge:
+
+```groovy
+dependencies {
+    // TODO need to figure out how to do jar-in-jar or shadow on NeoForge
+    implementation "net.blay09.mods:kuma-api-neoforge:${kuma_version}"
+}
+```
+
+For Fabric:
+
+```groovy
+dependencies {
+    include modApi("net.blay09.mods:kuma-api-fabric:${kuma_version}")
+}
+```
+
+For Forge:
+
+```groovy
+dependencies {
+    // TODO need to figure out how to do jar-in-jar or shadow on Forge
+    implementation "net.blay09.mods:kuma-api-forge:${kuma_version}"
+}
+```
+
+2\. In your mod constructor or initializer, start creating key mappings using `Kuma`.
+
+Kuma API takes care of registering the vanilla `KeyMapping`s at the correct time.
+The method returns a `ManagedKeyMapping` instance that you can use to operate on the key mapping later, be it a real `KeyMapping` or a virtual one.
+
+Here's some examples for creating key mappings:
+
+```java
+class ExampleMod {
+    public ExampleMod() {
+        // Just a regular key mapping with a single modifier.
+        // Will register as a regular KeyMapping on Forge and NeoForge, and as a virtual key mapping on Fabric.
+        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_1"))
+                .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
+                .handleScreenInput((event) -> {
+                    // TODO Add your press logic here
+                    return true;
+                })
+                .build(); // Don't forget to call build() at the end!
+        
+        // A key mapping with a fallback binding. 
+        // If the environment does not support the binding, it will attempt to use the fallback instead of creating a virtual key mapping,
+        // which means this key would not have a default on Fabric environments.
+        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_2"))
+                .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
+                .withFallbackDefault(InputBinding.none())
+                .handleScreenInput((event) -> {
+                    // TODO Add your press logic here
+                    return true;
+                })
+                .build(); // Don't forget to call build() at the end!
+        
+        // A key mapping with a custom modifier. These will always result in a virtual key mapping if no fallback binding is provided, since 
+        // no mod loader supports them, unless the user also installs the Kuma companion mod.
+        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_3"))
+                // We want to use SPACE-CLICK by default. This is only supported 
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getOrCreate(InputConstant.KEY_SPACE, -1))))
+                .handleScreenInput((event) -> {
+                    // TODO Add your press logic here
+                    return true;
+                })
+                .build(); // Don't forget to call build() at the end!
+        
+        // A nonsense key mapping just to show off the rest of the methods.
+        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_4"))
+                // By default, the category is created based on the resource location above. You can override it.
+                .overrideCategory("key.categories.movement")
+                .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
+                .withFallbackDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
+                .withContext(KeyConflictContext.UNIVERSAL) // This is normally just inferred from the supplied input handlers.
+                .handleScreenInput((event) -> {
+                    // TODO Add your press logic here
+                    return true;
+                })
+                .handleWorldInput((event) -> {
+                    // TODO Add your press logic here
+                    return true;
+                })
+                .build(); // Don't forget to call build() at the end!
+    }
 }
 ```
 
