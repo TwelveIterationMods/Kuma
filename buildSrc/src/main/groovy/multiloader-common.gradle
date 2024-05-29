@@ -85,7 +85,7 @@ processResources {
             "mod_author": mod_author,
             "mod_id": mod_id,
             "license": license,
-            "description": project.description,
+            "description": description,
             "neoforge_version": neoforge_version,
             "neoforge_version_range": neoforge_version_range,
             "neoforge_loader_version_range": neoforge_loader_version_range,
