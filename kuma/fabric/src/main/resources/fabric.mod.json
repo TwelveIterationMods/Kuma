@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "kuma",
+  "version": "${version}",
+
+  "name": "${mod_name}",
+  "description": "${description}",
+  "authors": [
+    "BlayTheNinth"
+  ],
+  "contact": {
+    "homepage": "https://mods.twelveiterations.com/mc/kuma",
+    "sources": "https://github.com/TwelveIterationMods/Kuma",
+    "issues": "https://github.com/TwelveIterationMods/Kuma/issues"
+  },
+  "license": "${license}",
+  "icon": "${mod_id}.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.blay09.mods.kuma.companion.fabric.FabricKuma"
+    ],
+    "modmenu": [
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.fabric.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
+  },
+  "suggests": {
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/VAfZ2Nau6j"
+      },
+      "badges": ["library"]
+    }
+  }
+}
