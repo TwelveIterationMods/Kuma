@@ -73,7 +73,7 @@ jar {
 processResources {
     def expandProps = [
             "version": version,
-            "group": group,
+            "group": project.group,
             "minecraft_version": minecraft_version,
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
