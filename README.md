@@ -13,8 +13,8 @@ multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
 
 #### Downloads
 
-[![Versions](http://cf.way2muchnoise.eu/versions/531761_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
-[![Downloads](http://cf.way2muchnoise.eu/full_531761_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
+[![Versions](http://cf.way2muchnoise.eu/versions/1027078_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
+[![Downloads](http://cf.way2muchnoise.eu/full_1027078_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
 
 ## Adding Kuma to a development environment
 
