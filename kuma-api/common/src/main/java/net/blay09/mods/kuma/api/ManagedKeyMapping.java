@@ -9,6 +9,10 @@ public interface ManagedKeyMapping {
 
     boolean areModifiersActive();
 
+    default boolean isActiveAndDown() {
+        return isContextActive() && areModifiersActive() && isDown();
+    }
+
     default boolean isActiveAndMatchesMouse(int button) {
         return isContextActive() && areModifiersActive() && matchesMouse(button);
     }
@@ -16,6 +20,8 @@ public interface ManagedKeyMapping {
     default boolean isActiveAndMatchesKey(int key, int scanCode, int modifiers) {
         return isContextActive() && areModifiersActive() && matchesKey(key, scanCode, modifiers);
     }
+
+    boolean isDown();
 
     boolean matchesMouse(int button);
 

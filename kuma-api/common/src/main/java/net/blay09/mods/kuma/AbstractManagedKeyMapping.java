@@ -40,6 +40,11 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     }
 
     @Override
+    public boolean isDown() {
+        return Kuma.isDown(getKey());
+    }
+
+    @Override
     public boolean matchesMouse(int button) {
         final var key = getKey();
         return key.getType().equals(InputConstants.Type.MOUSE) && key.getValue() == button;

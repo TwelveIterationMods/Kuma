@@ -7,6 +7,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
+import org.lwjgl.glfw.GLFW;
 
 public class Kuma {
     private static final KumaRuntime runtime = KumaRuntimeSpi.create();
@@ -63,7 +64,7 @@ public class Kuma {
         if (requiresKeyModifiers && !Kuma.areModifiersSupported()) {
             return false;
         }
-        if(requiresMultipleKeyModifiers && !Kuma.areMultiModifiersSupported()) {
+        if (requiresMultipleKeyModifiers && !Kuma.areMultiModifiersSupported()) {
             return false;
         }
         //noinspection RedundantIfStatement
@@ -75,5 +76,21 @@ public class Kuma {
 
     public static KeyModifiers getKeyModifiers(KeyMapping keyMapping) {
         return runtime.getKeyModifiers(keyMapping);
+    }
+
+    public static boolean isDown(InputBinding binding) {
+        return areModifiersActive(binding.modifiers()) && isDown(binding.key());
+
+    }
+
+    public static boolean isDown(InputConstants.Key key) {
+        final var type = key.getType();
+        long window = Minecraft.getInstance().getWindow().getWindow();
+        if (type.equals(InputConstants.Type.MOUSE)) {
+            return GLFW.glfwGetMouseButton(window, key.getValue()) == GLFW.GLFW_PRESS;
+        } else if (type.equals(InputConstants.Type.KEYSYM)) {
+            return GLFW.glfwGetKey(window, key.getValue()) == GLFW.GLFW_PRESS;
+        }
+        return false;
     }
 }
