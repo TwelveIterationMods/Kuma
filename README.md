@@ -119,7 +119,7 @@ class ExampleMod {
         // A key mapping with a custom modifier. These will always result in a virtual key mapping if no fallback binding is provided, since 
         // no mod loader supports them, unless the user also installs the Kuma companion mod.
         Kuma.createKeyMapping(new ResourceLocation("example", "example_key_3"))
-                // We want to use SPACE-CLICK by default. This will not be configurable unless the user installs also installs Kuma (not just Kuma API).
+                // We want to use SPACE-CLICK by default. This will not be remappable unless the user installs also installs Kuma (not just Kuma API).
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
