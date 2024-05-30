@@ -20,7 +20,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
 
     public AbstractManagedKeyMappingBuilder(ResourceLocation id) {
         this.id = id;
-        category = "key.category." + id.getNamespace();
+        category = "key.categories." + id.getNamespace();
     }
 
     @Override
