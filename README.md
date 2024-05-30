@@ -77,9 +77,10 @@ dependencies {
 For Forge:
 
 ```groovy
+jarJar.enable() // Enable the Jar-in-Jar system. Make sure to put this line *before* the minecraft block!
+
 dependencies {
-    // TODO need to figure out how to do jar-in-jar or shadow on Forge
-    implementation "net.blay09.mods:kuma-api-forge:${kuma_version}"
+    jarJar(group: "net.blay09.mods", name: "kuma-api-forge", version: "[${kuma_version},)")
 }
 ```
 
@@ -119,7 +120,7 @@ class ExampleMod {
         // no mod loader supports them, unless the user also installs the Kuma companion mod.
         Kuma.createKeyMapping(new ResourceLocation("example", "example_key_3"))
                 // We want to use SPACE-CLICK by default. This is only supported 
-                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getOrCreate(InputConstant.KEY_SPACE, -1))))
+                .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT, KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
                     return true;
