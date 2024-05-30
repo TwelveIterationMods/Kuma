@@ -52,7 +52,7 @@ For Common / Mojmap:
 
 ```groovy
 dependencies {
-    // compileOnly "net.blay09.mods:kuma-api-common:${kuma_version}"
+    compileOnly "net.blay09.mods:kuma-api-common:${kuma_version}"
 }
 ```
 
