@@ -29,7 +29,7 @@ public class ForgeKumaRuntime implements KumaRuntime {
 
     @Override
     public KeyModifiers getKeyModifiers(KeyMapping keyMapping) {
-        return ForgeKeyModifiers.fromNeoForge(keyMapping.getKeyModifier());
+        return ForgeKeyModifiers.fromForge(keyMapping.getKeyModifier());
     }
 
 }

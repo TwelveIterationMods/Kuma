@@ -1,6 +1,6 @@
 # Kuma
 
-Minecraft Mod. Universal Key Modifier API for Fabric, NeoForge and Forge.
+Minecraft Mod. Universal Key Modifier API for Fabric and Forge.
 
 `kuma-api` is a library mod intended to be included in existing mods, providing an easy API layer for compatible
 key mappings with multi-loader, context and (multi-) modifier support.
@@ -64,16 +64,6 @@ dependencies {
 }
 ```
 
-For NeoForge:
-
-```groovy
-jarJar.enable() // Enable the Jar-in-Jar system
-
-dependencies {
-    jarJar(group: "net.blay09.mods", name: "kuma-api-neoforge", version: "[20.6.0,20.7.0)")
-}
-```
-
 For Fabric:
 
 ```groovy
@@ -104,7 +94,7 @@ Here's some examples for creating key mappings:
 class ExampleMod {
     public ExampleMod() {
         // Just a regular key mapping with a single modifier.
-        // Will register as a regular KeyMapping on Forge and NeoForge, and as a virtual key mapping on Fabric.
+        // Will register as a regular KeyMapping on Forge, and as a virtual key mapping on Fabric.
         Kuma.createKeyMapping(new ResourceLocation("example", "example_key_1"))
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .handleScreenInput((event) -> {

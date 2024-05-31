@@ -26,7 +26,7 @@ public class ForgeManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuil
         return new VanillaManagedKeyMapping(context, screenInputHandler, worldInputHandler, () -> {
             final var defaultKey = binding.key();
             final var effectiveContext = mapConflictContext(context);
-            final var effectiveModifier = ForgeKeyModifiers.toNeoForge(binding.modifiers());
+            final var effectiveModifier = ForgeKeyModifiers.toForge(binding.modifiers());
             return new KeyMapping(name, effectiveContext, effectiveModifier, defaultKey.getType(), defaultKey.getValue(), category);
         });
     }

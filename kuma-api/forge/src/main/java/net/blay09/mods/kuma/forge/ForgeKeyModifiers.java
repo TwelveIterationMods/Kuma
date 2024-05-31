@@ -5,7 +5,7 @@ import net.blay09.mods.kuma.api.KeyModifiers;
 
 public class ForgeKeyModifiers {
 
-    public static net.minecraftforge.client.settings.KeyModifier toNeoForge(KeyModifiers modifiers) {
+    public static net.minecraftforge.client.settings.KeyModifier toForge(KeyModifiers modifiers) {
         if (modifiers.contains(KeyModifier.SHIFT)) {
             return net.minecraftforge.client.settings.KeyModifier.SHIFT;
         } else if (modifiers.contains(KeyModifier.CONTROL)) {
@@ -16,7 +16,7 @@ public class ForgeKeyModifiers {
         return net.minecraftforge.client.settings.KeyModifier.NONE;
     }
 
-    public static KeyModifiers fromNeoForge(net.minecraftforge.client.settings.KeyModifier modifiers) {
+    public static KeyModifiers fromForge(net.minecraftforge.client.settings.KeyModifier modifiers) {
         if (modifiers == net.minecraftforge.client.settings.KeyModifier.SHIFT) {
             return KeyModifiers.of(KeyModifier.SHIFT);
         } else if (modifiers == net.minecraftforge.client.settings.KeyModifier.CONTROL) {
