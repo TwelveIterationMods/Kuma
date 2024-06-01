@@ -42,6 +42,8 @@ public interface ManagedKeyMapping {
 
         Builder handleWorldInput(WorldInputEventHandler handler);
 
+        Builder forceVirtual();
+
         Builder handleScreenInput(ScreenInputEventHandler handler);
 
         ManagedKeyMapping build();
