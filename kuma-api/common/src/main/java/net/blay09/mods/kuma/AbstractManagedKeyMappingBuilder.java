@@ -1,7 +1,6 @@
 package net.blay09.mods.kuma;
 
 import net.blay09.mods.kuma.api.*;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
     protected List<InputBinding> fallbackBindings = new ArrayList<>();
+    protected boolean forceVirtual;
     protected WorldInputEventHandler worldInputHandler;
     protected ScreenInputEventHandler screenInputHandler;
 
@@ -54,6 +54,12 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     }
 
     @Override
+    public ManagedKeyMapping.Builder forceVirtual() {
+        this.forceVirtual = true;
+        return this;
+    }
+
+    @Override
     public ManagedKeyMapping.Builder handleScreenInput(ScreenInputEventHandler handler) {
         this.screenInputHandler = handler;
         return this;
@@ -88,7 +94,12 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
             context = determineContext();
         }
         var effectiveBinding = determineBinding();
-        var managedKeyMapping = effectiveBinding.map(it -> (ManagedKeyMapping) createVanillaKeyMapping(name, it))
+        var managedKeyMapping = effectiveBinding.map(it -> {
+                    if (forceVirtual) {
+                        return null;
+                    }
+                    return (ManagedKeyMapping) createVanillaKeyMapping(name, it);
+                })
                 .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, defaultBinding));
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
