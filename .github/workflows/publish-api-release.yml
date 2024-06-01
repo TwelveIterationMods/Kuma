@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Extracting version from properties
         shell: bash
-        run: echo "version=$(cat kuma/gradle.properties | grep -w "\bversion" | cut -d= -f2)" >> $GITHUB_OUTPUT
+        run: echo "version=$(cat kuma-api/gradle.properties | grep -w "\bversion" | cut -d= -f2)" >> $GITHUB_OUTPUT
         id: extract-version
       - name: Bumping version
         uses: TwelveIterationMods/bump-version@v1
@@ -31,7 +31,7 @@ jobs:
         id: bump-version
       - name: Updating version properties
         run: |
-          sed -i "s/^\s*version\s*=.*/version = ${{ steps.bump-version.outputs.version }}/g" kuma/gradle.properties
+          sed -i "s/^\s*version\s*=.*/version = ${{ steps.bump-version.outputs.version }}/g" kuma-api/gradle.properties
           git config user.name "GitHub Actions"
           git config user.email "<>"
           git commit -am "Set version to ${{ steps.bump-version.outputs.version }}"
