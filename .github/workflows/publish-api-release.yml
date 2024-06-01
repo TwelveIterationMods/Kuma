@@ -1,4 +1,4 @@
-name: publish-release
+name: publish-api-release
 on:
   workflow_dispatch:
     inputs:
