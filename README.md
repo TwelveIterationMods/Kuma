@@ -78,7 +78,7 @@ For Fabric:
 
 ```groovy
 dependencies {
-    include modApi("net.blay09.mods:kuma-api-fabric:20.6.1")
+    include modApi("net.blay09.mods:kuma-api-fabric:[20.6.0,20.7.0)")
 }
 ```
 
@@ -145,6 +145,9 @@ class ExampleMod {
                         KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
                 .withFallbackDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .withContext(KeyConflictContext.UNIVERSAL) // This is normally just inferred from the supplied input handlers.
+                 // forceVirtual prevents the mapping from being registered as a vanilla key mapping UNLESS the Kuma companion mod is installed.
+                 // Useful when binding to something like SHIFT or another Vanilla default key, because otherwise the Vanilla key would no longer trigger on Fabric.
+                .forceVirtual()
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
                     return true;
