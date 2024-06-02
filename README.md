@@ -9,8 +9,6 @@ key mappings with multi-loader, context and (multi-) modifier support.
 that otherwise would not be supported within the given loader, such as key modifiers on Fabric,
 multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`). Unlike the API, it is not yet available.
 
-- [Modpack Permissions](https://mods.twelveiterations.com/permissions)
-
 #### Downloads
 
 [![Versions](http://cf.way2muchnoise.eu/versions/1027078_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
