@@ -9,8 +9,6 @@ key mappings with multi-loader, context and (multi-) modifier support.
 that otherwise would not be supported within the given loader, such as key modifiers on Fabric,
 multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`). Unlike the API, it is not yet available.
 
-- [Modpack Permissions](https://mods.twelveiterations.com/permissions)
-
 #### Downloads
 
 [![Versions](http://cf.way2muchnoise.eu/versions/1027078_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
@@ -78,7 +76,7 @@ For Fabric:
 
 ```groovy
 dependencies {
-    include modApi("net.blay09.mods:kuma-api-fabric:20.6.1")
+    include modApi("net.blay09.mods:kuma-api-fabric:[20.6.0,20.7.0)")
 }
 ```
 
@@ -145,6 +143,9 @@ class ExampleMod {
                         KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
                 .withFallbackDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .withContext(KeyConflictContext.UNIVERSAL) // This is normally just inferred from the supplied input handlers.
+                 // forceVirtual prevents the mapping from being registered as a vanilla key mapping UNLESS the Kuma companion mod is installed.
+                 // Useful when binding to something like SHIFT or another Vanilla default key, because otherwise the Vanilla key would no longer trigger on Fabric.
+                .forceVirtual()
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
                     return true;
