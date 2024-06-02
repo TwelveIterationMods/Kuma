@@ -47,7 +47,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        loader: [ common, fabric, forge, neoforge ]
+        loader: [ common, fabric, forge ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
