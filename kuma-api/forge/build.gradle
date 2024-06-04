@@ -14,8 +14,6 @@ mixin {
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
-    reobf = false
-
     copyIdeResources = true
 
     // Automatically enable forge AccessTransformers if the file exists
