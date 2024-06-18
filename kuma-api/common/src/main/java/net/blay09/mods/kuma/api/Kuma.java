@@ -80,16 +80,15 @@ public class Kuma {
 
     public static boolean isDown(InputBinding binding) {
         return areModifiersActive(binding.modifiers()) && isDown(binding.key());
-
     }
 
     public static boolean isDown(InputConstants.Key key) {
         final var type = key.getType();
         long window = Minecraft.getInstance().getWindow().getWindow();
-        if (type.equals(InputConstants.Type.MOUSE)) {
+        if (type.equals(InputConstants.Type.MOUSE) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
             return GLFW.glfwGetMouseButton(window, key.getValue()) == GLFW.GLFW_PRESS;
-        } else if (type.equals(InputConstants.Type.KEYSYM)) {
-            return GLFW.glfwGetKey(window, key.getValue()) == GLFW.GLFW_PRESS;
+        } else if (type.equals(InputConstants.Type.KEYSYM) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
+            return InputConstants.isKeyDown(window, key.getValue());
         }
         return false;
     }
