@@ -44,6 +44,10 @@ public class Kuma {
         return true;
     }
 
+    public static boolean areMultiBindingsSupported() {
+        return runtime.areMultiBindingsSupported();
+    }
+
     public static boolean areModifiersSupported() {
         return runtime.areModifiersSupported();
     }
@@ -67,10 +71,18 @@ public class Kuma {
         if (requiresMultipleKeyModifiers && !Kuma.areMultiModifiersSupported()) {
             return false;
         }
-        //noinspection RedundantIfStatement
         if (requiresCustomKeyModifiers && !Kuma.areCustomModifiersSupported()) {
             return false;
         }
+
+        if (!Kuma.areMultiBindingsSupported()) {
+            for (final var keyMapping : Minecraft.getInstance().options.keyMappings) {
+                if (binding.key().equals(keyMapping.getDefaultKey())) {
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 

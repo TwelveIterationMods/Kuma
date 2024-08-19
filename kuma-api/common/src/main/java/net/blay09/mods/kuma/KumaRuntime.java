@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 public interface KumaRuntime {
     ManagedKeyMapping.Builder createKeyMapping(ResourceLocation id);
 
+    boolean areMultiBindingsSupported();
+
     boolean areModifiersSupported();
 
     boolean areMultiModifiersSupported();

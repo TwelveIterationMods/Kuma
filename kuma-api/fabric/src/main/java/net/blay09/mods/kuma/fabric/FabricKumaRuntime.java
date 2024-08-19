@@ -13,6 +13,11 @@ public class FabricKumaRuntime implements KumaRuntime {
     }
 
     @Override
+    public boolean areMultiBindingsSupported() {
+        return false;
+    }
+
+    @Override
     public boolean areModifiersSupported() {
         return false;
     }

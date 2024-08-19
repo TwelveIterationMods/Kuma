@@ -13,6 +13,11 @@ public class NeoForgeKumaRuntime implements KumaRuntime {
     }
 
     @Override
+    public boolean areMultiBindingsSupported() {
+        return true;
+    }
+
+    @Override
     public boolean areModifiersSupported() {
         return true;
     }
