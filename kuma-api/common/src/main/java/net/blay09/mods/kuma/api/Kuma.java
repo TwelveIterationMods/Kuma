@@ -75,13 +75,13 @@ public class Kuma {
             return false;
         }
 
-        if (!Kuma.areMultiBindingsSupported()) {
+        /*if (!Kuma.areMultiBindingsSupported()) {
             for (final var keyMapping : Minecraft.getInstance().options.keyMappings) {
                 if (binding.key().equals(keyMapping.getDefaultKey())) {
                     return false;
                 }
             }
-        }
+        }*/
 
         return true;
     }
