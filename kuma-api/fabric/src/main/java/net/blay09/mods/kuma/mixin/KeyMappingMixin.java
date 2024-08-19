@@ -15,7 +15,10 @@ public class KeyMappingMixin {
         KeyMapping thisKeyMapping = (KeyMapping) (Object) this;
         final var same = callbackInfo.getReturnValue();
         if (same && !FabricKeyMappingContexts.same(thisKeyMapping, keyMapping)) {
-            callbackInfo.setReturnValue(false);
+            // TODO Normally we would do this to prevent showing incorrect key conflicts,
+            //      but this is currently misleading because even with differing context,
+            //      another key mapping may take preference (Vanilla only ever triggers one key mapping).
+            // callbackInfo.setReturnValue(false);
         }
     }
 }
