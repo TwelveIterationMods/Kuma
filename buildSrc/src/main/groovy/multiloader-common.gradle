@@ -82,6 +82,7 @@ processResources {
             "version": version,
             "group": project.group,
             "minecraft_version": minecraft_version,
+            "minimum_minecraft_version": minimum_minecraft_version,
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
             "forge_version_range": forge_version_range,
