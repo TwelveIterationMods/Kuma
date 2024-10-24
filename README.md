@@ -5,14 +5,13 @@ Minecraft Mod. Universal Key Modifier API for Fabric, NeoForge and Forge.
 `kuma-api` is a library mod intended to be included in existing mods, providing an easy API layer for compatible
 key mappings with multi-loader, context and (multi-) modifier support.
 
-`kuma` is a companion mod built upon `kuma-api` that extends the Controls menu with the ability to manage key mappings
+In the future, I plan to make a companion mod that extends the Controls menu with the ability to manage key mappings
 that otherwise would not be supported within the given loader, such as key modifiers on Fabric,
-multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`). Unlike the API, it is not yet available.
+multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
 
 #### Downloads
 
-[![Versions](http://cf.way2muchnoise.eu/versions/1027078_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
-[![Downloads](http://cf.way2muchnoise.eu/full_1027078_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/kuma)
+Kuma API is meant to be included as an embedded library. There is no file to download or install as a user.
 
 ## Who needs this?
 
