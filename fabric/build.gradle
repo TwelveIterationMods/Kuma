@@ -1,6 +1,8 @@
 plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
+    id 'net.darkhax.curseforgegradle'
+    id "com.modrinth.minotaur"
 }
 
 dependencies {
@@ -17,7 +19,7 @@ apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'
 
 loom {
-    def aw = project(":kuma-api:common").file("src/main/resources/${mod_id}.accesswidener")
+    def aw = project(":common").file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
     }
@@ -29,24 +31,24 @@ loom {
     runs {
         client {
             client()
-            setConfigName("fabric Client API")
+            setConfigName("fabric Client")
             ideConfigGenerated(true)
             runDir("runs/client")
         }
         server {
             server()
-            setConfigName("fabric Server API")
+            setConfigName("fabric Server")
             ideConfigGenerated(true)
             runDir("runs/server")
         }
         data {
             inherit client
-            setConfigName("fabric Data API")
+            setConfigName("fabric Data")
             ideConfigGenerated(true)
             runDir("build/datagen")
 
             vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${project(":kuma-api:common").file("src/generated/resources")}"
+            vmArg "-Dfabric-api.datagen.output-dir=${project(":common").file("src/generated/resources")}"
             vmArg "-Dfabric-api.datagen.modid=${mod_id}"
         }
     }

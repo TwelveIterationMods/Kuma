@@ -1,7 +1,9 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin'
+    id 'net.minecraftforge.gradle' version '[6.0.25,6.2)'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'net.darkhax.curseforgegradle'
+    id "com.modrinth.minotaur"
 }
 
 mixin {
@@ -30,7 +32,7 @@ minecraft {
         client {
             workingDirectory file('runs/client')
             ideaModule "${rootProject.name}.${project.name}.main"
-            taskName "Client API"
+            taskName "Client"
 
             property 'forge.enabledGameTestNamespaces', mod_id
 
@@ -44,12 +46,25 @@ minecraft {
         server {
             workingDirectory file('runs/server')
             ideaModule "${rootProject.name}.${project.name}.main"
-            taskName "Server API"
+            taskName "Server"
 
             property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
                 modServerRun {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory file('runs/data')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            taskName "Data"
+
+            mods {
+                modDataRun {
                     source sourceSets.main
                 }
             }

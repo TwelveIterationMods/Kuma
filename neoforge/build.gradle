@@ -1,6 +1,8 @@
 plugins {
     id 'multiloader-loader'
     id 'net.neoforged.moddev'
+    id 'net.darkhax.curseforgegradle'
+    id "com.modrinth.minotaur"
 }
 
 base {
@@ -10,7 +12,7 @@ base {
 neoForge {
     version = neoforge_version
     // Automatically enable neoforge AccessTransformers if the file exists
-    def at = project(':kuma-api:common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.add(at.absolutePath)
     }
@@ -47,18 +49,6 @@ neoForge {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-repositories {
-    if (neoforge_snapshot_url) {
-        maven {
-            url = neoforge_snapshot_url
-            content {
-                includeModule('net.neoforged', 'testframework')
-                includeModule('net.neoforged', 'neoforge')
-            }
-        }
-    }
-}
 
 apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'

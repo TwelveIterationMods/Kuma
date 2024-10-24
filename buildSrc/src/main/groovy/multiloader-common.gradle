@@ -25,21 +25,21 @@ repositories {
             }
         }
         filter { includeGroupAndSubgroups("org.spongepowered") }
-        exclusiveContent {
-            forRepositories(
-                    maven {
-                        name = 'ParchmentMC'
-                        url = 'https://maven.parchmentmc.org/'
-                    },
-                    maven {
-                        name = "NeoForge"
-                        url = 'https://maven.neoforged.net/releases'
-                    }
-            )
-            filter { includeGroup('org.parchmentmc.data') }
-        }
     }
     maven { url "https://maven.twelveiterations.com/repository/maven-public/" }
+    exclusiveContent {
+        forRepositories(
+                maven {
+                    name = 'ParchmentMC'
+                    url = 'https://maven.parchmentmc.org/'
+                },
+                maven {
+                    name = "NeoForge"
+                    url = 'https://maven.neoforged.net/releases'
+                }
+        )
+        filter { includeGroup('org.parchmentmc.data') }
+    }
 }
 
 dependencies {
@@ -50,8 +50,8 @@ dependencies {
 // Read more about capabilities here: https://docs.gradle.org/current/userguide/component_capabilities.html#sec:declaring-additional-capabilities-for-a-local-component
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
     configurations."$variant".outgoing {
-        capability("$group:${mod_id.replace('_', '-')}-${project.name}:$version")
-        capability("$group:${mod_id.replace('_', '-')}:$version")
+        capability("$group:$mod_id-${project.name}:$version")
+        capability("$group:$mod_id:$version")
     }
     publishing.publications.configureEach {
         suppressPomMetadataWarningsFor(variant)
@@ -61,13 +61,6 @@ dependencies {
 sourcesJar {
     from(rootProject.file("LICENSE")) {
         rename { "${it}_${mod_name}" }
-    }
-}
-
-tasks.withType(Javadoc).tap {
-    configureEach {
-        failOnError false
-        options.addStringOption('Xdoclint:-missing', '-quiet')
     }
 }
 
@@ -93,7 +86,7 @@ jar {
 processResources {
     def expandProps = [
             "version": version,
-            "group": project.group,
+            "group": project.group, //Else we target the task's group.
             "minecraft_version": minecraft_version,
             "minimum_minecraft_version": minimum_minecraft_version,
             "forge_version": forge_version,
@@ -106,7 +99,7 @@ processResources {
             "mod_author": mod_author,
             "mod_id": mod_id,
             "license": license,
-            "description": description,
+            "description": project.description,
             "neoforge_version": neoforge_version,
             "neoforge_version_range": neoforge_version_range,
             "neoforge_loader_version_range": neoforge_loader_version_range,
@@ -115,7 +108,7 @@ processResources {
             "pack_format_number": pack_format_number,
             "homepage": homepage,
             "issues": issues,
-            "sources": sources,
+            "sources": sources
     ]
 
     filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
@@ -128,8 +121,7 @@ publishing {
     publications {
         register('mavenJava', MavenPublication) {
             version = project.version + (!project.version.endsWith("SNAPSHOT") ? "+" + minecraft_version : "")
-            artifactId "${mod_id.replace('_', '-')}-${project.name}"
-            group = project.group
+            artifactId "${mod_id}-${project.name}"
             from components.java
         }
     }
