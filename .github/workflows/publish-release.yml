@@ -80,11 +80,7 @@ jobs:
             const includeNeoForge = includes.includes('neoforge') && ${{inputs.neoforge}};
             return {
               loader: ['common', includeFabric ? 'fabric' : false, includeForge ? 'forge' : false, includeNeoForge ? 'neoforge' : false].filter(Boolean),
-              site: ['curseforge', 'modrinth', 'publish'],
-              exclude: [
-                {loader: 'common', site: 'curseforge'},
-                {loader: 'common', site: 'modrinth'}
-              ]
+              site: ['publish']
             }
   build-common:
     runs-on: ubuntu-latest
@@ -171,15 +167,8 @@ jobs:
           cache: 'gradle'
       - name: Make gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: Check current artifact hash TODO
-        run: sha1sum ${{ matrix.loader }}/build/libs/*
       - name: Publish
         run: ./gradlew :${{ matrix.loader }}:${{ matrix.site }} '-Pversion=${{needs.create-release.outputs.version}}' '-PtwelveIterationsNexusUsername=${{ secrets.NEXUS_USER }}' '-PtwelveIterationsNexusPassword=${{ secrets.NEXUS_PASSWORD }}'
-        env:
-          CURSEFORGE_TOKEN: ${{secrets.CURSEFORGE_TOKEN}}
-          MODRINTH_TOKEN: ${{secrets.MODRINTH_TOKEN}}
-      - name: Check new artifact hash TODO
-        run: sha1sum ${{ matrix.loader }}/build/libs/*
     needs:
       - create-release
       - build-common
