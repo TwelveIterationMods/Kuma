@@ -1,5 +1,7 @@
 package net.blay09.mods.kuma.api;
 
+import net.minecraft.network.chat.Component;
+
 public interface ManagedKeyMapping {
     InputBinding getBinding();
 
@@ -30,6 +32,8 @@ public interface ManagedKeyMapping {
     boolean handleScreenInput(ScreenInputEvent event);
 
     boolean handleWorldInput(WorldInputEvent event);
+
+    Component getBoundKeyDisplayName();
 
     interface Builder {
         Builder overrideCategory(String category);
