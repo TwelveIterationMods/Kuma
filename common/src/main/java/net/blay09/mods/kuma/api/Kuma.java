@@ -9,13 +9,30 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Provides utility methods for managing key bindings and input handling in the Kuma mod.
+ * This class serves as the main API entry point for interacting with the Kuma input system.
+ */
 public class Kuma {
     private static final KumaRuntime runtime = KumaRuntimeSpi.create();
 
+    /**
+     * Creates a new {@link ManagedKeyMapping.Builder} instance with a specified id.
+     * The returned builder can be used to configure and register a new key mapping.
+     *
+     * @param id The resource location that uniquely identifies the key mapping.
+     * @return A new {@link ManagedKeyMapping.Builder} instance.
+     */
     public static ManagedKeyMapping.Builder createKeyMapping(ResourceLocation id) {
         return runtime.createKeyMapping(id);
     }
 
+    /**
+     * Checks if the specified key conflict context is currently active.
+     *
+     * @param context The key conflict context to check.
+     * @return True if the specified context is active, false otherwise.
+     */
     public static boolean isContextActive(KeyConflictContext context) {
         final var client = Minecraft.getInstance();
         return switch (context) {
@@ -25,6 +42,12 @@ public class Kuma {
         };
     }
 
+    /**
+     * Checks if the specified key modifiers are currently active.
+     *
+     * @param modifiers The key modifiers to check.
+     * @return True if all the specified modifiers are active, false otherwise.
+     */
     public static boolean areModifiersActive(KeyModifiers modifiers) {
         if (modifiers.contains(KeyModifier.ALT) && !Screen.hasAltDown()) {
             return false;
@@ -44,22 +67,49 @@ public class Kuma {
         return true;
     }
 
+    /**
+     * Checks if the runtime supports multiple key mappings to be bound to the same key. On some platforms, only the first key mapping will receive input events if multiple key mappings are bound to the same key.
+     *
+     * @return True if the runtime supports multiple key bindings, false otherwise.
+     */
     public static boolean areMultiBindingsSupported() {
         return runtime.areMultiBindingsSupported();
     }
 
+    /**
+     * Checks if the runtime supports key modifiers.
+     *
+     * @return True if the runtime supports key modifiers, false otherwise.
+     */
     public static boolean areModifiersSupported() {
         return runtime.areModifiersSupported();
     }
 
+    /**
+     * Checks if the runtime supports multiple key modifiers for a key mapping at the same time. Most platforms only support one key modifier at a time.
+     *
+     * @return True if the runtime supports multiple key modifiers, false otherwise.
+     */
     public static boolean areMultiModifiersSupported() {
         return runtime.areMultiModifiersSupported();
     }
 
+    /**
+     * Checks if the runtime supports custom key modifiers. Custom key modifiers are modifiers that are not the standard Alt, Control, or Shift modifiers. Most platforms do not support these kind of modifiers.
+     *
+     * @return True if the runtime supports custom key modifiers, false otherwise.
+     */
     public static boolean areCustomModifiersSupported() {
         return runtime.areCustomModifiersSupported();
     }
 
+    /**
+     * Checks if the specified input binding is supported by the runtime.
+     *
+     * @param binding The input binding to check.
+     * @param context The key conflict context.
+     * @return True if the input binding is supported, false otherwise.
+     */
     public static boolean isBindingSupported(InputBinding binding, KeyConflictContext context) {
         final var defaultModifiers = binding.modifiers();
         final var requiresKeyModifiers = !defaultModifiers.isEmpty();
@@ -86,14 +136,32 @@ public class Kuma {
         return true;
     }
 
+    /**
+     * Gets the key modifiers for the specified key mapping.
+     *
+     * @param keyMapping The key mapping to get the modifiers for.
+     * @return The key modifiers for the specified key mapping.
+     */
     public static KeyModifiers getKeyModifiers(KeyMapping keyMapping) {
         return runtime.getKeyModifiers(keyMapping);
     }
 
+    /**
+     * Checks if the specified input binding is currently active (i.e. the key and all modifiers are pressed).
+     *
+     * @param binding The input binding to check.
+     * @return True if the input binding is currently active, false otherwise.
+     */
     public static boolean isDown(InputBinding binding) {
         return areModifiersActive(binding.modifiers()) && isDown(binding.key());
     }
 
+    /**
+     * Checks if the specified key is currently down (pressed).
+     *
+     * @param key The key to check.
+     * @return True if the key is currently down, false otherwise.
+     */
     public static boolean isDown(InputConstants.Key key) {
         final var type = key.getType();
         long window = Minecraft.getInstance().getWindow().getWindow();
