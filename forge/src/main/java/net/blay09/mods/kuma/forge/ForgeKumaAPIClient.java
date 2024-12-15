@@ -11,11 +11,10 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ForgeKumaAPIClient {
-    public static void init() {
-        final var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static void init(IEventBus modEventBus) {
         modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof VanillaManagedKeyMapping vanillaManagedKeyMapping) {
