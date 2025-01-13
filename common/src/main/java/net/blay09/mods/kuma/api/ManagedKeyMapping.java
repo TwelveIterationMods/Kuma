@@ -117,6 +117,18 @@ public interface ManagedKeyMapping {
     Component getBoundKeyDisplayName();
 
     /**
+     * Checks if the key mapping is bound to any input.
+     * @return True if the key mapping is bound to any input, false otherwise.
+     */
+    boolean isBound();
+
+    /**
+     * Checks if the key mapping is unbound, i.e. not configured to any input.
+     * @return True if the key mapping is unbound, false otherwise.
+     */
+    boolean isUnbound();
+
+    /**
      * A builder interface for creating instances of {@link ManagedKeyMapping}.
      * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
      * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(ResourceLocation id)}.
@@ -180,7 +192,7 @@ public interface ManagedKeyMapping {
          * @return This builder instance, for chaining.
          */
         Builder handleScreenInput(ScreenInputEventHandler handler);
-
+        
         /**
          * Builds and returns the configured ManagedKeyMapping instance.
          *

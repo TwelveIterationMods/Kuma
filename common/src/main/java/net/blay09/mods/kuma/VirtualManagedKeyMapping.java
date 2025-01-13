@@ -23,4 +23,14 @@ public class VirtualManagedKeyMapping extends AbstractManagedKeyMapping {
     public InputBinding getBinding() {
         return binding;
     }
+
+    @Override
+    public boolean isBound() {
+        return true;
+    }
+
+    @Override
+    public boolean isUnbound() {
+        return false;
+    }
 }
