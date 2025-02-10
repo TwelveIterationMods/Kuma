@@ -1,6 +1,5 @@
 package net.blay09.mods.kuma.fabric;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.api.*;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,8 +17,7 @@ public class FabricKumaAPI implements ClientModInitializer {
                 for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                     if (keyMapping.isActiveAndMatchesMouse(button)) {
                         if (keyMapping.handleScreenInput(new ScreenInputEvent(clickedScreen, mouseX, mouseY))) {
-                            // We only cancel click events that aren't sole left clicks, otherwise people might get stuck in menu screens
-                            return button == InputConstants.MOUSE_BUTTON_LEFT && keyMapping.getBinding().modifiers().isEmpty();
+                            return false;
                         }
                     }
                 }
