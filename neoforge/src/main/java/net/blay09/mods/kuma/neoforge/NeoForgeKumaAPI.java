@@ -73,11 +73,7 @@ public class NeoForgeKumaAPI {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
                     if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getMouseX(), event.getMouseY()))) {
-                        // We only cancel click events that aren't sole left clicks, otherwise people might get stuck in menu screens
-                        if (event.getButton() != InputConstants.MOUSE_BUTTON_LEFT || !keyMapping.getBinding().modifiers().isEmpty()) {
-                            event.setCanceled(true);
-                        }
-                        return;
+                        event.setCanceled(true);
                     }
                 }
             }
