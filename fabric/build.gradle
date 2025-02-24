@@ -7,7 +7,10 @@ plugins {
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 }
@@ -16,7 +19,7 @@ apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'
 
 loom {
-    def aw = project(":kuma-api:common").file("src/main/resources/${mod_id}.accesswidener")
+    def aw = project(":common").file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
     }
@@ -45,7 +48,7 @@ loom {
             runDir("build/datagen")
 
             vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${project(":kuma-api:common").file("src/generated/resources")}"
+            vmArg "-Dfabric-api.datagen.output-dir=${project(":common").file("src/generated/resources")}"
             vmArg "-Dfabric-api.datagen.modid=${mod_id}"
         }
     }
@@ -61,6 +64,7 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     def mainFile = upload(curseforge_project_id, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
     mainFile.changelog = rootProject.file('CHANGELOG.md').text
     mainFile.addRequirement("fabric-api")
+    mainFile.addRequirement("balm-fabric")
     project.minecraft_versions.split(',').toList().each { mainFile.addGameVersion(it) }
     mainFile.releaseType = "release"
 }
@@ -68,7 +72,7 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
 modrinth {
     token = project.findProperty("modrinth.token") ?: System.getenv("MODRINTH_TOKEN") ?: "none"
     projectId = project.modrinth_project_id
-    versionType = project.modrinth_release_type
+    versionType = "release"
     versionNumber = project.version + "+fabric-" + project.minecraft_version
     uploadFile = remapJar
     changelog = rootProject.file("CHANGELOG.md").text
@@ -77,5 +81,6 @@ modrinth {
     loaders = ['fabric']
     dependencies {
         required.project "fabric-api"
+        required.project "balm"
     }
 }

@@ -26,6 +26,7 @@ repositories {
         url = "https://maven.bai.lol"
         content {
             includeGroup "mcp.mobius.waila"
+            includeGroup "lol.bai"
         }
     }
 
@@ -33,6 +34,7 @@ repositories {
         url = "https://maven.terraformersmc.com/releases"
         content {
             includeGroup "com.terraformersmc"
+            includeGroup "dev.emi"
         }
     }
 
@@ -40,6 +42,7 @@ repositories {
         url = "https://jm.gserv.me/repository/maven-public/"
         content {
             includeGroup "info.journeymap"
+            includeGroup "mysticdrew"
         }
     }
 
@@ -47,6 +50,7 @@ repositories {
         url = 'https://jitpack.io'
         content {
             includeGroup "com.github.BlueMap-Minecraft"
+            includeGroup "com.github.mattidragon"
         }
     }
 
@@ -55,5 +59,30 @@ repositories {
         content {
             includeGroup "us.dynmap"
         }
+    }
+
+    maven {
+        url "https://maven.siphalor.de/"
+        content {
+            includeGroup "de.siphalor"
+        }
+    }
+
+    maven {
+        url = "https://dl.cloudsmith.io/public/novamachina-mods/release/maven/"
+        content {
+            includeGroup "novamachina.novacore"
+            includeGroup "novamachina.exnihilosequentia"
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Minecraft'
+                url = 'https://libraries.minecraft.net/'
+            }
+        }
+        filter { includeGroupAndSubgroups("com.mojang") }
     }
 }
