@@ -43,9 +43,4 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
 
-include("kuma-api:common")
-include("kuma-api:fabric")
-include("kuma-api:forge")
-include("kuma:common")
-include("kuma:fabric")
-include("kuma:forge")
+include("common", "fabric", "forge")

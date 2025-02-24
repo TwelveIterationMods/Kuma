@@ -15,14 +15,14 @@ configurations {
 }
 
 dependencies {
-    compileOnly(project("${project.parent?.path}:common")) {
+    compileOnly(project(':common')) {
         capabilities {
-            requireCapability "$group:${mod_id.replace('_', '-')}"
+            requireCapability "$group:$mod_id"
         }
     }
-    commonJava project(path: "${project.parent?.path}:common", configuration: 'commonJava')
-    commonResources project(path: "${project.parent?.path}:common", configuration: 'commonResources')
-    commonGeneratedResources project(path: "${project.parent?.path}:common", configuration: 'commonGeneratedResources')
+    commonJava project(path: ':common', configuration: 'commonJava')
+    commonResources project(path: ':common', configuration: 'commonResources')
+    commonGeneratedResources project(path: ':common', configuration: 'commonGeneratedResources')
 }
 
 tasks.named('compileJava', JavaCompile) {
