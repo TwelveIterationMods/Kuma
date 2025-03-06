@@ -54,11 +54,18 @@ even if another mod ships a later patch version of Kuma API.
 You can find the latest version for a given Minecraft version
 at https://maven.twelveiterations.com/service/rest/repository/browse/maven-public/net/blay09/mods/kuma-common/
 
+In your `gradle.properties`:
+
+```ini
+kuma_version = 21.0.4+1.21
+kuma_version_range = [21.0,21.2)
+```
+
 For Common / Mojmap:
 
 ```groovy
 dependencies {
-    compileOnly "net.blay09.mods:kuma-api-common:[20.6.0,20.7.0)"
+    compileOnly "net.blay09.mods:kuma-api-common:$kuma_version"
 }
 ```
 
@@ -68,7 +75,12 @@ For NeoForge:
 jarJar.enable() // Enable the Jar-in-Jar system
 
 dependencies {
-    jarJar(group: "net.blay09.mods", name: "kuma-api-neoforge", version: "[20.6.0,20.7.0)")
+    jarJar("net.blay09.mods:kuma-api-neoforge") {
+        version {
+            strictly kuma_version_range
+            prefer kuma_version
+        }
+    }
 }
 ```
 
@@ -76,7 +88,7 @@ For Fabric:
 
 ```groovy
 dependencies {
-    include modApi("net.blay09.mods:kuma-api-fabric:[20.6.0,20.7.0)")
+    include modApi("net.blay09.mods:kuma-api-fabric:$kuma_version")
 }
 ```
 
@@ -86,7 +98,9 @@ For Forge:
 jarJar.enable() // Enable the Jar-in-Jar system. Make sure to put this line *before* the minecraft block!
 
 dependencies {
-    jarJar(group: "net.blay09.mods", name: "kuma-api-forge", version: "[20.6.0,20.7.0)")
+    jarJar(group: "net.blay09.mods", name: "kuma-api-forge", version: kuma_version_range) {
+        jarJar.pin(it, kuma_version)
+    }
 }
 ```
 
