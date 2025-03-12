@@ -26,7 +26,12 @@ repositories {
         }
         filter { includeGroupAndSubgroups("org.spongepowered") }
     }
-    maven { url "https://maven.twelveiterations.com/repository/maven-public/" }
+    maven {
+        url "https://maven.twelveiterations.com/repository/maven-public/"
+        content {
+            includeGroup "net.blay09.mods"
+        }
+    }
     exclusiveContent {
         forRepositories(
                 maven {
@@ -88,7 +93,7 @@ processResources {
             "version": version,
             "group": project.group, //Else we target the task's group.
             "minecraft_version": minecraft_version,
-            "minimum_minecraft_version": minimum_minecraft_version,
+            "minimum_minecraft_version": minecraft_version_range.replaceAll("[\\[\\])]", "").split(",")[0],
             "forge_version": forge_version,
             "forge_loader_version_range": forge_loader_version_range,
             "forge_version_range": forge_version_range,
@@ -96,6 +101,7 @@ processResources {
             "fabric_version": fabric_version,
             "fabric_loader_version": fabric_loader_version,
             "mod_name": mod_name,
+            "mod_main": mod_name.replaceAll(" ", ""),
             "mod_author": mod_author,
             "mod_id": mod_id,
             "license": license,
@@ -105,8 +111,8 @@ processResources {
             "neoforge_loader_version_range": neoforge_loader_version_range,
             "credits": credits,
             "java_version": java_version,
-            "pack_format_number": pack_format_number,
             "homepage": homepage,
+            "discord": discord,
             "issues": issues,
             "sources": sources
     ]
@@ -126,12 +132,13 @@ publishing {
         }
     }
     repositories {
-        maven {
-            var releasesRepoUrl = "https://maven.twelveiterations.com/repository/maven-releases/"
-            var snapshotsRepoUrl = "https://maven.twelveiterations.com/repository/maven-snapshots/"
-            url = uri(version.toString().endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl)
-            name = "twelveIterationsNexus"
-            credentials(PasswordCredentials)
+        def repoUrl = version.toString().endsWith("SNAPSHOT") ? findProperty("maven_snapshots") : findProperty("maven_releases")
+        if (repoUrl != null) {
+            maven {
+                url = uri(repoUrl)
+                name = "maven"
+                credentials(PasswordCredentials)
+            }
         }
     }
 }
