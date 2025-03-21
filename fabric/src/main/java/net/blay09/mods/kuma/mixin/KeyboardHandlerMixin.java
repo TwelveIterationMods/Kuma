@@ -1,7 +1,6 @@
 package net.blay09.mods.kuma.mixin;
 
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
-import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
@@ -23,8 +22,12 @@ public class KeyboardHandlerMixin {
     public void keyPress(long window, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
         if (window == minecraft.getWindow().getWindow() && minecraft.screen == null) {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
+                    continue;
+                }
+
                 if (keyMapping.isActiveAndMatchesKey(key, scanCode, modifiers)) {
-                    keyMapping.handleWorldInput(new WorldInputEvent());
+                    keyMapping.handleWorldInput(new WorldInputEvent(keyMapping));
                     callbackInfo.cancel();
                     return;
                 }
