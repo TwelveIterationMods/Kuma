@@ -75,6 +75,10 @@ public interface ManagedKeyMapping {
      */
     boolean isDown();
 
+    /**
+     * Checks if the key mapping was pressed down in the previous tick.
+     * @return True if the key mapping was pressed down in the previous tick, false otherwise.
+     */
     boolean wasDown();
 
     /**
@@ -130,6 +134,10 @@ public interface ManagedKeyMapping {
      */
     boolean isUnbound();
 
+    /**
+     * Key repeat makes it so event handlers are fired repeatedly while the key is held down.
+     * @return True if key repeat is enabled for this key mapping.
+     */
     boolean isKeyRepeatEnabled();
 
     /**
