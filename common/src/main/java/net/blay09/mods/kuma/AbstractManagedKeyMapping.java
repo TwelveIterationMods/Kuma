@@ -8,11 +8,14 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     private final KeyConflictContext context;
     private final ScreenInputEventHandler screenInputEventHandler;
     private final WorldInputEventHandler worldInputEventHandler;
+    private final boolean keyRepeat;
+    private boolean wasDown;
 
-    protected AbstractManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler) {
+    protected AbstractManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat) {
         this.context = context;
         this.screenInputEventHandler = screenInputEventHandler;
         this.worldInputEventHandler = worldInputEventHandler;
+        this.keyRepeat = keyRepeat;
     }
 
     @Override
@@ -45,6 +48,11 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     }
 
     @Override
+    public boolean wasDown() {
+        return wasDown;
+    }
+
+    @Override
     public boolean matchesMouse(int button) {
         final var key = getKey();
         return key.getType().equals(InputConstants.Type.MOUSE) && key.getValue() == button;
@@ -72,5 +80,14 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
         }
 
         return worldInputEventHandler.handle(event);
+    }
+
+    @Override
+    public boolean isKeyRepeatEnabled() {
+        return keyRepeat;
+    }
+
+    public void tick() {
+        wasDown = isDown();
     }
 }

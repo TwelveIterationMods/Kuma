@@ -24,7 +24,7 @@ public class MouseHandlerMixin {
         if (window == minecraft.getWindow().getWindow() && minecraft.screen == null && press == 1) {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.isActiveAndMatchesMouse(button)) {
-                    keyMapping.handleWorldInput(new WorldInputEvent());
+                    keyMapping.handleWorldInput(new WorldInputEvent(keyMapping));
                     callbackInfo.cancel();
                     return;
                 }

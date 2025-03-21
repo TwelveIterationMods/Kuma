@@ -1,6 +1,6 @@
 package net.blay09.mods.kuma.neoforge;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import net.blay09.mods.kuma.AbstractManagedKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.*;
@@ -9,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -26,14 +27,26 @@ public class NeoForgeKumaAPI {
             }
         });
 
+        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
+            for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
+                    managedKeyMapping.tick();
+                }
+            }
+        });
+
         NeoForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
             if (Minecraft.getInstance().screen != null) {
                 return;
             }
 
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
+                    continue;
+                }
+
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
-                    if (keyMapping.handleWorldInput(new WorldInputEvent())) {
+                    if (keyMapping.handleWorldInput(new WorldInputEvent(keyMapping))) {
                         event.setCanceled(true);
                         return;
                     }
@@ -47,8 +60,12 @@ public class NeoForgeKumaAPI {
             }
 
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
+                    continue;
+                }
+
                 if (event.getAction() == 1 && keyMapping.isActiveAndMatchesKey(event.getKey(), event.getScanCode(), event.getModifiers())) {
-                    keyMapping.handleWorldInput(new WorldInputEvent());
+                    keyMapping.handleWorldInput(new WorldInputEvent(keyMapping));
                     // TODO cannot cancel?
                 }
             }
@@ -56,12 +73,16 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ScreenEvent.KeyPressed.Pre event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
+                    continue;
+                }
+
                 if (keyMapping.isActiveAndMatchesKey(event.getKeyCode(), event.getScanCode(), event.getModifiers())) {
                     final var client = Minecraft.getInstance();
                     final var window = client.getWindow();
                     int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                     int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
-                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY))) {
+                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
                         event.setCanceled(true);
                         return;
                     }
@@ -71,8 +92,12 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
+                    continue;
+                }
+
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
-                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getMouseX(), event.getMouseY()))) {
+                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getMouseX(), event.getMouseY(), keyMapping))) {
                         event.setCanceled(true);
                     }
                 }
