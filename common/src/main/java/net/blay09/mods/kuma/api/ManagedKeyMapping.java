@@ -77,6 +77,7 @@ public interface ManagedKeyMapping {
 
     /**
      * Checks if the key mapping was pressed down in the previous tick.
+     *
      * @return True if the key mapping was pressed down in the previous tick, false otherwise.
      */
     boolean wasDown();
@@ -124,18 +125,21 @@ public interface ManagedKeyMapping {
 
     /**
      * Checks if the key mapping is bound to any input.
+     *
      * @return True if the key mapping is bound to any input, false otherwise.
      */
     boolean isBound();
 
     /**
      * Checks if the key mapping is unbound, i.e. not configured to any input.
+     *
      * @return True if the key mapping is unbound, false otherwise.
      */
     boolean isUnbound();
 
     /**
      * Key repeat makes it so event handlers are fired repeatedly while the key is held down.
+     *
      * @return True if key repeat is enabled for this key mapping.
      */
     boolean isKeyRepeatEnabled();
@@ -213,16 +217,11 @@ public interface ManagedKeyMapping {
         ManagedKeyMapping build();
 
         /**
-         * Already on by default until 1.21.5. Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         * Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         *
+         * @return This builder instance, for chaining.
          */
         Builder enableKeyRepeat();
-
-        /**
-         * Disabling key repeat prevents handle*Input() handlers from calling repeatedly if the key is held down.
-         * @deprecated Starting in 1.21.5, key repeat will be disabled by default.
-         */
-        @Deprecated
-        Builder disableKeyRepeat();
     }
 
 }
