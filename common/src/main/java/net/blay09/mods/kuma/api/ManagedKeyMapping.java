@@ -75,6 +75,8 @@ public interface ManagedKeyMapping {
      */
     boolean isDown();
 
+    boolean wasDown();
+
     /**
      * Checks if the bound input matches the given mouse button.
      *
@@ -127,6 +129,8 @@ public interface ManagedKeyMapping {
      * @return True if the key mapping is unbound, false otherwise.
      */
     boolean isUnbound();
+
+    boolean isKeyRepeatEnabled();
 
     /**
      * A builder interface for creating instances of {@link ManagedKeyMapping}.
@@ -192,13 +196,25 @@ public interface ManagedKeyMapping {
          * @return This builder instance, for chaining.
          */
         Builder handleScreenInput(ScreenInputEventHandler handler);
-        
+
         /**
          * Builds and returns the configured ManagedKeyMapping instance.
          *
          * @return The built ManagedKeyMapping instance.
          */
         ManagedKeyMapping build();
+
+        /**
+         * Already on by default until 1.21.5. Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         */
+        Builder enableKeyRepeat();
+
+        /**
+         * Disabling key repeat prevents handle*Input() handlers from calling repeatedly if the key is held down.
+         * @deprecated Starting in 1.21.5, key repeat will be disabled by default.
+         */
+        @Deprecated
+        Builder disableKeyRepeat();
     }
 
 }

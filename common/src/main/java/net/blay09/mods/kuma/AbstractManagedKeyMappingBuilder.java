@@ -17,6 +17,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected boolean forceVirtual;
     protected WorldInputEventHandler worldInputHandler;
     protected ScreenInputEventHandler screenInputHandler;
+    protected boolean keyRepeat = true; // TODO 1.21.5: Change to false by default
 
     public AbstractManagedKeyMappingBuilder(ResourceLocation id) {
         this.id = id;
@@ -65,6 +66,18 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         return this;
     }
 
+    @Override
+    public ManagedKeyMapping.Builder enableKeyRepeat() {
+        keyRepeat = true;
+        return this;
+    }
+
+    @Override
+    public ManagedKeyMapping.Builder disableKeyRepeat() {
+        keyRepeat = false;
+        return this;
+    }
+
     private KeyConflictContext determineContext() {
         if (worldInputHandler != null && screenInputHandler == null) {
             return KeyConflictContext.WORLD;
@@ -100,7 +113,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
                     }
                     return (ManagedKeyMapping) createVanillaKeyMapping(name, it);
                 })
-                .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, defaultBinding));
+                .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, defaultBinding));
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }
