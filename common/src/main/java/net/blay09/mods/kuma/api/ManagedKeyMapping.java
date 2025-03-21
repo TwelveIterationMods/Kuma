@@ -21,6 +21,8 @@ public interface ManagedKeyMapping {
         return isContextActive() && areModifiersActive() && matchesKey(key, scanCode, modifiers);
     }
 
+    boolean wasDown();
+
     boolean isDown();
 
     boolean matchesMouse(int button);
@@ -30,6 +32,8 @@ public interface ManagedKeyMapping {
     boolean handleScreenInput(ScreenInputEvent event);
 
     boolean handleWorldInput(WorldInputEvent event);
+
+    boolean isKeyRepeatEnabled();
 
     interface Builder {
         Builder overrideCategory(String category);
@@ -45,6 +49,18 @@ public interface ManagedKeyMapping {
         Builder forceVirtual();
 
         Builder handleScreenInput(ScreenInputEventHandler handler);
+
+        /**
+         * Already on by default until 1.21.5. Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         */
+        Builder enableKeyRepeat();
+
+        /**
+         * Disabling key repeat prevents handle*Input() handlers from calling repeatedly if the key is held down.
+         * @deprecated Starting in 1.21.5, key repeat will be disabled by default.
+         */
+        @Deprecated
+        Builder disableKeyRepeat();
 
         ManagedKeyMapping build();
     }
