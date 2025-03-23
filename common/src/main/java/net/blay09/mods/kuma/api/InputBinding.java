@@ -27,6 +27,6 @@ public record InputBinding(InputConstants.Key key, KeyModifiers modifiers) {
     }
 
     public static InputBinding of(KeyMapping mapping) {
-        return new InputBinding(((KeyMappingAccessor) mapping).kuma_getKey(), KeyModifiers.of(mapping));
+        return new InputBinding(((KeyMappingAccessor) mapping).getKey(), KeyModifiers.of(mapping));
     }
 }
