@@ -48,3 +48,44 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'
+
+task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn('build')
+    description = 'Publishes the NeoForge build to CurseForge.'
+    group = 'publishing'
+
+    apiToken = project.findProperty("curseforge.api_key") ?: System.getenv("CURSEFORGE_TOKEN") ?: "none"
+
+    def projectId = findProperty("curseforge_project_id")
+    onlyIf {
+        projectId != null
+    }
+    if (projectId) {
+        def mainFile = upload(findProperty("curseforge_project_id"), file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+        mainFile.changelog = rootProject.file('CHANGELOG.md').text
+        mainFile.addRequirement("balm")
+        project.minecraft_versions.split(',').toList().each { mainFile.addGameVersion(it) }
+        mainFile.releaseType = "release"
+        mainFile.addModLoader("NeoForge")
+    }
+}
+
+modrinth {
+    token = project.findProperty("modrinth.token") ?: System.getenv("MODRINTH_TOKEN") ?: "none"
+    projectId = findProperty("modrinth_project_id")
+    versionType = "release"
+    versionNumber = project.version + "+neoforge-" + project.minecraft_version
+    uploadFile = jar
+    changelog = rootProject.file("CHANGELOG.md").text
+    gameVersions = project.minecraft_versions.split(',').toList()
+    syncBodyFrom = rootProject.file("modpage.md").text
+    loaders = ['neoforge']
+    dependencies {
+        required.project "balm"
+    }
+}
+
+configurations {
+    // This is a workaround for issues with certain dependencies. It may not be necessary in your case.
+    testCompileOnly.extendsFrom compileOnly
+}
