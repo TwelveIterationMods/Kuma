@@ -68,6 +68,6 @@ public record InputBinding(InputConstants.Key key, KeyModifiers modifiers) {
      * @return a new {@link InputBinding} with the key and modifiers from the specified {@link KeyMapping}
      */
     public static InputBinding of(KeyMapping mapping) {
-        return new InputBinding(((KeyMappingAccessor) mapping).kuma_getKey(), KeyModifiers.of(mapping));
+        return new InputBinding(((KeyMappingAccessor) mapping).getKey(), KeyModifiers.of(mapping));
     }
 }
