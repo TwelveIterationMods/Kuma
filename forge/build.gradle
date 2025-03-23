@@ -1,7 +1,6 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.minecraftforge.gradle' version '[6.0.25,6.2)'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'net.neoforged.moddev.legacyforge'
     id 'net.darkhax.curseforgegradle'
     id "com.modrinth.minotaur"
 }
@@ -13,65 +12,34 @@ mixin {
     config("${mod_id}.forge.mixins.json")
 }
 
-jar {
-    manifest {
-        attributes["MixinConfigs"] = "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
-    }
-}
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
 
-minecraft {
-    mappings channel: 'official', version: minecraft_version
+    validateAccessTransformers = true
 
-    reobf = false
-
-    copyIdeResources = true
-
-    // Automatically enable forge AccessTransformers if the file exists
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformer = at
+        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
     }
-
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
     runs {
         client {
-            workingDirectory file('runs/client')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName "Client"
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                }
-            }
+            client()
         }
-
-        server {
-            workingDirectory file('runs/server')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName "Server"
-
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                }
-            }
-        }
-
         data {
-            workingDirectory file('runs/data')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName "Data"
-
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                }
-            }
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
         }
     }
 }
@@ -79,22 +47,19 @@ minecraft {
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    // temporary hacky fix as suggested by Forge
-    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
+    compileOnly project(":common")
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+}
+
+jar {
+    finalizedBy('reobfJar')
+    manifest.attributes([
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    ])
 }
 
 apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            fg.component(it)
-        }
-    }
-}
 
 task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     dependsOn('build')
@@ -129,10 +94,4 @@ modrinth {
     dependencies {
         required.project "balm"
     }
-}
-
-sourceSets.each {
-    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
-    it.output.resourcesDir = dir
-    it.java.destinationDirectory = dir
 }
