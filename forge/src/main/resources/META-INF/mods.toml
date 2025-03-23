@@ -12,8 +12,6 @@ credits="BlayTheNinth"
 authors="BlayTheNinth"
 description='''${description}'''
 [[mixins]]
-config = "${mod_id}.mixins.json"
-[[mixins]]
 config = "${mod_id}.forge.mixins.json"
 [[dependencies.${mod_id}]]
     modId="forge"
