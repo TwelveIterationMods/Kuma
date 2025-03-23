@@ -94,7 +94,7 @@ def neoForgeSnapshotUrl = findProperty("neoforge_snapshot_url")
 if (neoForgeSnapshotUrl != null) {
     repositories {
         maven {
-            name 'Maven for PRs'
+            name 'Maven for NeoForge Snapshots'
             url neoForgeSnapshotUrl
             content {
                 includeModule('net.neoforged', 'neoforge')
