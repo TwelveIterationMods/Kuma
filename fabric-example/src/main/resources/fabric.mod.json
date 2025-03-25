@@ -20,8 +20,6 @@
   "entrypoints": {
     "client": [
       "net.blay09.mods.kuma.fabric.FabricKumaExample"
-    ],
-    "modmenu": [
     ]
   },
   "mixins": [
