@@ -9,7 +9,7 @@ public class ForgeKumaAPI {
 
     public ForgeKumaAPI(FMLJavaModLoadingContext context) {
         if (FMLEnvironment.dist.isClient()) {
-            ForgeKumaAPIClient.init(context.getModEventBus());
+            ForgeKumaAPIClient.init(context.getModBusGroup());
         }
     }
 }

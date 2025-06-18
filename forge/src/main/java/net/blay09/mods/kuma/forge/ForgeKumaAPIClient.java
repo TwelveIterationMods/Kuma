@@ -10,13 +10,12 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.bus.BusGroup;
 
 public class ForgeKumaAPIClient {
-    public static void init(IEventBus modEventBus) {
-        modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
+    public static void init(BusGroup modBusGroup) {
+        RegisterKeyMappingsEvent.getBus(modBusGroup).addListener((event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof VanillaManagedKeyMapping vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
@@ -24,19 +23,17 @@ public class ForgeKumaAPIClient {
             }
         });
 
-        MinecraftForge.EVENT_BUS.addListener((TickEvent.ClientTickEvent event) -> {
-            if (event.phase == TickEvent.Phase.END) {
-                for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                    if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
-                        managedKeyMapping.tick();
-                    }
+        TickEvent.ClientTickEvent.Post.BUS.addListener((event) -> {
+            for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
+                    managedKeyMapping.tick();
                 }
             }
         });
 
-        MinecraftForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
+        InputEvent.MouseButton.Pre.BUS.addListener((event) -> {
             if (Minecraft.getInstance().screen != null) {
-                return;
+                return false;
             }
 
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
@@ -46,14 +43,15 @@ public class ForgeKumaAPIClient {
 
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
                     if (keyMapping.handleWorldInput(new WorldInputEvent(keyMapping))) {
-                        event.setCanceled(true);
-                        return;
+                        return true;
                     }
                 }
             }
+
+            return false;
         });
 
-        MinecraftForge.EVENT_BUS.addListener((InputEvent.Key event) -> {
+        InputEvent.Key.BUS.addListener((event) -> {
             if (Minecraft.getInstance().screen != null) {
                 return;
             }
@@ -70,7 +68,7 @@ public class ForgeKumaAPIClient {
             }
         });
 
-        MinecraftForge.EVENT_BUS.addListener((ScreenEvent.KeyPressed.Pre event) -> {
+        ScreenEvent.KeyPressed.Pre.BUS.addListener((event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                     continue;
@@ -82,14 +80,14 @@ public class ForgeKumaAPIClient {
                     int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                     int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
                     if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
-                        event.setCanceled(true);
-                        return;
+                        return true;
                     }
                 }
             }
+            return false;
         });
 
-        MinecraftForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre event) -> {
+        ScreenEvent.MouseButtonPressed.Pre.BUS.addListener((event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                     continue;
@@ -97,10 +95,11 @@ public class ForgeKumaAPIClient {
 
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
                     if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getMouseX(), event.getMouseY(), keyMapping))) {
-                        event.setCanceled(true);
+                        return true;
                     }
                 }
             }
+            return false;
         });
     }
 }
