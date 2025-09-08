@@ -2,6 +2,7 @@ package net.blay09.mods.kuma;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.api.*;
+import net.minecraft.network.chat.Component;
 
 public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
@@ -86,6 +87,11 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
         }
 
         return worldInputEventHandler.handle(event);
+    }
+
+    @Override
+    public Component getBoundKeyDisplayName() {
+        return getBinding().key().getDisplayName();
     }
 
     @Override
