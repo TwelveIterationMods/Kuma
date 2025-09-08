@@ -44,7 +44,7 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
     @Override
     public boolean isDown() {
-        return Kuma.isDown(getKey());
+        return isBound() && Kuma.isDown(getKey());
     }
 
     @Override
@@ -54,12 +54,18 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
     @Override
     public boolean matchesMouse(int button) {
+        if (isUnbound()) {
+            return false;
+        }
         final var key = getKey();
         return key.getType().equals(InputConstants.Type.MOUSE) && key.getValue() == button;
     }
 
     @Override
     public boolean matchesKey(int key, int scanCode, int modifiers) {
+        if (isUnbound()) {
+            return false;
+        }
         final var keyBinding = getKey();
         return keyBinding.getType().equals(InputConstants.Type.KEYSYM) && keyBinding.getValue() == key;
     }
