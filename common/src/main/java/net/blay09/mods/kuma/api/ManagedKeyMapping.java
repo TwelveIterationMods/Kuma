@@ -1,5 +1,7 @@
 package net.blay09.mods.kuma.api;
 
+import net.minecraft.network.chat.Component;
+
 public interface ManagedKeyMapping {
     InputBinding getBinding();
 
@@ -32,6 +34,27 @@ public interface ManagedKeyMapping {
     boolean handleScreenInput(ScreenInputEvent event);
 
     boolean handleWorldInput(WorldInputEvent event);
+
+    /**
+     * Gets the display name for the key that is currently bound to this managed key mapping.
+     *
+     * @return The display name for the bound key.
+     */
+    Component getBoundKeyDisplayName();
+
+    /**
+     * Checks if the key mapping is bound to any input.
+     *
+     * @return True if the key mapping is bound to any input, false otherwise.
+     */
+    boolean isBound();
+
+    /**
+     * Checks if the key mapping is unbound, i.e. not configured to any input.
+     *
+     * @return True if the key mapping is unbound, false otherwise.
+     */
+    boolean isUnbound();
 
     boolean isKeyRepeatEnabled();
 

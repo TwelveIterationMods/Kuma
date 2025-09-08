@@ -36,4 +36,14 @@ public class VanillaManagedKeyMapping extends AbstractManagedKeyMapping {
         mapping = mappingSupplier.get();
         return mapping;
     }
+
+    @Override
+    public boolean isBound() {
+        return !mapping.isUnbound();
+    }
+
+    @Override
+    public boolean isUnbound() {
+        return mapping.isUnbound();
+    }
 }
