@@ -3,6 +3,7 @@ package net.blay09.mods.kuma.api;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.mixin.KeyMappingAccessor;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.input.KeyEvent;
 
 /**
  * Represents an input binding, which is a combination of a key or mouse button and optional key modifiers.
@@ -49,7 +50,7 @@ public record InputBinding(InputConstants.Key key, KeyModifiers modifiers) {
      * @return a new {@link InputBinding} for the specified key and modifiers
      */
     public static InputBinding key(int keyCode, KeyModifiers modifiers) {
-        return new InputBinding(InputConstants.getKey(keyCode, -1), modifiers);
+        return new InputBinding(InputConstants.getKey(new KeyEvent(keyCode, 0, 0)), modifiers);
     }
 
     /**

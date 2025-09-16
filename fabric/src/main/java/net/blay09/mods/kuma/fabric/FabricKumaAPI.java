@@ -23,14 +23,14 @@ public class FabricKumaAPI implements ClientModInitializer {
         });
 
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
-            ScreenMouseEvents.allowMouseClick(screen).register((clickedScreen, mouseX, mouseY, button) -> {
+            ScreenMouseEvents.allowMouseClick(screen).register((clickedScreen, button) -> {
                 for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                     if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                         continue;
                     }
 
                     if (keyMapping.isActiveAndMatchesMouse(button)) {
-                        if (keyMapping.handleScreenInput(new ScreenInputEvent(clickedScreen, mouseX, mouseY, keyMapping))) {
+                        if (keyMapping.handleScreenInput(new ScreenInputEvent(clickedScreen, button.x(), button.y(), keyMapping))) {
                             return false;
                         }
                     }
@@ -38,13 +38,13 @@ public class FabricKumaAPI implements ClientModInitializer {
                 return true;
             });
 
-            ScreenKeyboardEvents.allowKeyPress(screen).register((pressedScreen, key, scanCode, modifiers) -> {
+            ScreenKeyboardEvents.allowKeyPress(screen).register((pressedScreen, event) -> {
                 for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                     if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                         continue;
                     }
 
-                    if (keyMapping.isActiveAndMatchesKey(key, scanCode, modifiers)) {
+                    if (keyMapping.isActiveAndMatchesKey(event)) {
                         final var window = client.getWindow();
                         int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                         int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());

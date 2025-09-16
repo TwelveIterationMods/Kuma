@@ -1,6 +1,7 @@
 package net.blay09.mods.kuma;
 
 import net.blay09.mods.kuma.api.*;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Optional;
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
     protected final ResourceLocation id;
-    protected String category;
+    protected KeyMapping.Category category;
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
     protected List<InputBinding> fallbackBindings = new ArrayList<>();
@@ -21,11 +22,11 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
 
     public AbstractManagedKeyMappingBuilder(ResourceLocation id) {
         this.id = id;
-        category = "key.categories." + id.getNamespace();
+        category = KumaKeyCategories.getDefaultCategory(id.getNamespace());
     }
 
     @Override
-    public ManagedKeyMapping.Builder overrideCategory(String category) {
+    public ManagedKeyMapping.Builder overrideCategory(KeyMapping.Category category) {
         this.category = category;
         return this;
     }

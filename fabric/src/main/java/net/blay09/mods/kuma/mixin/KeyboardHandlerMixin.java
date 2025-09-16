@@ -4,6 +4,7 @@ import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.api.WorldInputEvent;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.KeyEvent;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,15 +19,15 @@ public class KeyboardHandlerMixin {
     @Shadow
     private Minecraft minecraft;
 
-    @Inject(method = "keyPress(JIIII)V", at = @At("HEAD"), cancellable = true)
-    public void keyPress(long window, int key, int scanCode, int action, int modifiers, CallbackInfo callbackInfo) {
-        if (window == minecraft.getWindow().getWindow() && minecraft.screen == null) {
+    @Inject(method = "keyPress(JILnet/minecraft/client/input/KeyEvent;)V", at = @At("HEAD"), cancellable = true)
+    public void keyPress(long window, int key, KeyEvent event, CallbackInfo callbackInfo) {
+        if (window == minecraft.getWindow().handle() && minecraft.screen == null) {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                     continue;
                 }
 
-                if (keyMapping.isActiveAndMatchesKey(key, scanCode, modifiers)) {
+                if (keyMapping.isActiveAndMatchesKey(event)) {
                     keyMapping.handleWorldInput(new WorldInputEvent(keyMapping));
                     callbackInfo.cancel();
                     return;

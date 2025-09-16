@@ -1,5 +1,9 @@
 package net.blay09.mods.kuma.api;
 
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -57,6 +61,26 @@ public interface ManagedKeyMapping {
     }
 
     /**
+     * Checks if the {@link KeyConflictContext} associated with this managed key mapping is currently active, its modifiers are active, and the specified mouse button is currently pressed.
+     *
+     * @param buttonInfo The mouse button info to check.
+     * @return True if the key conflict context, modifiers, and mouse button are active, false otherwise.
+     */
+    default boolean isActiveAndMatchesMouse(MouseButtonInfo buttonInfo) {
+        return isContextActive() && areModifiersActive() && matchesMouse(buttonInfo.button());
+    }
+
+    /**
+     * Checks if the {@link KeyConflictContext} associated with this managed key mapping is currently active, its modifiers are active, and the specified mouse button is currently pressed.
+     *
+     * @param event The mouse button event to check.
+     * @return True if the key conflict context, modifiers, and mouse button are active, false otherwise.
+     */
+    default boolean isActiveAndMatchesMouse(MouseButtonEvent event) {
+        return isContextActive() && areModifiersActive() && matchesMouse(event.button());
+    }
+
+    /**
      * Checks if the {@link KeyConflictContext} associated with this managed key mapping is currently active, its modifiers are active, and the specified key, scan code, and modifiers match the current input.
      *
      * @param key       The key to check.
@@ -66,6 +90,16 @@ public interface ManagedKeyMapping {
      */
     default boolean isActiveAndMatchesKey(int key, int scanCode, int modifiers) {
         return isContextActive() && areModifiersActive() && matchesKey(key, scanCode, modifiers);
+    }
+
+    /**
+     * Checks if the {@link KeyConflictContext} associated with this managed key mapping is currently active, its modifiers are active, and the specified key, scan code, and modifiers match the current input.
+     *
+     * @param event The key event to check.
+     * @return True if the key conflict context, modifiers, and input match, false otherwise.
+     */
+    default boolean isActiveAndMatchesKey(KeyEvent event) {
+        return isContextActive() && areModifiersActive() && matchesKey(event.key(), event.scancode(), event.modifiers());
     }
 
     /**
@@ -152,12 +186,12 @@ public interface ManagedKeyMapping {
     interface Builder {
         /**
          * Sets the category for this key mapping. The category is used to group related key mappings together in the controls menu.
-         * By default, the category is set to <code>key.categories.[namespace]</code> where <code>[namespace]</code> is the namespace of the key mapping's id
+         * By default, the category is set to <code>key.categories.[namespace].default</code> where <code>[namespace]</code> is the namespace of the key mapping's id
          *
          * @param category The category for this key mapping.
          * @return This builder instance, for chaining.
          */
-        Builder overrideCategory(String category);
+        Builder overrideCategory(KeyMapping.Category category);
 
         /**
          * Sets the key conflict context for this key mapping. The conflict context is used to determine what other key mappings can be considered conflicting.

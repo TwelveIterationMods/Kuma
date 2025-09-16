@@ -49,22 +49,37 @@ public class Kuma {
      * @return True if all the specified modifiers are active, false otherwise.
      */
     public static boolean areModifiersActive(KeyModifiers modifiers) {
-        if (modifiers.contains(KeyModifier.ALT) && !Screen.hasAltDown()) {
+        if (modifiers.contains(KeyModifier.ALT) && !hasAltDown()) {
             return false;
         }
-        if (modifiers.contains(KeyModifier.CONTROL) && !Screen.hasControlDown()) {
+        if (modifiers.contains(KeyModifier.CONTROL) && !hasControlDown()) {
             return false;
         }
-        if (modifiers.contains(KeyModifier.SHIFT) && !Screen.hasShiftDown()) {
+        if (modifiers.contains(KeyModifier.SHIFT) && !hasShiftDown()) {
             return false;
         }
         final var window = Minecraft.getInstance().getWindow();
         for (final var key : modifiers.getCustomModifiers()) {
-            if (!InputConstants.isKeyDown(window.getWindow(), key.getValue())) {
+            if (!InputConstants.isKeyDown(window, key.getValue())) {
                 return false;
             }
         }
         return true;
+    }
+
+    private static boolean hasAltDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LALT)
+                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RALT);
+    }
+
+    private static boolean hasControlDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LCONTROL)
+                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RCONTROL);
+    }
+
+    private static boolean hasShiftDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RSHIFT);
     }
 
     /**
@@ -164,9 +179,9 @@ public class Kuma {
      */
     public static boolean isDown(InputConstants.Key key) {
         final var type = key.getType();
-        long window = Minecraft.getInstance().getWindow().getWindow();
+        final var window = Minecraft.getInstance().getWindow();
         if (type.equals(InputConstants.Type.MOUSE) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
-            return GLFW.glfwGetMouseButton(window, key.getValue()) == GLFW.GLFW_PRESS;
+            return GLFW.glfwGetMouseButton(window.handle(), key.getValue()) == GLFW.GLFW_PRESS;
         } else if (type.equals(InputConstants.Type.KEYSYM) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
             return InputConstants.isKeyDown(window, key.getValue());
         }
