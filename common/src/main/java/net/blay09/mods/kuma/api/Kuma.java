@@ -67,17 +67,17 @@ public class Kuma {
         return true;
     }
 
-    private static boolean hasAltDown() {
+    public static boolean hasAltDown() {
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LALT)
                 || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RALT);
     }
 
-    private static boolean hasControlDown() {
+    public static boolean hasControlDown() {
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LCONTROL)
                 || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RCONTROL);
     }
 
-    private static boolean hasShiftDown() {
+    public static boolean hasShiftDown() {
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)
                 || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RSHIFT);
     }
