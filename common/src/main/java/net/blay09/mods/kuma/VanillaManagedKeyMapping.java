@@ -39,11 +39,11 @@ public class VanillaManagedKeyMapping extends AbstractManagedKeyMapping {
 
     @Override
     public boolean isBound() {
-        return !mapping.isUnbound();
+        return mapping != null && !mapping.isUnbound();
     }
 
     @Override
     public boolean isUnbound() {
-        return mapping.isUnbound();
+        return mapping == null || mapping.isUnbound();
     }
 }
