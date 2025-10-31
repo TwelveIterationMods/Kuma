@@ -3,9 +3,9 @@ package net.blay09.mods.kuma.api;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.KumaRuntimeSpi;
+import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
@@ -73,8 +73,14 @@ public class Kuma {
     }
 
     public static boolean hasControlDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LCONTROL)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RCONTROL);
+        final var window = Minecraft.getInstance().getWindow();
+        if (Util.getPlatform() == Util.OS.OSX) {
+            return InputConstants.isKeyDown(window, InputConstants.KEY_LSUPER)
+                    || InputConstants.isKeyDown(window, InputConstants.KEY_RSUPER);
+        }
+
+        return InputConstants.isKeyDown(window, InputConstants.KEY_LCONTROL)
+                || InputConstants.isKeyDown(window, InputConstants.KEY_RCONTROL);
     }
 
     public static boolean hasShiftDown() {
