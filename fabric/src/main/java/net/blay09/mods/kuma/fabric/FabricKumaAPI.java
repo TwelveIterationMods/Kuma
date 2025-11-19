@@ -30,7 +30,7 @@ public class FabricKumaAPI implements ClientModInitializer {
                     }
 
                     if (keyMapping.isActiveAndMatchesMouse(button)) {
-                        if (keyMapping.handleScreenInput(new ScreenInputEvent(clickedScreen, button.x(), button.y(), keyMapping))) {
+                        if (keyMapping.handleScreenInput(new ScreenInputEvent(clickedScreen, button, button.x(), button.y(), keyMapping))) {
                             return false;
                         }
                     }
@@ -49,7 +49,7 @@ public class FabricKumaAPI implements ClientModInitializer {
                         int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                         int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
                         if (keyMapping.ignoresScreenFocus() || !pressedScreen.isFocused()) {
-                            if (keyMapping.handleScreenInput(new ScreenInputEvent(pressedScreen, mouseX, mouseY, keyMapping))) {
+                            if (keyMapping.handleScreenInput(new ScreenInputEvent(pressedScreen, event, mouseX, mouseY, keyMapping))) {
                                 return false;
                             }
                         }
