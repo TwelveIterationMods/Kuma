@@ -42,7 +42,7 @@ public class ForgeKumaAPIClient {
                 }
 
                 if (keyMapping.isActiveAndMatchesMouse(event.getButton())) {
-                    if (keyMapping.handleWorldInput(new WorldInputEvent(keyMapping))) {
+                    if (keyMapping.handleWorldInput(new WorldInputEvent(event.getInfo(), keyMapping))) {
                         return true;
                     }
                 }
@@ -62,7 +62,7 @@ public class ForgeKumaAPIClient {
                 }
 
                 if (event.getAction() == 1 && keyMapping.isActiveAndMatchesKey(event.getKey(), event.getScanCode(), event.getModifiers())) {
-                    keyMapping.handleWorldInput(new WorldInputEvent(keyMapping));
+                    keyMapping.handleWorldInput(new WorldInputEvent(event.getInfo(), keyMapping));
                     // TODO cannot cancel?
                 }
             }
