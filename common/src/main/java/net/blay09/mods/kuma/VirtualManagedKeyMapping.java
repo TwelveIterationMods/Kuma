@@ -9,8 +9,8 @@ public class VirtualManagedKeyMapping extends AbstractManagedKeyMapping {
 
     private InputBinding binding;
 
-    public VirtualManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputHandler, WorldInputEventHandler worldInputHandler, boolean keyRepeat, InputBinding binding) {
-        super(context, screenInputHandler, worldInputHandler, keyRepeat);
+    public VirtualManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputHandler, WorldInputEventHandler worldInputHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding binding) {
+        super(context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus);
         this.binding = binding;
     }
 

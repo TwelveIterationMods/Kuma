@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 /**
  * Represents a managed key mapping that can be used to handle input events.
  * The mapping can be associated with a specific input binding, context, and event handlers.
- * Implementations of this interface can be created using {@link Kuma#createKeyMapping(Identifier id)}.
+ * Implementations of this interface can be created using {@link Kuma#createKeyMapping(net.minecraft.resources.Identifier id)}.
  */
 public interface ManagedKeyMapping {
     /**
@@ -178,9 +178,16 @@ public interface ManagedKeyMapping {
     boolean isKeyRepeatEnabled();
 
     /**
+     * By default, screen handlers are not fired if a widget on a screen has focus (e.g. a text field), unless this returns true.
+     *
+     * @return True if this key mapping fires on screens even if the screen has a widget focused.
+     */
+    boolean ignoresScreenFocus();
+
+    /**
      * A builder interface for creating instances of {@link ManagedKeyMapping}.
      * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
-     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(Identifier id)}.
+     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(net.minecraft.resources.Identifier id)}.
      */
     interface Builder {
         /**
@@ -241,6 +248,14 @@ public interface ManagedKeyMapping {
          * @return This builder instance, for chaining.
          */
         Builder handleScreenInput(ScreenInputEventHandler handler);
+
+        /**
+         * By default, screen handlers are not fired if a widget on a screen has focus (e.g. a text field).
+         * Call this method to have screen events fired regardless of focus.
+         *
+         * @return This builder instance, for chaining.
+         */
+        Builder ignoreScreenFocus();
 
         /**
          * Builds and returns the configured ManagedKeyMapping instance.

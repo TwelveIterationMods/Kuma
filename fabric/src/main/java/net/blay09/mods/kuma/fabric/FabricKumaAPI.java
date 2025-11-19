@@ -2,7 +2,7 @@ package net.blay09.mods.kuma.fabric;
 
 import net.blay09.mods.kuma.AbstractManagedKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
-import net.blay09.mods.kuma.api.*;
+import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -48,8 +48,10 @@ public class FabricKumaAPI implements ClientModInitializer {
                         final var window = client.getWindow();
                         int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                         int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
-                        if (keyMapping.handleScreenInput(new ScreenInputEvent(pressedScreen, mouseX, mouseY, keyMapping))) {
-                            return false;
+                        if (keyMapping.ignoresScreenFocus() || !pressedScreen.isFocused()) {
+                            if (keyMapping.handleScreenInput(new ScreenInputEvent(pressedScreen, mouseX, mouseY, keyMapping))) {
+                                return false;
+                            }
                         }
                     }
                 }

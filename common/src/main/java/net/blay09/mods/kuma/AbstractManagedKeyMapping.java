@@ -10,13 +10,15 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     private final ScreenInputEventHandler screenInputEventHandler;
     private final WorldInputEventHandler worldInputEventHandler;
     private final boolean keyRepeat;
+    private final boolean ignoresScreenFocus;
     private boolean wasDown;
 
-    protected AbstractManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat) {
+    protected AbstractManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus) {
         this.context = context;
         this.screenInputEventHandler = screenInputEventHandler;
         this.worldInputEventHandler = worldInputEventHandler;
         this.keyRepeat = keyRepeat;
+        this.ignoresScreenFocus = ignoresScreenFocus;
     }
 
     @Override
@@ -97,6 +99,11 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     @Override
     public boolean isKeyRepeatEnabled() {
         return keyRepeat;
+    }
+
+    @Override
+    public boolean ignoresScreenFocus() {
+        return ignoresScreenFocus;
     }
 
     public void tick() {

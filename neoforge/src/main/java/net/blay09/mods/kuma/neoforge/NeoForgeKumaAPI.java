@@ -3,7 +3,8 @@ package net.blay09.mods.kuma.neoforge;
 import net.blay09.mods.kuma.AbstractManagedKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.VanillaManagedKeyMapping;
-import net.blay09.mods.kuma.api.*;
+import net.blay09.mods.kuma.api.ScreenInputEvent;
+import net.blay09.mods.kuma.api.WorldInputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
@@ -82,9 +83,11 @@ public class NeoForgeKumaAPI {
                     final var window = client.getWindow();
                     int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                     int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
-                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
-                        event.setCanceled(true);
-                        return;
+                    if (keyMapping.ignoresScreenFocus() || !event.getScreen().isFocused()) {
+                        if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
+                            event.setCanceled(true);
+                            return;
+                        }
                     }
                 }
             }

@@ -19,6 +19,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected WorldInputEventHandler worldInputHandler;
     protected ScreenInputEventHandler screenInputHandler;
     protected boolean keyRepeat = false;
+    protected boolean ignoresScreenFocus = false;
 
     public AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
@@ -73,6 +74,12 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         return this;
     }
 
+    @Override
+    public ManagedKeyMapping.Builder ignoreScreenFocus() {
+        ignoresScreenFocus = true;
+        return this;
+    }
+
     private KeyConflictContext determineContext() {
         if (worldInputHandler != null && screenInputHandler == null) {
             return KeyConflictContext.WORLD;
@@ -108,7 +115,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
                     }
                     return (ManagedKeyMapping) createVanillaKeyMapping(name, it);
                 })
-                .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, defaultBinding));
+                .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, defaultBinding));
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }

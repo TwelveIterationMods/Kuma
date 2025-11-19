@@ -13,8 +13,8 @@ public class VanillaManagedKeyMapping extends AbstractManagedKeyMapping {
 
     private KeyMapping mapping;
 
-    public VanillaManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, Supplier<KeyMapping> mappingSupplier) {
-        super(context, screenInputEventHandler, worldInputEventHandler, keyRepeat);
+    public VanillaManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, Supplier<KeyMapping> mappingSupplier) {
+        super(context, screenInputEventHandler, worldInputEventHandler, keyRepeat, ignoresScreenFocus);
         this.mappingSupplier = mappingSupplier;
     }
 

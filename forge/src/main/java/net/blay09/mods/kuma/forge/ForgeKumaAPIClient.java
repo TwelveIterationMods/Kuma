@@ -79,8 +79,10 @@ public class ForgeKumaAPIClient {
                     final var window = client.getWindow();
                     int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                     int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
-                    if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
-                        return true;
+                    if (keyMapping.ignoresScreenFocus() || !pressedScreen.isFocused()) {
+                        if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), mouseX, mouseY, keyMapping))) {
+                            return true;
+                        }
                     }
                 }
             }
