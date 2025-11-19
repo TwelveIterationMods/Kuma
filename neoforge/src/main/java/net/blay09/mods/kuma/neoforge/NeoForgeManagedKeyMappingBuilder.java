@@ -23,7 +23,7 @@ public class NeoForgeManagedKeyMappingBuilder extends AbstractManagedKeyMappingB
 
     @Override
     protected VanillaManagedKeyMapping createVanillaKeyMapping(String name, InputBinding binding) {
-        return new VanillaManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, () -> {
+        return new VanillaManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, () -> {
             final var defaultKey = binding.key();
             final var effectiveContext = mapConflictContext(context);
             final var effectiveModifier = NeoForgeKeyModifiers.toNeoForge(binding.modifiers());
