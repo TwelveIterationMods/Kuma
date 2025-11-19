@@ -5,11 +5,11 @@ import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.*;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class FabricManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuilder {
 
-    public FabricManagedKeyMappingBuilder(ResourceLocation id) {
+    public FabricManagedKeyMappingBuilder(Identifier id) {
         super(id);
     }
 

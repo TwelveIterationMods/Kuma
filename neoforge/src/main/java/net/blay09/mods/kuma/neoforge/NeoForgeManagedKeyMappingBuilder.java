@@ -5,11 +5,11 @@ import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.InputBinding;
 import net.blay09.mods.kuma.api.KeyConflictContext;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class NeoForgeManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuilder {
 
-    public NeoForgeManagedKeyMappingBuilder(ResourceLocation id) {
+    public NeoForgeManagedKeyMappingBuilder(Identifier id) {
         super(id);
     }
 

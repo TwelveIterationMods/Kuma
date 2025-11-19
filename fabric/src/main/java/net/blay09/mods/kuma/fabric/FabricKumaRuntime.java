@@ -4,11 +4,11 @@ import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.ManagedKeyMapping;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class FabricKumaRuntime implements KumaRuntime {
     @Override
-    public ManagedKeyMapping.Builder createKeyMapping(ResourceLocation id) {
+    public ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
         return new FabricManagedKeyMappingBuilder(id);
     }
 

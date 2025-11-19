@@ -5,12 +5,11 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 /**
  * Represents a managed key mapping that can be used to handle input events.
  * The mapping can be associated with a specific input binding, context, and event handlers.
- * Implementations of this interface can be created using {@link Kuma#createKeyMapping(ResourceLocation id)}.
+ * Implementations of this interface can be created using {@link Kuma#createKeyMapping(Identifier id)}.
  */
 public interface ManagedKeyMapping {
     /**
@@ -181,7 +180,7 @@ public interface ManagedKeyMapping {
     /**
      * A builder interface for creating instances of {@link ManagedKeyMapping}.
      * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
-     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(ResourceLocation id)}.
+     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(Identifier id)}.
      */
     interface Builder {
         /**

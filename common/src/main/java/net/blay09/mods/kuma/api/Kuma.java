@@ -3,10 +3,10 @@ package net.blay09.mods.kuma.api;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.KumaRuntimeSpi;
-import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -23,7 +23,7 @@ public class Kuma {
      * @param id The resource location that uniquely identifies the key mapping.
      * @return A new {@link ManagedKeyMapping.Builder} instance.
      */
-    public static ManagedKeyMapping.Builder createKeyMapping(ResourceLocation id) {
+    public static ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
         return runtime.createKeyMapping(id);
     }
 

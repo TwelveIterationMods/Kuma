@@ -2,7 +2,7 @@ package net.blay09.mods.kuma;
 
 import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
-    protected final ResourceLocation id;
+    protected final Identifier id;
     protected KeyMapping.Category category;
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
@@ -20,7 +20,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected ScreenInputEventHandler screenInputHandler;
     protected boolean keyRepeat = false;
 
-    public AbstractManagedKeyMappingBuilder(ResourceLocation id) {
+    public AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
         category = KumaKeyCategories.getDefaultCategory(id.getNamespace());
     }

@@ -116,7 +116,7 @@ class ExampleMod {
     public ExampleMod() {
         // Just a regular key mapping with a single modifier.
         // Will register as a regular KeyMapping on Forge and NeoForge, and as a virtual key mapping on Fabric.
-        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_1"))
+        Kuma.createKeyMapping(new Identifier("example", "example_key_1"))
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
@@ -127,7 +127,7 @@ class ExampleMod {
         // A key mapping with a fallback binding. 
         // If the environment does not support the binding, it will attempt to use the fallback instead of creating a virtual key mapping,
         // which means this key would not have a default on Fabric environments.
-        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_2"))
+        Kuma.createKeyMapping(new Identifier("example", "example_key_2"))
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .withFallbackDefault(InputBinding.none())
                 .handleScreenInput((event) -> {
@@ -138,7 +138,7 @@ class ExampleMod {
 
         // A key mapping with a custom modifier. These will always result in a virtual key mapping if no fallback binding is provided, since 
         // no mod loader supports them, unless the user also installs the Kuma companion mod.
-        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_3"))
+        Kuma.createKeyMapping(new Identifier("example", "example_key_3"))
                 // We want to use SPACE-CLICK by default. This will not be remappable unless the user installs also installs Kuma (not just Kuma API).
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT,
                         KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
@@ -149,7 +149,7 @@ class ExampleMod {
                 .build(); // Don't forget to call build() at the end!
 
         // A nonsense key mapping just to show off the rest of the methods.
-        Kuma.createKeyMapping(new ResourceLocation("example", "example_key_4"))
+        Kuma.createKeyMapping(new Identifier("example", "example_key_4"))
                 // By default, the category is created based on the resource location above. You can override it.
                 .overrideCategory("key.categories.movement")
                 .withDefault(InputBinding.key(InputConstants.KEY_G,
