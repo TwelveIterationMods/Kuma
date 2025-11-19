@@ -1,1 +1,4 @@
 - Updated to Minecraft 1.21.11
+- Screen key events no longer fire by default when a widget is focused (e.g. a textfield)
+  - Use `ignoreScreenFocus()` in your builder to allow screen events to fire even when a widget is focused
+- Added `InputWithModifiers input()` to `WorldInputEvent` and `ScreenInputEvent`
