@@ -2,6 +2,10 @@ package net.blay09.mods.kuma;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.api.*;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 
 public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
@@ -104,6 +108,20 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
     @Override
     public boolean ignoresScreenFocus() {
         return ignoresScreenFocus;
+    }
+
+    @Override
+    public boolean isActiveAndMatchesInput(InputWithModifiers input) {
+        if(!isContextActive() || areModifiersActive()) {
+            return false;
+        }
+
+        return switch (input) {
+            case KeyEvent event -> matchesKey(event.key(), event.scancode(), event.modifiers());
+            case MouseButtonEvent event -> matchesMouse(event.button());
+            case MouseButtonInfo event -> matchesMouse(event.button());
+            default -> false;
+        };
     }
 
     public void tick() {

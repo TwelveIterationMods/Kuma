@@ -1,6 +1,7 @@
 package net.blay09.mods.kuma.api;
 
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
@@ -100,6 +101,14 @@ public interface ManagedKeyMapping {
     default boolean isActiveAndMatchesKey(KeyEvent event) {
         return isContextActive() && areModifiersActive() && matchesKey(event.key(), event.scancode(), event.modifiers());
     }
+
+    /**
+     * Checks if the {@link KeyConflictContext} associated with this managed key mapping is currently active, its modifiers are active, and the specified key, scan code, and modifiers match the current input.
+     *
+     * @param input The input to check.
+     * @return True if the key conflict context, modifiers, and input match, false otherwise.
+     */
+    boolean isActiveAndMatchesInput(InputWithModifiers input);
 
     /**
      * Checks if the key mapping is currently pressed down.
