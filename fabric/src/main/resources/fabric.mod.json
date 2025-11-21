@@ -9,9 +9,9 @@
     "BlayTheNinth"
   ],
   "contact": {
-    "homepage": "https://mods.twelveiterations.com/mc/kuma",
-    "sources": "https://github.com/TwelveIterationMods/Kuma",
-    "issues": "https://github.com/TwelveIterationMods/Kuma/issues"
+    "homepage": "https://balm.twelveiterations.com/",
+    "sources": "https://github.com/TwelveIterationMods/KumaAPI",
+    "issues": "https://github.com/TwelveIterationMods/KumaAPI/issues"
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
@@ -30,7 +30,7 @@
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
-    "minecraft": ">=${minimum_minecraft_version}",
+    "minecraft": ">=${minecraft_version}",
     "java": ">=${java_version}"
   },
   "suggests": {
