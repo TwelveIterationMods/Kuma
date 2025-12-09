@@ -112,7 +112,7 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
     @Override
     public boolean isActiveAndMatchesInput(InputWithModifiers input) {
-        if(!isContextActive() || areModifiersActive()) {
+        if(!isContextActive() || !areModifiersActive()) {
             return false;
         }
 
