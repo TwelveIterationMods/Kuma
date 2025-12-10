@@ -23,11 +23,11 @@ public class ForgeManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuil
 
     @Override
     protected VanillaManagedKeyMapping createVanillaKeyMapping(String name, InputBinding binding) {
-        return new VanillaManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, () -> {
+        return new VanillaManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, () -> {
             final var defaultKey = binding.key();
             final var effectiveContext = mapConflictContext(context);
             final var effectiveModifier = ForgeKeyModifiers.toNeoForge(binding.modifiers());
-            return new KeyMapping(name, effectiveContext, effectiveModifier, defaultKey.getType(), defaultKey.getValue(), category);
+            return new KeyMapping(name, effectiveContext, effectiveModifier, defaultKey.getType(), defaultKey.getValue(), category, 0);
         });
     }
 }
