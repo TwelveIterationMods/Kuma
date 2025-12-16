@@ -2,11 +2,10 @@ package net.blay09.mods.kuma.api;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a set of key modifiers, such as Shift, Ctrl, Alt, etc, as well as custom modifiers.
@@ -66,6 +65,17 @@ public class KeyModifiers {
      */
     public KeyModifiers addCustomModifier(int keyCode) {
         customModifiers.add(InputConstants.Type.KEYSYM.getOrCreate(keyCode));
+        return this;
+    }
+
+    /**
+     * Adds a standard key modifier to this set of key modifiers.
+     *
+     * @param modifier The key modifier to add.
+     * @return This {@link KeyModifiers} instance, for method chaining.
+     */
+    public KeyModifiers addModifier(KeyModifier modifier) {
+        modifiers.add(modifier);
         return this;
     }
 
@@ -139,11 +149,78 @@ public class KeyModifiers {
         return keyModifiers;
     }
 
+    /**
+     * Tests the given event for whether its modifiers match this {@link KeyModifiers} instance.
+     *
+     * @param event The input event to test.
+     * @return <code>true</code> if the modifiers in the event match this set of key modifiers
+     */
+    public boolean test(InputWithModifiers event) {
+        for (final var modifier : modifiers) {
+            if (!modifier.isActiveOn(event)) {
+                return false;
+            }
+        }
+
+        for (final var customModifier : customModifiers) {
+            if (!Kuma.isDown(customModifier)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public String toString() {
         return "KeyModifiers{" +
                 "modifiers=" + modifiers +
                 ", customModifiers=" + customModifiers +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof KeyModifiers that)) {
+            return false;
+        }
+
+        return Objects.equals(modifiers, that.modifiers) && Objects.equals(customModifiers, that.customModifiers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(modifiers, customModifiers);
+    }
+
+    public Component getTranslatedKeyMessage(KeyMapping keyMapping) {
+        if (modifiers.isEmpty() && customModifiers.isEmpty()) {
+            return keyMapping.getTranslatedKeyMessage();
+        }
+
+        final var parts = new ArrayList<Component>();
+        for (final var modifier : modifiers) {
+            if (modifier != KeyModifier.NONE) {
+                parts.add(switch (modifier) {
+                    case SHIFT -> Component.translatable("key.keyboard.modifier.shift");
+                    case CONTROL -> Component.translatable("key.keyboard.modifier.control");
+                    case ALT -> Component.translatable("key.keyboard.modifier.alt");
+                    default -> Component.empty();
+                });
+            }
+        }
+
+        for (final var customModifier : customModifiers) {
+            parts.add(customModifier.getDisplayName());
+        }
+
+        parts.add(keyMapping.getTranslatedKeyMessage());
+
+        var result = parts.getFirst();
+        for (int i = 1; i < parts.size(); i++) {
+            result = Component.translatable("key.keyboard.modifiers", result, parts.get(i));
+        }
+
+        return result;
     }
 }

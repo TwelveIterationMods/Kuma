@@ -7,7 +7,13 @@
   "mixins": [
   ],
   "client": [
-    "KeyMappingAccessor"
+    "KeyMappingAccessor",
+    "KeyMappingMixin",
+    "KeyEntryMixin",
+    "ButtonAccessor",
+    "KeyBindsListAccessor",
+    "KeyBindsScreenMixin",
+    "KeyBindsScreenAccessor"
   ],
   "server": [
   ],

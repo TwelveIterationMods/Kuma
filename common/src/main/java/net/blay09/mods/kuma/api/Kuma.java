@@ -91,37 +91,45 @@ public class Kuma {
     /**
      * Checks if the runtime supports multiple key mappings to be bound to the same key. On some platforms, only the first key mapping will receive input events if multiple key mappings are bound to the same key.
      *
+     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
      * @return True if the runtime supports multiple key bindings, false otherwise.
      */
+    @Deprecated
     public static boolean areMultiBindingsSupported() {
-        return runtime.areMultiBindingsSupported();
+        return true;
     }
 
     /**
      * Checks if the runtime supports key modifiers.
      *
+     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
      * @return True if the runtime supports key modifiers, false otherwise.
      */
+    @Deprecated
     public static boolean areModifiersSupported() {
-        return runtime.areModifiersSupported();
+        return true;
     }
 
     /**
      * Checks if the runtime supports multiple key modifiers for a key mapping at the same time. Most platforms only support one key modifier at a time.
      *
+     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
      * @return True if the runtime supports multiple key modifiers, false otherwise.
      */
+    @Deprecated
     public static boolean areMultiModifiersSupported() {
-        return runtime.areMultiModifiersSupported();
+        return true;
     }
 
     /**
      * Checks if the runtime supports custom key modifiers. Custom key modifiers are modifiers that are not the standard Alt, Control, or Shift modifiers. Most platforms do not support these kind of modifiers.
      *
+     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
      * @return True if the runtime supports custom key modifiers, false otherwise.
      */
+    @Deprecated
     public static boolean areCustomModifiersSupported() {
-        return runtime.areCustomModifiersSupported();
+        return true;
     }
 
     /**
@@ -129,31 +137,11 @@ public class Kuma {
      *
      * @param binding The input binding to check.
      * @param context The key conflict context.
+     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
      * @return True if the input binding is supported, false otherwise.
      */
+    @Deprecated
     public static boolean isBindingSupported(InputBinding binding, KeyConflictContext context) {
-        final var defaultModifiers = binding.modifiers();
-        final var requiresKeyModifiers = !defaultModifiers.isEmpty();
-        final var requiresMultipleKeyModifiers = defaultModifiers.size() > 1;
-        final var requiresCustomKeyModifiers = defaultModifiers.hasCustomModifiers();
-        if (requiresKeyModifiers && !Kuma.areModifiersSupported()) {
-            return false;
-        }
-        if (requiresMultipleKeyModifiers && !Kuma.areMultiModifiersSupported()) {
-            return false;
-        }
-        if (requiresCustomKeyModifiers && !Kuma.areCustomModifiersSupported()) {
-            return false;
-        }
-
-        /*if (!Kuma.areMultiBindingsSupported()) {
-            for (final var keyMapping : Minecraft.getInstance().options.keyMappings) {
-                if (binding.key().equals(keyMapping.getDefaultKey())) {
-                    return false;
-                }
-            }
-        }*/
-
         return true;
     }
 
@@ -164,7 +152,7 @@ public class Kuma {
      * @return The key modifiers for the specified key mapping.
      */
     public static KeyModifiers getKeyModifiers(KeyMapping keyMapping) {
-        return runtime.getKeyModifiers(keyMapping);
+        return keyMapping instanceof KumaKeyMapping kumaKeyMapping ? kumaKeyMapping.kuma$getModifiers() : KeyModifiers.none();
     }
 
     /**
@@ -192,5 +180,9 @@ public class Kuma {
             return InputConstants.isKeyDown(window, key.getValue());
         }
         return false;
+    }
+
+    public static KeyMappingStorage getDefaultStorage() {
+        return runtime.getDefaultStorage();
     }
 }

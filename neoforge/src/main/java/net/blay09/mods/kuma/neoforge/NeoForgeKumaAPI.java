@@ -1,8 +1,7 @@
 package net.blay09.mods.kuma.neoforge;
 
-import net.blay09.mods.kuma.AbstractManagedKeyMapping;
+import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
-import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
 import net.minecraft.client.Minecraft;
@@ -22,7 +21,7 @@ public class NeoForgeKumaAPI {
     public NeoForgeKumaAPI(IEventBus modEventBus) {
         modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (managedKeyMapping instanceof VanillaManagedKeyMapping vanillaManagedKeyMapping) {
+                if (managedKeyMapping instanceof ManagedKeyMappingImpl vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
                 }
             }
@@ -30,7 +29,7 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
+                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
                     managedKeyMapping.tick();
                 }
             }

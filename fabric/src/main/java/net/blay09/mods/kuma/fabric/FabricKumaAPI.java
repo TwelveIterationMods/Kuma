@@ -1,13 +1,15 @@
 package net.blay09.mods.kuma.fabric;
 
-import net.blay09.mods.kuma.AbstractManagedKeyMapping;
+import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
+import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.util.Mth;
 
 public class FabricKumaAPI implements ClientModInitializer {
@@ -16,13 +18,18 @@ public class FabricKumaAPI implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
+                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
                     managedKeyMapping.tick();
                 }
             }
         });
 
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
+            if (screen instanceof KeyBindsScreen) {
+                ScreenMouseEvents.afterMouseRelease(screen).register(KeyBindsScreenHooks::afterMouseRelease);
+                ScreenKeyboardEvents.afterKeyRelease(screen).register(KeyBindsScreenHooks::afterKeyRelease);
+            }
+
             ScreenMouseEvents.allowMouseClick(screen).register((clickedScreen, button) -> {
                 for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                     if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {

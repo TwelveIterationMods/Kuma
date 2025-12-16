@@ -7,7 +7,7 @@ package net.blay09.mods.kuma.api;
 @FunctionalInterface
 public interface WorldInputEventHandler {
     /**
-     *  Handles a key mapping event while interacting with the world (i.e. no screens are open).
+     * Handles a key mapping event while interacting with the world (i.e. no screens are open).
      * @param event The world input event to handle.
      * @return {@code true} if the event was handled, {@code false} otherwise.
      */
