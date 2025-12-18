@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import net.blay09.mods.kuma.api.InputBinding;
 import net.blay09.mods.kuma.api.KeyMappingStorage;
+import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.ManagedKeyMapping;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class SharedJsonKeyMappingStorage implements KeyMappingStorage {
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(Identifier.class, new IdentifierAdapter())
-            .registerTypeAdapter(net.blay09.mods.kuma.api.KeyModifiers.class, new KeyModifiersAdapter())
+            .registerTypeAdapter(KeyModifiers.class, new KeyModifiersAdapter())
             .registerTypeAdapter(ExtendedKeyMappingData.class, new ExtendedKeyMappingDataAdapter())
             .create();
 
