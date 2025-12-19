@@ -67,6 +67,7 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
             kumaKeyMapping.kuma$setManagedKeyMapping(this);
             kumaKeyMapping.kuma$setConflictContext(context);
             kumaKeyMapping.kuma$setDefaultModifiers(getDefaultBinding().modifiers());
+            kumaKeyMapping.kuma$setModifiers(getDefaultBinding().modifiers());
         }
         return mapping;
     }
