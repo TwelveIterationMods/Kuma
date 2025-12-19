@@ -5,6 +5,7 @@ import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.KumaRuntimeSpi;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
@@ -184,5 +185,19 @@ public class Kuma {
 
     public static KeyMappingStorage getDefaultStorage() {
         return runtime.getDefaultStorage();
+    }
+
+    public static @InputWithModifiers.Modifiers int getActiveModifierFlags() {
+        int modifiers = 0;
+        if (hasShiftDown()) {
+            modifiers |= 1;
+        }
+        if (hasControlDown()) {
+            modifiers |= 2;
+        }
+        if (hasAltDown()) {
+            modifiers |= 4;
+        }
+        return modifiers;
     }
 }
