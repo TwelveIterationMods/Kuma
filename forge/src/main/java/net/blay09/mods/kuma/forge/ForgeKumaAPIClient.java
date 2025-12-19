@@ -2,10 +2,14 @@ package net.blay09.mods.kuma.forge;
 
 import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
-import net.blay09.mods.kuma.api.ManagedKeyMapping;
+import net.blay09.mods.kuma.api.Kuma;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
+import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -67,7 +71,21 @@ public class ForgeKumaAPIClient {
                 }
             }
         });
+        
+        ScreenEvent.KeyReleased.Post.BUS.addListener((event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getInfo());
+            }
+        });
 
+        ScreenEvent.MouseButtonReleased.Post.BUS.addListener((event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                final var mouseButtonInfo = new MouseButtonInfo(event.getButton(), Kuma.getActiveModifierFlags());
+                final var mouseButtonEvent = new MouseButtonEvent(event.getMouseX(), event.getMouseY(), mouseButtonInfo);
+                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent, event.wasHandled());
+            }
+        });
+        
         ScreenEvent.KeyPressed.Pre.BUS.addListener((event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {

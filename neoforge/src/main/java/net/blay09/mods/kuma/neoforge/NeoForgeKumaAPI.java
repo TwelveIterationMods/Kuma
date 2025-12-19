@@ -4,7 +4,9 @@ import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
+import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -68,6 +70,18 @@ public class NeoForgeKumaAPI {
                     keyMapping.handleWorldInput(new WorldInputEvent(event.getKeyEvent(), keyMapping));
                     // TODO cannot cancel?
                 }
+            }
+        });
+
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.KeyReleased.Post event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getKeyEvent());
+            }
+        });
+
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonReleased.Post event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), event.getMouseButtonEvent(), event.getReleaseResult());
             }
         });
 
