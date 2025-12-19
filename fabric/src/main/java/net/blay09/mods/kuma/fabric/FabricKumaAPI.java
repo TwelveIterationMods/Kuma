@@ -26,7 +26,7 @@ public class FabricKumaAPI implements ClientModInitializer {
 
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
             if (screen instanceof KeyBindsScreen) {
-                ScreenMouseEvents.afterMouseRelease(screen).register(KeyBindsScreenHooks::afterMouseRelease);
+                ScreenMouseEvents.afterMouseRelease(screen).register((scr, mouseButtonEvent, b) -> KeyBindsScreenHooks.afterMouseRelease(scr, mouseButtonEvent));
                 ScreenKeyboardEvents.afterKeyRelease(screen).register(KeyBindsScreenHooks::afterKeyRelease);
             }
 

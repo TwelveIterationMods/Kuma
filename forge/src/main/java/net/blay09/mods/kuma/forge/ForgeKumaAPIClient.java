@@ -82,7 +82,7 @@ public class ForgeKumaAPIClient {
             if (event.getScreen() instanceof KeyBindsScreen) {
                 final var mouseButtonInfo = new MouseButtonInfo(event.getButton(), Kuma.getActiveModifierFlags());
                 final var mouseButtonEvent = new MouseButtonEvent(event.getMouseX(), event.getMouseY(), mouseButtonInfo);
-                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent, event.wasHandled());
+                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent);
             }
         });
         
