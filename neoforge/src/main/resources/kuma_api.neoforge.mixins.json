@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.blay09.mods.kuma.mixin",
+  "package": "net.blay09.mods.kuma.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
