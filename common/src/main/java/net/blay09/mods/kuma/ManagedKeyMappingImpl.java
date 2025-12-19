@@ -2,34 +2,90 @@ package net.blay09.mods.kuma;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.api.*;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
-public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
+import java.util.function.Supplier;
 
+public class ManagedKeyMappingImpl implements ManagedKeyMapping {
+
+    private final Supplier<KeyMapping> mappingSupplier;
+    private KeyMapping mapping;
+
+    private final Identifier id;
     private final KeyConflictContext context;
     private final ScreenInputEventHandler screenInputEventHandler;
     private final WorldInputEventHandler worldInputEventHandler;
     private final boolean keyRepeat;
     private final boolean ignoresScreenFocus;
+    private final InputBinding defaultBinding;
+    private final KeyMappingStorage storage;
     private boolean wasDown;
 
-    protected AbstractManagedKeyMapping(KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus) {
+    public ManagedKeyMappingImpl(Identifier id, KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding defaultBinding, KeyMappingStorage storage, Supplier<KeyMapping> mappingSupplier) {
+        this.id = id;
         this.context = context;
         this.screenInputEventHandler = screenInputEventHandler;
         this.worldInputEventHandler = worldInputEventHandler;
         this.keyRepeat = keyRepeat;
         this.ignoresScreenFocus = ignoresScreenFocus;
+        this.defaultBinding = defaultBinding;
+        this.storage = storage;
+        this.mappingSupplier = mappingSupplier;
     }
 
     @Override
-    public abstract void setBinding(InputBinding binding);
+    public Identifier getId() {
+        return id;
+    }
 
     @Override
-    public abstract InputBinding getBinding();
+    public void setBinding(InputBinding binding) {
+        if (mapping != null) {
+            mapping.setKey(binding.key());
+            if (mapping instanceof KumaKeyMapping kumaKeyMapping) {
+                kumaKeyMapping.kuma$setModifiers(binding.modifiers());
+                storage.saveKeyMapping(this);
+            }
+        }
+    }
+
+    @Override
+    public InputBinding getBinding() {
+        return mapping != null ? InputBinding.of(mapping) : InputBinding.none();
+    }
+
+    public KeyMapping register() {
+        mapping = mappingSupplier.get();
+        if (mapping instanceof KumaKeyMapping kumaKeyMapping) {
+            kumaKeyMapping.kuma$setManagedKeyMapping(this);
+            kumaKeyMapping.kuma$setConflictContext(context);
+            kumaKeyMapping.kuma$setDefaultModifiers(getDefaultBinding().modifiers());
+            kumaKeyMapping.kuma$setModifiers(getDefaultBinding().modifiers());
+        }
+        return mapping;
+    }
+
+    @Override
+    public boolean isBound() {
+        return mapping != null && !mapping.isUnbound();
+    }
+
+    @Override
+    public boolean isUnbound() {
+        return mapping == null || mapping.isUnbound();
+    }
+
+    @Override
+    public InputBinding getDefaultBinding() {
+        return defaultBinding;
+    }
 
     protected InputConstants.Key getKey() {
         return getBinding().key();
@@ -83,6 +139,10 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
             return false;
         }
 
+        if (event.screen() instanceof KeyBindsScreen) {
+            return false;
+        }
+
         return screenInputEventHandler.handle(event);
     }
 
@@ -112,7 +172,7 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
     @Override
     public boolean isActiveAndMatchesInput(InputWithModifiers input) {
-        if(!isContextActive() || !areModifiersActive()) {
+        if (!isContextActive() || !areModifiersActive()) {
             return false;
         }
 
@@ -126,5 +186,10 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping {
 
     public void tick() {
         wasDown = isDown();
+    }
+
+    @Override
+    public KeyMappingStorage getStorage() {
+        return storage;
     }
 }

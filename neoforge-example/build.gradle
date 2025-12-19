@@ -1,0 +1,50 @@
+plugins {
+    alias libs.plugins.modDevGradle
+}
+
+neoForge {
+    version = libs.neoForge.get().version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+
+    parchment.parchmentArtifact = libs.parchment.get().toString()
+
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', 'kuma_example')
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+        }
+
+        client {
+            client()
+        }
+    }
+
+    mods {
+        kuma_example {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+apply from: rootProject.file('repositories.gradle')
+apply from: 'dependencies.gradle'
+
+def neoForgeSnapshotUrl = findProperty("neoforge_snapshot_url")
+if (neoForgeSnapshotUrl != null && !neoForgeSnapshotUrl.isBlank()) {
+    repositories {
+        maven {
+            name = 'Maven for NeoForge Snapshots'
+            url = neoForgeSnapshotUrl
+            content {
+                includeModule('net.neoforged', 'neoforge')
+                includeModule('net.neoforged', 'testframework')
+            }
+        }
+    }
+}

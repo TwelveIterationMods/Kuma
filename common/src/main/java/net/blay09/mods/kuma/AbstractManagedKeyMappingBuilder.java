@@ -4,22 +4,17 @@ import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
     protected final Identifier id;
     protected KeyMapping.Category category;
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
-    protected List<InputBinding> fallbackBindings = new ArrayList<>();
-    protected boolean forceVirtual;
     protected WorldInputEventHandler worldInputHandler;
     protected ScreenInputEventHandler screenInputHandler;
     protected boolean keyRepeat = false;
     protected boolean ignoresScreenFocus = false;
+    protected KeyMappingStorage storage = Kuma.getDefaultStorage();
 
     public AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
@@ -45,20 +40,14 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     }
 
     @Override
-    public ManagedKeyMapping.Builder withFallbackDefault(InputBinding binding) {
-        this.fallbackBindings.add(binding);
+    public ManagedKeyMapping.Builder withCustomStorage(KeyMappingStorage storage) {
+        this.storage = storage;
         return this;
     }
 
     @Override
     public ManagedKeyMapping.Builder handleWorldInput(WorldInputEventHandler handler) {
         this.worldInputHandler = handler;
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder forceVirtual() {
-        this.forceVirtual = true;
         return this;
     }
 
@@ -90,35 +79,17 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         return KeyConflictContext.UNIVERSAL;
     }
 
-    private Optional<InputBinding> determineBinding() {
-        if (Kuma.isBindingSupported(defaultBinding, context)) {
-            return Optional.of(defaultBinding);
-        }
-        for (InputBinding binding : fallbackBindings) {
-            if (Kuma.isBindingSupported(binding, context)) {
-                return Optional.of(binding);
-            }
-        }
-        return Optional.empty();
-    }
-
     @Override
     public ManagedKeyMapping build() {
         final var name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
         if (context == null) {
             context = determineContext();
         }
-        var effectiveBinding = determineBinding();
-        var managedKeyMapping = effectiveBinding.map(it -> {
-                    if (forceVirtual) {
-                        return null;
-                    }
-                    return (ManagedKeyMapping) createVanillaKeyMapping(name, it);
-                })
-                .orElseGet(() -> new VirtualManagedKeyMapping(context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, defaultBinding));
+        final var managedKeyMapping = createVanillaKeyMapping(id, name, defaultBinding);
+        managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }
 
-    protected abstract VanillaManagedKeyMapping createVanillaKeyMapping(String name, InputBinding binding);
+    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding);
 }

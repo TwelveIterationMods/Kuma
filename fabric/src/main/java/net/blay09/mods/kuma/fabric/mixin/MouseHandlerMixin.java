@@ -1,4 +1,4 @@
-package net.blay09.mods.kuma.mixin;
+package net.blay09.mods.kuma.fabric.mixin;
 
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.api.WorldInputEvent;

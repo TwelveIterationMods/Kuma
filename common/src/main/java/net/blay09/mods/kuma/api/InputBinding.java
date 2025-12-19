@@ -3,7 +3,9 @@ package net.blay09.mods.kuma.api;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.mixin.KeyMappingAccessor;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 
 /**
  * Represents an input binding, which is a combination of a key or mouse button and optional key modifiers.
@@ -70,5 +72,18 @@ public record InputBinding(InputConstants.Key key, KeyModifiers modifiers) {
      */
     public static InputBinding of(KeyMapping mapping) {
         return new InputBinding(((KeyMappingAccessor) mapping).getKey(), KeyModifiers.of(mapping));
+    }
+
+    public static InputBinding of(InputWithModifiers event, KeyModifiers modifiers) {
+        if (event instanceof MouseButtonEvent mouseButtonEvent) {
+            return new InputBinding(InputConstants.Type.MOUSE.getOrCreate(mouseButtonEvent.button()), modifiers);
+        } else if (event instanceof KeyEvent keyEvent) {
+            return new InputBinding(InputConstants.getKey(keyEvent), modifiers);
+        }
+        return InputBinding.none();
+    }
+
+    public static InputBinding of(InputConstants.Key key, KeyModifiers modifiers) {
+        return new InputBinding(key, modifiers);
     }
 }

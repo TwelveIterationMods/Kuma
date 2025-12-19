@@ -1,11 +1,12 @@
 package net.blay09.mods.kuma.neoforge;
 
-import net.blay09.mods.kuma.AbstractManagedKeyMapping;
+import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
-import net.blay09.mods.kuma.VanillaManagedKeyMapping;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
+import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -22,7 +23,7 @@ public class NeoForgeKumaAPI {
     public NeoForgeKumaAPI(IEventBus modEventBus) {
         modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (managedKeyMapping instanceof VanillaManagedKeyMapping vanillaManagedKeyMapping) {
+                if (managedKeyMapping instanceof ManagedKeyMappingImpl vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
                 }
             }
@@ -30,7 +31,7 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof AbstractManagedKeyMapping managedKeyMapping) {
+                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
                     managedKeyMapping.tick();
                 }
             }
@@ -68,6 +69,22 @@ public class NeoForgeKumaAPI {
                 if (event.getAction() == 1 && keyMapping.isActiveAndMatchesKey(event.getKey(), event.getScanCode(), event.getModifiers())) {
                     keyMapping.handleWorldInput(new WorldInputEvent(event.getKeyEvent(), keyMapping));
                     // TODO cannot cancel?
+                }
+            }
+        });
+
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.KeyReleased.Pre event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                if (KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getKeyEvent())) {
+                    event.setCanceled(true);
+                }
+            }
+        });
+
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonReleased.Pre event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                if (KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), event.getMouseButtonEvent())) {
+                    event.setCanceled(true);
                 }
             }
         });

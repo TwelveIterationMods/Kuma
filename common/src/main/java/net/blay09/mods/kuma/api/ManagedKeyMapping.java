@@ -6,6 +6,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 /**
  * Represents a managed key mapping that can be used to handle input events.
@@ -14,11 +15,23 @@ import net.minecraft.network.chat.Component;
  */
 public interface ManagedKeyMapping {
     /**
+     * Gets the id that uniquely identifies this managed key mapping.
+     */
+    Identifier getId();
+
+    /**
      * Gets the input bound to this managed key mapping.
      *
      * @return The input binding bound to this key mapping.
      */
     InputBinding getBinding();
+
+    /**
+     * Gets the default input bound to this managed key mapping.
+     *
+     * @return The default input binding bound to this key mapping.
+     */
+    InputBinding getDefaultBinding();
 
     /**
      * Sets the input bound to  this managed key mapping.
@@ -193,6 +206,8 @@ public interface ManagedKeyMapping {
      */
     boolean ignoresScreenFocus();
 
+    KeyMappingStorage getStorage();
+
     /**
      * A builder interface for creating instances of {@link ManagedKeyMapping}.
      * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
@@ -228,9 +243,22 @@ public interface ManagedKeyMapping {
          * Add a fallback default input binding for this key mapping, to be used if the primary default binding or previous default bindings are not supported by the current runtime.
          *
          * @param binding The fallback default input binding to add to this key mapping.
+         * @deprecated Kuma supports all capabilities on all platforms now. Fallback bindings will never be used.
          * @return This builder instance, for chaining.
          */
-        Builder withFallbackDefault(InputBinding binding);
+        @Deprecated
+        default Builder withFallbackDefault(InputBinding binding) {
+            return this;
+        }
+
+        /**
+         * Specify a custom storage provider for storing this key's modifiers and extra data.
+         * Omit this call to use the default storage provided by Kuma.
+         *
+         * @param storage The storage provider to use for this key mapping.
+         * @return This builder instance, for chaining.
+         */
+        Builder withCustomStorage(KeyMappingStorage storage);
 
         /**
          * Adds a handler for world input events that are associated with this managed key mapping.
@@ -245,9 +273,13 @@ public interface ManagedKeyMapping {
          * Forces this key mapping to be treated as a virtual key mapping, even if the runtime would support it natively.
          * Virtual key mappings are not registered as regular key mappings and support all advanced features regardless of runtime.
          *
+         * @deprecated Kuma supports all capabilities on all platforms now. Virtual keys no longer exist.
          * @return This builder instance, for chaining.
          */
-        Builder forceVirtual();
+        @Deprecated
+        default Builder forceVirtual() {
+            return this;
+        }
 
         /**
          * Adds a handler for screen input events that are associated with this managed key mapping.

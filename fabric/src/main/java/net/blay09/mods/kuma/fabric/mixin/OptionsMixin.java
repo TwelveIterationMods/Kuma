@@ -1,4 +1,4 @@
-package net.blay09.mods.kuma.mixin;
+package net.blay09.mods.kuma.fabric.mixin;
 
 import net.blay09.mods.kuma.fabric.FabricKeyMappingContexts;
 import net.minecraft.client.Options;
