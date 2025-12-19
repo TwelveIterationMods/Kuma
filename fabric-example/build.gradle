@@ -1,8 +1,5 @@
 plugins {
-    id 'multiloader-loader'
     alias libs.plugins.fabricLoom
-    alias libs.plugins.curseForgeGradle
-    alias libs.plugins.modrinthMinotaur
 }
 
 dependencies {

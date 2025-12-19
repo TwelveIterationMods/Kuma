@@ -1,7 +1,4 @@
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
-
 plugins {
-    id 'multiloader-loader'
     alias libs.plugins.forgeGradle
     alias libs.plugins.mixin
     alias libs.plugins.curseForgeGradle
@@ -51,71 +48,8 @@ dependencies {
 apply from: rootProject.file('repositories.gradle')
 apply from: 'dependencies.gradle'
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            fg.component(it)
-        }
-    }
-}
-
-tasks.register('curseforge', TaskPublishCurseForge) {
-    dependsOn('build')
-    description = 'Publishes the Forge build to CurseForge.'
-    group = 'publishing'
-
-    apiToken = project.findProperty("curseforge.api_key") ?: System.getenv("CURSEFORGE_TOKEN") ?: "none"
-
-    def projectId = findProperty("curseforge_project_id")
-    onlyIf {
-        projectId != null
-    }
-    if (projectId) {
-        def mainFile = upload(findProperty("curseforge_project_id"), file("${project.buildDir}/libs/${base.archivesName}-${version}.jar"))
-        mainFile.changelog = rootProject.file('CHANGELOG.md').text
-        mainFile.addRequirement("balm")
-        mainFile.addGameVersion(libs.minecraft.get().version)
-        mainFile.releaseType = "release"
-        project.findProperty("curseforge_environments")?.split(",")?.toList()?.each { mainFile.addEnvironment(it) }
-    }
-}
-
-modrinth {
-    token = project.findProperty("modrinth.token") ?: System.getenv("MODRINTH_TOKEN") ?: "none"
-    projectId = findProperty("modrinth_project_id")
-    versionType = "release"
-    versionNumber = project.version + "+forge-" + libs.minecraft.get().version
-    uploadFile = jar
-    changelog = rootProject.file("CHANGELOG.md").text
-    gameVersions = [libs.minecraft.get().version]
-    syncBodyFrom = rootProject.file("modpage.md").text
-    loaders = ['forge']
-    dependencies {
-        required.project "balm"
-    }
-}
-
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
-}
-
-// Implement mcgradleconventions loader attribute
-def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
-    configurations.named("$variant") {
-        attributes {
-            attribute(loaderAttribute, 'forge')
-        }
-    }
-}
-sourceSets.configureEach {
-    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
-        configurations.named("$variant") {
-            attributes {
-                attribute(loaderAttribute, 'forge')
-            }
-        }
-    }
 }
