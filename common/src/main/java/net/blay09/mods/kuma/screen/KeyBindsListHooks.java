@@ -11,6 +11,10 @@ public class KeyBindsListHooks {
         ((ButtonAccessor) resetButton).setOnPress((button) -> {
             if (keyMapping instanceof KumaKeyMapping kumaKeyMapping) {
                 kumaKeyMapping.kuma$setModifiers(kumaKeyMapping.kuma$getDefaultModifiers());
+                final var managedKeyMapping = kumaKeyMapping.kuma$getManagedKeyMapping();
+                if (managedKeyMapping != null) {
+                    managedKeyMapping.getStorage().saveKeyMapping(managedKeyMapping);
+                }
             } else {
                 throw new IllegalStateException("Expected Kuma-managed key to implement KumaKeyMapping");
             }
