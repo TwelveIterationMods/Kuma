@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.bus.BusGroup;
 
 public class ForgeKumaAPIClient {
     public static void init(BusGroup modBusGroup) {
-        RegisterKeyMappingsEvent.getBus(modBusGroup).addListener((event) -> {
+        RegisterKeyMappingsEvent.BUS.addListener((event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof ManagedKeyMappingImpl vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
