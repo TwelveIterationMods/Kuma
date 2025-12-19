@@ -26,10 +26,6 @@ neoForge {
         client {
             client()
         }
-
-        server {
-            server()
-        }
     }
 
     mods {
