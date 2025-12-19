@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="${license}"
+issueTrackerURL="https://github.com/TwelveIterationMods/KumaAPI/issues"
+[[mods]]
+modId="kuma_example"
+version="${version}"
+displayName="Kuma Example Mod"
+displayURL="https://balm.twelveiterations.com/"
+logoFile="kuma_example.png"
+credits="BlayTheNinth"
+authors="BlayTheNinth"
+description='''${description}'''
+[[dependencies.kuma_example]]
+modId="neoforge"
+type="required"
+versionRange="[${neoforge_version},)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.kuma_example]]
+modId="minecraft"
+type="required"
+versionRange="[${minecraft_version},)"
+ordering="NONE"
+side="BOTH"
