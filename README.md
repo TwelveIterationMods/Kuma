@@ -5,24 +5,17 @@ Minecraft Mod. Universal Key Modifier API for Fabric, NeoForge and Forge.
 `kuma-api` is a library mod intended to be included in existing mods, providing an easy API layer for compatible
 key mappings with multi-loader, context and (multi-) modifier support.
 
-In the future, I plan to make a companion mod that extends the Controls menu with the ability to manage key mappings
-that otherwise would not be supported within the given loader, such as key modifiers on Fabric,
-multi-modifiers on (Neo)Forge, and custom modifiers (like `Space + Click`).
-
 #### Downloads
 
 Kuma API is meant to be included as an embedded library. There is no file to download or install as a user.
 
 ## Who needs this?
 
-This library is useful for mod developers targeting both Fabric and (Neo)Forge at once, or for those who wish to use the
-same API for their key mappings even when depending on more advanced features like multiple modifiers or
-custom modifier keys. Kuma API is designed to progressively upgrade or fallback to match the capabilities of its
-environment.
+This library is useful for mod developers targeting both Fabric and Neo/Forge at once, or for those who wish to use native Vanilla key mappings even when depending on more advanced features like multiple modifiers or
+custom modifier keys.
 
 I created it because both Crafting Tweaks and Inventory Essentials have plenty of modifier-based key mappings that were
-difficult to properly support across the different mod loaders and repeatedly ran into limitations with the Vanilla
-KeyMapping system.
+difficult to properly support across the different mod loaders and repeatedly ran into limitations.
 
 ## How to use as a Mod Developer
 
@@ -103,6 +96,8 @@ dependencies {
 }
 ```
 
+If you are using Balm, Kuma is already available to you! Balm comes with it included.
+
 2\. In your mod constructor or initializer, start creating key mappings using `Kuma`.
 
 Kuma API takes care of registering the vanilla `KeyMapping`s at the correct time.
@@ -114,8 +109,7 @@ Here's some examples for creating key mappings:
 ```java
 class ExampleMod {
     public ExampleMod() {
-        // Just a regular key mapping with a single modifier.
-        // Will register as a regular KeyMapping on Forge and NeoForge, and as a virtual key mapping on Fabric.
+        // Just a regular key mapping with a single modifier (CONTROL + G).
         Kuma.createKeyMapping(new Identifier("example", "example_key_1"))
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .handleScreenInput((event) -> {
@@ -124,22 +118,8 @@ class ExampleMod {
                 })
                 .build(); // Don't forget to call build() at the end!
 
-        // A key mapping with a fallback binding. 
-        // If the environment does not support the binding, it will attempt to use the fallback instead of creating a virtual key mapping,
-        // which means this key would not have a default on Fabric environments.
-        Kuma.createKeyMapping(new Identifier("example", "example_key_2"))
-                .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
-                .withFallbackDefault(InputBinding.none())
-                .handleScreenInput((event) -> {
-                    // TODO Add your press logic here
-                    return true;
-                })
-                .build(); // Don't forget to call build() at the end!
-
-        // A key mapping with a custom modifier. These will always result in a virtual key mapping if no fallback binding is provided, since 
-        // no mod loader supports them, unless the user also installs the Kuma companion mod.
+        // A key mapping with a custom modifier (SPACE + CLICK).
         Kuma.createKeyMapping(new Identifier("example", "example_key_3"))
-                // We want to use SPACE-CLICK by default. This will not be remappable unless the user installs also installs Kuma (not just Kuma API).
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT,
                         KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
                 .handleScreenInput((event) -> {
@@ -152,13 +132,8 @@ class ExampleMod {
         Kuma.createKeyMapping(new Identifier("example", "example_key_4"))
                 // By default, the category is created based on the resource location above. You can override it.
                 .overrideCategory("key.categories.movement")
-                .withDefault(InputBinding.key(InputConstants.KEY_G,
-                        KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
-                .withFallbackDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
+                .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
                 .withContext(KeyConflictContext.UNIVERSAL) // This is normally just inferred from the supplied input handlers.
-                 // forceVirtual prevents the mapping from being registered as a vanilla key mapping UNLESS the Kuma companion mod is installed.
-                 // Useful when binding to something like SHIFT or another Vanilla default key, because otherwise the Vanilla key would no longer trigger on Fabric.
-                .forceVirtual()
                 .handleScreenInput((event) -> {
                     // TODO Add your press logic here
                     return true;
