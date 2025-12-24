@@ -53,3 +53,7 @@ sourceSets.each {
     it.output.resourcesDir = dir
     it.java.destinationDirectory = dir
 }
+
+tasks.named('compileJava', JavaCompile).configure {
+    dependsOn(project(':forge').tasks.named('classes'))
+}
