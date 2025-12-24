@@ -2,13 +2,14 @@ package net.blay09.mods.kuma.storage.json;
 
 import com.google.gson.*;
 import net.blay09.mods.kuma.api.KeyModifiers;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 class ExtendedKeyMappingDataAdapter implements JsonSerializer<ExtendedKeyMappingData>, JsonDeserializer<ExtendedKeyMappingData> {
 
     @Override
-    public JsonElement serialize(ExtendedKeyMappingData src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(@Nullable ExtendedKeyMappingData src, Type typeOfSrc, JsonSerializationContext context) {
         final var result = new JsonObject();
         if (src != null) {
             result.add("modifiers", context.serialize(src.keyModifiers(), KeyModifiers.class));
@@ -17,7 +18,7 @@ class ExtendedKeyMappingDataAdapter implements JsonSerializer<ExtendedKeyMapping
     }
 
     @Override
-    public ExtendedKeyMappingData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public ExtendedKeyMappingData deserialize(@Nullable JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (json == null || json.isJsonNull()) {
             return new ExtendedKeyMappingData(KeyModifiers.none());
         }

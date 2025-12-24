@@ -8,11 +8,13 @@ import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 
 public class FabricKumaRuntime implements KumaRuntime {
 
+    @Nullable
     private KeyMappingStorage defaultStorage;
 
     @Override

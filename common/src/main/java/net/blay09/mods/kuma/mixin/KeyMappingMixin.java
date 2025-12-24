@@ -4,6 +4,7 @@ import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class KeyMappingMixin implements KumaKeyMapping {
 
     @Unique
+    @Nullable
     private ManagedKeyMapping kuma$managedKeyMapping;
 
     @Unique
@@ -31,6 +33,7 @@ public class KeyMappingMixin implements KumaKeyMapping {
     }
 
     @Override
+    @Nullable
     public ManagedKeyMapping kuma$getManagedKeyMapping() {
         return kuma$managedKeyMapping;
     }
@@ -66,7 +69,7 @@ public class KeyMappingMixin implements KumaKeyMapping {
     }
 
     @Override
-    public void kuma$setModifiers(KeyModifiers modifiers) {
+    public void kuma$setModifiers(@Nullable KeyModifiers modifiers) {
         kuma$modifiers = modifiers != null ? modifiers : KeyModifiers.none();
     }
 

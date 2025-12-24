@@ -8,11 +8,13 @@ import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.neoforged.fml.loading.FMLPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 
 public class NeoForgeKumaRuntime implements KumaRuntime {
 
+    @Nullable
     private KeyMappingStorage defaultStorage;
 
     @Override

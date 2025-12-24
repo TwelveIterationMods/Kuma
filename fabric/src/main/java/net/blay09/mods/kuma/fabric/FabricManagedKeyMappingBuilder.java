@@ -14,7 +14,7 @@ public class FabricManagedKeyMappingBuilder extends AbstractManagedKeyMappingBui
     }
 
     @Override
-    protected ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding) {
+    protected ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding, KeyConflictContext context) {
         final var managedKeyMapping = new ManagedKeyMappingImpl(id, context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, binding, storage, () -> {
             final var defaultKey = binding.key();
             return new KeyMapping(name, defaultKey.getType(), defaultKey.getValue(), category);

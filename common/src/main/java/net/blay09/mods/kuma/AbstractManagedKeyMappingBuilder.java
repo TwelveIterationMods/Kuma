@@ -3,14 +3,18 @@ package net.blay09.mods.kuma;
 import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
     protected final Identifier id;
     protected KeyMapping.Category category;
+    @Nullable
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
+    @Nullable
     protected WorldInputEventHandler worldInputHandler;
+    @Nullable
     protected ScreenInputEventHandler screenInputHandler;
     protected boolean keyRepeat = false;
     protected boolean ignoresScreenFocus = false;
@@ -85,11 +89,11 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         if (context == null) {
             context = determineContext();
         }
-        final var managedKeyMapping = createVanillaKeyMapping(id, name, defaultBinding);
+        final var managedKeyMapping = createVanillaKeyMapping(id, name, defaultBinding, context);
         managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }
 
-    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding);
+    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding, KeyConflictContext context1);
 }

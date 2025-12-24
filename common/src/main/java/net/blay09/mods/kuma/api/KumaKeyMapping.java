@@ -1,8 +1,11 @@
 package net.blay09.mods.kuma.api;
 
+import org.jspecify.annotations.Nullable;
+
 public interface KumaKeyMapping {
     boolean kuma$isManaged();
 
+    @Nullable
     ManagedKeyMapping kuma$getManagedKeyMapping();
 
     void kuma$setManagedKeyMapping(ManagedKeyMapping managed);
@@ -13,7 +16,7 @@ public interface KumaKeyMapping {
 
     KeyModifiers kuma$getModifiers();
 
-    void kuma$setModifiers(KeyModifiers modifiers);
+    void kuma$setModifiers(@Nullable KeyModifiers modifiers);
 
     KeyModifiers kuma$getDefaultModifiers();
 

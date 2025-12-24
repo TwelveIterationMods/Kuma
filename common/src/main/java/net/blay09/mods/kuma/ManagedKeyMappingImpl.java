@@ -10,17 +10,21 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 public class ManagedKeyMappingImpl implements ManagedKeyMapping {
 
     private final Supplier<KeyMapping> mappingSupplier;
+    @Nullable
     private KeyMapping mapping;
 
     private final Identifier id;
     private final KeyConflictContext context;
+    @Nullable
     private final ScreenInputEventHandler screenInputEventHandler;
+    @Nullable
     private final WorldInputEventHandler worldInputEventHandler;
     private final boolean keyRepeat;
     private final boolean ignoresScreenFocus;
@@ -28,7 +32,7 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
     private final KeyMappingStorage storage;
     private boolean wasDown;
 
-    public ManagedKeyMappingImpl(Identifier id, KeyConflictContext context, ScreenInputEventHandler screenInputEventHandler, WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding defaultBinding, KeyMappingStorage storage, Supplier<KeyMapping> mappingSupplier) {
+    public ManagedKeyMappingImpl(Identifier id, KeyConflictContext context, @Nullable ScreenInputEventHandler screenInputEventHandler, @Nullable WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding defaultBinding, KeyMappingStorage storage, Supplier<KeyMapping> mappingSupplier) {
         this.id = id;
         this.context = context;
         this.screenInputEventHandler = screenInputEventHandler;

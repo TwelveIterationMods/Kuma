@@ -2,13 +2,14 @@ package net.blay09.mods.kuma.storage.json;
 
 import com.google.gson.*;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 public class IdentifierAdapter implements JsonSerializer<Identifier>, JsonDeserializer<Identifier> {
 
     @Override
-    public JsonElement serialize(Identifier src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(@Nullable Identifier src, Type typeOfSrc, JsonSerializationContext context) {
         if (src == null) {
             throw new JsonParseException("Identifier cannot be null");
         }
@@ -16,7 +17,7 @@ public class IdentifierAdapter implements JsonSerializer<Identifier>, JsonDeseri
     }
 
     @Override
-    public Identifier deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public Identifier deserialize(@Nullable JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         if (json == null || json.isJsonNull()) {
             throw new JsonParseException("Identifier cannot be null");
         }
