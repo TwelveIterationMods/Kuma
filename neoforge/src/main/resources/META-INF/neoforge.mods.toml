@@ -3,25 +3,25 @@ loaderVersion="[1,)"
 license="${license}"
 issueTrackerURL="https://github.com/TwelveIterationMods/KumaAPI/issues"
 [[mods]]
-modId="${mod_id}"
+modId="kuma_api"
 version="${version}"
 displayName="${mod_name}"
 displayURL="https://balm.twelveiterations.com/"
-logoFile="${mod_id}.png"
+logoFile="kuma_api.png"
 credits="BlayTheNinth"
 authors="BlayTheNinth"
 description='''${description}'''
 [[mixins]]
-config = "${mod_id}.mixins.json"
+config = "kuma_api.mixins.json"
 [[mixins]]
-config = "${mod_id}.neoforge.mixins.json"
-[[dependencies.${mod_id}]]
+config = "kuma_api.neoforge.mixins.json"
+[[dependencies.kuma_api]]
 modId="neoforge"
 type="required"
 versionRange="[${neoforge_version},)"
 ordering="NONE"
 side="BOTH"
-[[dependencies.${mod_id}]]
+[[dependencies.kuma_api]]
 modId="minecraft"
 type="required"
 versionRange="[${minecraft_version},)"
