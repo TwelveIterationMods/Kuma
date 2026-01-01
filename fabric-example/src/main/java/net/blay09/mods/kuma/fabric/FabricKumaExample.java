@@ -20,5 +20,17 @@ public class FabricKumaExample implements ClientModInitializer {
                     return true;
                 })
                 .build();
+
+
+        Kuma.createKeyMapping(Identifier.fromNamespaceAndPath("kuma_example", "f4_test"))
+                .withDefault(InputBinding.key(InputConstants.KEY_F4, KeyModifiers.none()))
+                .handleWorldInput(event -> {
+                    if (!Kuma.isDown(InputConstants.getKey("key.keyboard.f3"))) {
+                        System.out.println("F4 input triggered");
+                        return true;
+                    }
+                    return false;
+                })
+                .build();
     }
 }
