@@ -28,8 +28,9 @@ public class KeyboardHandlerMixin {
                 }
 
                 if (keyMapping.isActiveAndMatchesKey(event)) {
-                    keyMapping.handleWorldInput(new WorldInputEvent(event, keyMapping));
-                    callbackInfo.cancel();
+                    if (keyMapping.handleWorldInput(new WorldInputEvent(event, keyMapping))) {
+                        callbackInfo.cancel();
+                    }
                     return;
                 }
             }
