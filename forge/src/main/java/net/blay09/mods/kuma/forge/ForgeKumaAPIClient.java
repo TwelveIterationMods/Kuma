@@ -1,7 +1,7 @@
 package net.blay09.mods.kuma.forge;
 
-import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
+import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.Kuma;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
@@ -72,21 +72,35 @@ public class ForgeKumaAPIClient {
                 }
             }
         });
-        
+
+        ScreenEvent.KeyPressed.Pre.BUS.addListener((event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                return !KeyBindsScreenHooks.allowKeyPress(event.getScreen(), event.getInfo());
+            }
+            return false;
+        });
+
         ScreenEvent.KeyReleased.Post.BUS.addListener((event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
                 KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getInfo());
             }
         });
 
+        ScreenEvent.MouseButtonPressed.Pre.BUS.addListener((event) -> {
+            if (event.getScreen() instanceof KeyBindsScreen) {
+                return !KeyBindsScreenHooks.allowMouseClick(event.getScreen(), event.getInfo());
+            }
+            return false;
+        });
+
         ScreenEvent.MouseButtonReleased.Post.BUS.addListener((event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
                 final var mouseButtonInfo = new MouseButtonInfo(event.getButton(), Kuma.getActiveModifierFlags());
                 final var mouseButtonEvent = new MouseButtonEvent(event.getMouseX(), event.getMouseY(), mouseButtonInfo);
-                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent);
+                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent, event.wasHandled());
             }
         });
-        
+
         ScreenEvent.KeyPressed.Pre.BUS.addListener((event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {

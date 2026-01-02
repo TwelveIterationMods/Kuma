@@ -193,9 +193,9 @@ public class KeyModifiers {
         return Objects.hash(modifiers, customModifiers);
     }
 
-    public Component getTranslatedKeyMessage(KeyMapping keyMapping) {
+    public Component getTranslatedKeyMessage(KeyMapping keyMapping, Component message) {
         if (modifiers.isEmpty() && customModifiers.isEmpty()) {
-            return keyMapping.getTranslatedKeyMessage();
+            return message;
         }
 
         final var parts = new ArrayList<Component>();
@@ -214,7 +214,7 @@ public class KeyModifiers {
             parts.add(customModifier.getDisplayName());
         }
 
-        parts.add(keyMapping.getTranslatedKeyMessage());
+        parts.add(message);
 
         var result = parts.getFirst();
         for (int i = 1; i < parts.size(); i++) {

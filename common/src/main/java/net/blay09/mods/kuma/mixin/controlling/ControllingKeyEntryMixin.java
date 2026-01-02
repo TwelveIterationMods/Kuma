@@ -1,12 +1,12 @@
-package net.blay09.mods.kuma.mixin;
+package net.blay09.mods.kuma.mixin.controlling;
 
+import com.blamejared.controlling.client.NewKeyBindsList;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.blay09.mods.kuma.api.KumaKeyMapping;
 import net.blay09.mods.kuma.screen.KeyBindsListHooks;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.options.controls.KeyBindsList;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,17 +15,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(KeyBindsList.KeyEntry.class)
-public class KeyEntryMixin {
+@Mixin(NewKeyBindsList.KeyEntry.class)
+public class ControllingKeyEntryMixin {
 
     @Shadow
     @Final
-    private Button resetButton;
+    private Button btnResetKeyBinding;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void init(KeyBindsList keyBindsList, KeyMapping keyMapping, final Component component, CallbackInfo ci) {
-        if (keyMapping instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
-            KeyBindsListHooks.updateResetButton(resetButton, keyMapping);
+    public void init(NewKeyBindsList this$0, KeyMapping key, Component keyDesc, CallbackInfo ci) {
+        if (key instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
+            KeyBindsListHooks.updateResetButton(btnResetKeyBinding, key);
         }
     }
 

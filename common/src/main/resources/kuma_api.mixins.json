@@ -10,9 +10,9 @@
     "KeyMappingAccessor",
     "KeyMappingMixin",
     "KeyEntryMixin",
+    "controlling.ControllingKeyEntryMixin",
     "ButtonAccessor",
     "KeyBindsListAccessor",
-    "KeyBindsScreenMixin",
     "KeyBindsScreenAccessor"
   ],
   "server": [

@@ -1,2 +1,4 @@
 dependencies {
+    api libs.controllingCommon
+    compileOnly libs.mixinExtras
 }

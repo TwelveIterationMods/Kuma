@@ -19,6 +19,8 @@ repositories {
         url = "https://maven.blamejared.com"
         content {
             includeGroup "mezz.jei"
+            includeGroup "com.blamejared.controlling"
+            includeGroup "com.blamejared.searchables"
         }
     }
 
@@ -88,6 +90,14 @@ repositories {
         content {
             includeGroup "novamachina.novacore"
             includeGroup "novamachina.exnihilosequentia"
+        }
+    }
+
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org/'
+        content {
+            includeGroup 'org.parchmentmc.data'
         }
     }
 	

@@ -4,7 +4,7 @@ neoForm = "1.21.11-20251209.172050"
 neoForge = "21.11.0-beta"
 forge = "61.0.1"
 fabricApi = "0.139.4+1.21.11"
-fabricLoader = "0.18.1"
+fabricLoader = "0.18.2"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -17,6 +17,9 @@ fabricApi = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabr
 fabricLoader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoader" }
 
 mixin = { module = "org.spongepowered:mixin", version = "0.8.7" }
+mixinExtras = { module = "io.github.llamalad7:mixinextras-common", version = "0.5.2" }
+
+controllingCommon = { module = "com.blamejared.controlling:Controlling-common-1.21.11", version = "29.0.1" }
 
 [plugins]
 fabricLoom = { id = "fabric-loom", version = "1.13-SNAPSHOT" }

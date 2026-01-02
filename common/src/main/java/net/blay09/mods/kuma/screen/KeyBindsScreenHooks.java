@@ -80,7 +80,7 @@ public class KeyBindsScreenHooks {
         return modifiers;
     }
 
-    public static boolean afterMouseRelease(Screen screen, MouseButtonEvent mouseButtonEvent) {
+    public static boolean afterMouseRelease(Screen screen, MouseButtonEvent mouseButtonEvent, boolean ignored) {
         if (screen instanceof KeyBindsScreen keyBindsScreen) {
             if (keyBindsScreen.selectedKey instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
                 if (consumeNext) {
@@ -141,5 +141,29 @@ public class KeyBindsScreenHooks {
 
     public static void consumeNextMouse() {
         consumeNext = true;
+    }
+
+    public static boolean allowKeyPress(Screen screen, KeyEvent keyEvent) {
+        if (screen instanceof KeyBindsScreenAccessor keyBindsScreenAccessor) {
+            final var selectedKey = keyBindsScreenAccessor.getSelectedKey();
+            if (selectedKey instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
+                KeyBindsScreenHooks.consumeNextKey(keyEvent);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean allowMouseClick(Screen screen, MouseButtonEvent mouseButtonEvent) {
+        if (screen instanceof KeyBindsScreenAccessor keyBindsScreenAccessor) {
+            final var selectedKey = keyBindsScreenAccessor.getSelectedKey();
+            if (selectedKey instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
+                KeyBindsScreenHooks.consumeNextMouse();
+                return false;
+            }
+        }
+
+        return true;
     }
 }
