@@ -80,10 +80,11 @@ public class ForgeKumaAPIClient {
             return false;
         });
 
-        ScreenEvent.KeyReleased.Post.BUS.addListener((event) -> {
+        ScreenEvent.KeyReleased.Pre.BUS.addListener((event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
-                KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getInfo());
+                return !KeyBindsScreenHooks.allowKeyRelease(event.getScreen(), event.getInfo());
             }
+            return false;
         });
 
         ScreenEvent.MouseButtonPressed.Pre.BUS.addListener((event) -> {
@@ -93,12 +94,13 @@ public class ForgeKumaAPIClient {
             return false;
         });
 
-        ScreenEvent.MouseButtonReleased.Post.BUS.addListener((event) -> {
+        ScreenEvent.MouseButtonReleased.Pre.BUS.addListener((event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
                 final var mouseButtonInfo = new MouseButtonInfo(event.getButton(), Kuma.getActiveModifierFlags());
                 final var mouseButtonEvent = new MouseButtonEvent(event.getMouseX(), event.getMouseY(), mouseButtonInfo);
-                KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), mouseButtonEvent, event.wasHandled());
+                return !KeyBindsScreenHooks.allowMouseRelease(event.getScreen(), mouseButtonEvent);
             }
+            return false;
         });
 
         ScreenEvent.KeyPressed.Pre.BUS.addListener((event) -> {

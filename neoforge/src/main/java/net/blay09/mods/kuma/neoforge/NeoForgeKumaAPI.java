@@ -84,7 +84,7 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ScreenEvent.KeyReleased.Pre event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
-                if (KeyBindsScreenHooks.afterKeyRelease(event.getScreen(), event.getKeyEvent())) {
+                if (!KeyBindsScreenHooks.allowKeyRelease(event.getScreen(), event.getKeyEvent())) {
                     event.setCanceled(true);
                 }
             }
@@ -100,7 +100,7 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonReleased.Pre event) -> {
             if (event.getScreen() instanceof KeyBindsScreen) {
-                if (KeyBindsScreenHooks.afterMouseRelease(event.getScreen(), event.getMouseButtonEvent(), false)) {
+                if (!KeyBindsScreenHooks.allowMouseRelease(event.getScreen(), event.getMouseButtonEvent())) {
                     event.setCanceled(true);
                 }
             }

@@ -75,6 +75,7 @@ repositories {
         url "https://maven.siphalor.de/"
         content {
             includeGroup "de.siphalor"
+            includeGroup "de.siphalor.amecs-api"
         }
     }
 

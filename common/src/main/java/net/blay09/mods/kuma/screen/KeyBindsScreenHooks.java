@@ -80,7 +80,7 @@ public class KeyBindsScreenHooks {
         return modifiers;
     }
 
-    public static boolean afterMouseRelease(Screen screen, MouseButtonEvent mouseButtonEvent, boolean ignored) {
+    public static boolean allowMouseRelease(Screen screen, MouseButtonEvent mouseButtonEvent) {
         if (screen instanceof KeyBindsScreen keyBindsScreen) {
             if (keyBindsScreen.selectedKey instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
                 if (consumeNext) {
@@ -95,14 +95,14 @@ public class KeyBindsScreenHooks {
                     ((KeyBindsScreenAccessor) keyBindsScreen).getKeyBindsList().resetMappingAndUpdateButtons();
                     consumeNext = false;
                     heldKeys.clear();
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    public static boolean afterKeyRelease(Screen screen, KeyEvent event) {
+    public static boolean allowKeyRelease(Screen screen, KeyEvent event) {
         if (screen instanceof KeyBindsScreen keyBindsScreen) {
             if (keyBindsScreen.selectedKey instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
                 if (consumeNext) {
@@ -123,12 +123,12 @@ public class KeyBindsScreenHooks {
                     ((KeyBindsScreenAccessor) keyBindsScreen).getKeyBindsList().resetMappingAndUpdateButtons();
                     consumeNext = false;
                     heldKeys.clear();
-                    return true;
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     public static void consumeNextKey(KeyEvent event) {
@@ -166,4 +166,5 @@ public class KeyBindsScreenHooks {
 
         return true;
     }
+
 }

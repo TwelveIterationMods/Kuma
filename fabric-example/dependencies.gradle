@@ -3,6 +3,6 @@ dependencies {
     implementation project(path: ":fabric", configuration: "namedElements")
 
     compileOnly libs.controllingCommon
-    modLocalRuntime "curse.maven:searchables-858542:7348865"
-    modLocalRuntime "curse.maven:controlling-250398:7349341"
+    // modLocalRuntime "curse.maven:searchables-858542:7348865"
+    // modLocalRuntime "curse.maven:controlling-250398:7349341"
 }
