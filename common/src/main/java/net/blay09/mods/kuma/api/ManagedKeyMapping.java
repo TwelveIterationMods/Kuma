@@ -243,8 +243,8 @@ public interface ManagedKeyMapping {
          * Add a fallback default input binding for this key mapping, to be used if the primary default binding or previous default bindings are not supported by the current runtime.
          *
          * @param binding The fallback default input binding to add to this key mapping.
-         * @deprecated Kuma supports all capabilities on all platforms now. Fallback bindings will never be used.
          * @return This builder instance, for chaining.
+         * @deprecated Kuma supports all capabilities on all platforms now. Fallback bindings will never be used.
          */
         @Deprecated
         default Builder withFallbackDefault(InputBinding binding) {
@@ -270,16 +270,23 @@ public interface ManagedKeyMapping {
         Builder handleWorldInput(WorldInputEventHandler handler);
 
         /**
-         * Forces this key mapping to be treated as a virtual key mapping, even if the runtime would support it natively.
-         * Virtual key mappings are not registered as regular key mappings and support all advanced features regardless of runtime.
+         * Has no effect.
          *
-         * @deprecated Kuma supports all capabilities on all platforms now. Virtual keys no longer exist.
          * @return This builder instance, for chaining.
+         * @see #skipRegistration()
+         * @deprecated Kuma supports all capabilities on all platforms now, making this method obsolete. Use {@link #skipRegistration()} to explicitly create a virtual key mapping.
          */
         @Deprecated
         default Builder forceVirtual() {
             return this;
         }
+
+        /**
+         * Skips registration of this key mapping. This can be used for virtual key mappings that should not show up in the Controls menu.
+         *
+         * @return This builder instance, for chaining.
+         */
+        Builder skipRegistration();
 
         /**
          * Adds a handler for screen input events that are associated with this managed key mapping.

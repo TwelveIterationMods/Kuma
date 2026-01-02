@@ -1,7 +1,8 @@
 package net.blay09.mods.kuma.neoforge;
 
-import net.blay09.mods.kuma.ManagedKeyMappingImpl;
+import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
+import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
 import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
@@ -23,7 +24,7 @@ public class NeoForgeKumaAPI {
     public NeoForgeKumaAPI(IEventBus modEventBus) {
         modEventBus.addListener((RegisterKeyMappingsEvent event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (managedKeyMapping instanceof ManagedKeyMappingImpl vanillaManagedKeyMapping) {
+                if (managedKeyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
                 }
             }
@@ -31,8 +32,8 @@ public class NeoForgeKumaAPI {
 
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
-                    managedKeyMapping.tick();
+                if (keyMapping instanceof TickableKeyMapping tickableKeyMapping) {
+                    tickableKeyMapping.tick();
                 }
             }
         });

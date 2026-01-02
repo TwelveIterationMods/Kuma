@@ -1,7 +1,7 @@
 package net.blay09.mods.kuma.fabric;
 
-import net.blay09.mods.kuma.ManagedKeyMappingImpl;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
+import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.screen.KeyBindsScreenHooks;
 import net.fabricmc.api.ClientModInitializer;
@@ -18,8 +18,8 @@ public class FabricKumaAPI implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
-                    managedKeyMapping.tick();
+                if (keyMapping instanceof TickableKeyMapping tickableKeyMapping) {
+                    tickableKeyMapping.tick();
                 }
             }
         });

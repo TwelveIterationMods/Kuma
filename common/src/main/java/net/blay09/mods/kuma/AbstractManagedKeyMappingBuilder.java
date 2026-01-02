@@ -19,6 +19,7 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected boolean keyRepeat = false;
     protected boolean ignoresScreenFocus = false;
     protected KeyMappingStorage storage = Kuma.getDefaultStorage();
+    protected boolean skipRegistration = false;
 
     public AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
@@ -62,6 +63,12 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     }
 
     @Override
+    public ManagedKeyMapping.Builder skipRegistration() {
+        skipRegistration = true;
+        return this;
+    }
+
+    @Override
     public ManagedKeyMapping.Builder enableKeyRepeat() {
         keyRepeat = true;
         return this;
@@ -89,11 +96,15 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         if (context == null) {
             context = determineContext();
         }
-        final var managedKeyMapping = createVanillaKeyMapping(id, name, defaultBinding, context);
+        final var managedKeyMapping = skipRegistration ? createVirtualKeyMapping(id, context) : createVanillaKeyMapping(id, name, defaultBinding, context);
         managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }
 
-    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding, KeyConflictContext context1);
+    protected ManagedKeyMapping createVirtualKeyMapping(Identifier id, KeyConflictContext context) {
+        return new ManagedVirtualKeyMapping(id, context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, defaultBinding, storage);
+    }
+
+    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding, KeyConflictContext context);
 }

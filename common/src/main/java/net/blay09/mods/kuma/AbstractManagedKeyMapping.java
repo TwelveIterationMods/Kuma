@@ -14,11 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class ManagedKeyMappingImpl implements ManagedKeyMapping {
-
-    private final Supplier<KeyMapping> mappingSupplier;
-    @Nullable
-    private KeyMapping mapping;
+public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping, TickableKeyMapping {
 
     private final Identifier id;
     private final KeyConflictContext context;
@@ -32,7 +28,7 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
     private final KeyMappingStorage storage;
     private boolean wasDown;
 
-    public ManagedKeyMappingImpl(Identifier id, KeyConflictContext context, @Nullable ScreenInputEventHandler screenInputEventHandler, @Nullable WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding defaultBinding, KeyMappingStorage storage, Supplier<KeyMapping> mappingSupplier) {
+    public AbstractManagedKeyMapping(Identifier id, KeyConflictContext context, @Nullable ScreenInputEventHandler screenInputEventHandler, @Nullable WorldInputEventHandler worldInputEventHandler, boolean keyRepeat, boolean ignoresScreenFocus, InputBinding defaultBinding, KeyMappingStorage storage) {
         this.id = id;
         this.context = context;
         this.screenInputEventHandler = screenInputEventHandler;
@@ -41,49 +37,11 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
         this.ignoresScreenFocus = ignoresScreenFocus;
         this.defaultBinding = defaultBinding;
         this.storage = storage;
-        this.mappingSupplier = mappingSupplier;
     }
 
     @Override
     public Identifier getId() {
         return id;
-    }
-
-    @Override
-    public void setBinding(InputBinding binding) {
-        if (mapping != null) {
-            mapping.setKey(binding.key());
-            if (mapping instanceof KumaKeyMapping kumaKeyMapping) {
-                kumaKeyMapping.kuma$setModifiers(binding.modifiers());
-                storage.saveKeyMapping(this);
-            }
-        }
-    }
-
-    @Override
-    public InputBinding getBinding() {
-        return mapping != null ? InputBinding.of(mapping) : InputBinding.none();
-    }
-
-    public KeyMapping register() {
-        mapping = mappingSupplier.get();
-        if (mapping instanceof KumaKeyMapping kumaKeyMapping) {
-            kumaKeyMapping.kuma$setManagedKeyMapping(this);
-            kumaKeyMapping.kuma$setConflictContext(context);
-            kumaKeyMapping.kuma$setDefaultModifiers(getDefaultBinding().modifiers());
-            kumaKeyMapping.kuma$setModifiers(getDefaultBinding().modifiers());
-        }
-        return mapping;
-    }
-
-    @Override
-    public boolean isBound() {
-        return mapping != null && !mapping.isUnbound();
-    }
-
-    @Override
-    public boolean isUnbound() {
-        return mapping == null || mapping.isUnbound();
     }
 
     @Override
@@ -188,6 +146,7 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
         };
     }
 
+    @Override
     public void tick() {
         wasDown = isDown();
     }
@@ -195,5 +154,9 @@ public class ManagedKeyMappingImpl implements ManagedKeyMapping {
     @Override
     public KeyMappingStorage getStorage() {
         return storage;
+    }
+
+    public KeyConflictContext getContext() {
+        return context;
     }
 }

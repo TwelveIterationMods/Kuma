@@ -20,7 +20,6 @@ public class FabricKumaExample implements ClientModInitializer {
                 })
                 .build();
 
-
         Kuma.createKeyMapping(Identifier.fromNamespaceAndPath("kuma_example", "f4_test"))
                 .withDefault(InputBinding.key(InputConstants.KEY_F4, KeyModifiers.none()))
                 .handleWorldInput(event -> {
@@ -29,6 +28,15 @@ public class FabricKumaExample implements ClientModInitializer {
                         return true;
                     }
                     return false;
+                })
+                .build();
+
+        Kuma.createKeyMapping(Identifier.fromNamespaceAndPath("kuma_example", "alt_1"))
+                .withDefault(InputBinding.key(InputConstants.KEY_1, KeyModifiers.of(KeyModifier.ALT)))
+                .skipRegistration()
+                .handleWorldInput(event -> {
+                    System.out.println("ALT+1 input triggered");
+                    return true;
                 })
                 .build();
     }

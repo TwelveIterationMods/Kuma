@@ -1,7 +1,8 @@
 package net.blay09.mods.kuma.forge;
 
-import net.blay09.mods.kuma.ManagedKeyMappingImpl;
+import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
+import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.Kuma;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
@@ -21,7 +22,7 @@ public class ForgeKumaAPIClient {
     public static void init(BusGroup modBusGroup) {
         RegisterKeyMappingsEvent.BUS.addListener((event) -> {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (managedKeyMapping instanceof ManagedKeyMappingImpl vanillaManagedKeyMapping) {
+                if (managedKeyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
                 }
             }
@@ -29,8 +30,8 @@ public class ForgeKumaAPIClient {
 
         TickEvent.ClientTickEvent.Post.BUS.addListener((event) -> {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping instanceof ManagedKeyMappingImpl managedKeyMapping) {
-                    managedKeyMapping.tick();
+                if (keyMapping instanceof TickableKeyMapping tickableKeyMapping) {
+                    tickableKeyMapping.tick();
                 }
             }
         });
