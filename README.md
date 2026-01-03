@@ -2,8 +2,13 @@
 
 Minecraft Mod. Universal Key Modifier API for Fabric, NeoForge and Forge.
 
-`kuma-api` is a library mod intended to be included in existing mods, providing an easy API layer for compatible
+`kuma-api` is a library mod intended to be included in existing mods, providing an easy API layer and implementation for compatible, remappable
 key mappings with multi-loader, context and (multi-) modifier support.
+
+Kuma is designed to only change the behavior of keys that are explicitly registered to it. 
+This means it is safe to include without worrying about it affecting other mods or modpacks as a whole.
+
+Balm comes with Kuma already included, but you can use Kuma without Balm too! 
 
 #### Downloads
 
