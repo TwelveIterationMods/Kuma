@@ -84,7 +84,7 @@ dependencies {
 }
 ```
 
-For Forge:
+For Forge (ForgeGradle 6):
 
 ```groovy
 jarJar.enable() // Enable the Jar-in-Jar system. Make sure to put this line *before* the minecraft block!
@@ -93,6 +93,20 @@ dependencies {
     jarJar(group: "net.blay09.mods", name: "kuma-api-forge", version: kuma_version_range) {
         jarJar.pin(it, kuma_version)
     }
+}
+```
+
+For Forge (ForgeGradle 7):
+
+```groovy
+plugins {
+    id "net.minecraftforge.jarjar" version "0.2.3"
+}
+
+jarJar.register()
+
+dependencies {
+    jarJar("net.blay09.mods:kuma-api-forge:${kuma_version}")
 }
 ```
 
