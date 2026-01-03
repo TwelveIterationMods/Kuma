@@ -5,10 +5,14 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.Function;
+
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
     protected final Identifier id;
     protected KeyMapping.Category category;
+    @Nullable
+    protected String name;
     @Nullable
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
@@ -24,6 +28,18 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     public AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
         category = KumaKeyCategories.getDefaultCategory(id.getNamespace());
+    }
+
+    @Override
+    public ManagedKeyMapping.Builder overrideName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public ManagedKeyMapping.Builder overrideName(Function<Identifier, String> nameFunction) {
+        this.name = nameFunction.apply(id);
+        return this;
     }
 
     @Override
@@ -92,7 +108,9 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
 
     @Override
     public ManagedKeyMapping build() {
-        final var name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
+        if (name == null) {
+            name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
+        }
         if (context == null) {
             context = determineContext();
         }

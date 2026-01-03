@@ -8,6 +8,8 @@ import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
+import java.util.function.Function;
+
 /**
  * Represents a managed key mapping that can be used to handle input events.
  * The mapping can be associated with a specific input binding, context, and event handlers.
@@ -214,6 +216,10 @@ public interface ManagedKeyMapping {
      * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(net.minecraft.resources.Identifier id)}.
      */
     interface Builder {
+        Builder overrideName(String name);
+
+        Builder overrideName(Function<Identifier, String> nameFunction);
+
         /**
          * Sets the category for this key mapping. The category is used to group related key mappings together in the controls menu.
          * By default, the category is set to <code>key.categories.[namespace].default</code> where <code>[namespace]</code> is the namespace of the key mapping's id

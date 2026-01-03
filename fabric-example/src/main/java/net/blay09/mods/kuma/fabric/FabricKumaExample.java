@@ -14,6 +14,7 @@ public class FabricKumaExample implements ClientModInitializer {
     public void onInitializeClient() {
         Kuma.createKeyMapping(Identifier.fromNamespaceAndPath("kuma_example", "screen_test"))
                 .withDefault(InputBinding.key(InputConstants.KEY_E, KeyModifiers.of(KeyModifier.CONTROL)))
+                .overrideName(it -> it.toLanguageKey("test"))
                 .handleScreenInput(event -> {
                     System.out.println("Screen input triggered");
                     return true;
