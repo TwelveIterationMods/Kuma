@@ -1,6 +1,9 @@
 package net.blay09.mods.kuma.api;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.function.Function;
 
 public interface ManagedKeyMapping {
     InputBinding getBinding();
@@ -59,6 +62,10 @@ public interface ManagedKeyMapping {
     boolean isKeyRepeatEnabled();
 
     interface Builder {
+        Builder overrideName(String name);
+
+        Builder overrideName(Function<ResourceLocation, String> nameFunction);
+
         Builder overrideCategory(String category);
 
         Builder withContext(KeyConflictContext context);

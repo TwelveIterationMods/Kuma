@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.function.Function;
+
 public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
 
     protected final ResourceLocation id;
     protected String category;
+    protected String name;
     protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
     protected List<InputBinding> fallbackBindings = new ArrayList<>();
@@ -22,6 +25,18 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     public AbstractManagedKeyMappingBuilder(ResourceLocation id) {
         this.id = id;
         category = "key.categories." + id.getNamespace();
+    }
+
+    @Override
+    public ManagedKeyMapping.Builder overrideName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
+    public ManagedKeyMapping.Builder overrideName(Function<ResourceLocation, String> nameFunction) {
+        this.name = nameFunction.apply(id);
+        return this;
     }
 
     @Override
@@ -102,7 +117,9 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
 
     @Override
     public ManagedKeyMapping build() {
-        final var name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
+        if (name == null) {
+            name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
+        }
         if (context == null) {
             context = determineContext();
         }

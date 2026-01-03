@@ -15,6 +15,7 @@ public class FabricKumaExample implements ClientModInitializer {
         Kuma.createKeyMapping(new ResourceLocation("kuma_example", "screen_test"))
                 .withDefault(InputBinding.key(InputConstants.KEY_E, KeyModifiers.of(KeyModifier.CONTROL)))
                 .disableKeyRepeat()
+                .overrideName(it -> it.toLanguageKey("test"))
                 .handleScreenInput(event -> {
                     System.out.println("Screen input triggered");
                     return true;
