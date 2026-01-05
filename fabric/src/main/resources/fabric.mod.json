@@ -10,8 +10,8 @@
   ],
   "contact": {
     "homepage": "https://balm.twelveiterations.com/",
-    "sources": "https://github.com/TwelveIterationMods/KumaAPI",
-    "issues": "https://github.com/TwelveIterationMods/KumaAPI/issues"
+    "sources": "https://github.com/TwelveIterations/KumaAPI",
+    "issues": "https://github.com/TwelveIterations/KumaAPI/issues"
   },
   "license": "${license}",
   "icon": "${mod_id}.png",

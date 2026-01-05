@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="*"
 license="${license}"
-issueTrackerURL="https://github.com/TwelveIterationMods/KumaAPI/issues"
+issueTrackerURL="https://github.com/TwelveIterations/KumaAPI/issues"
 [[mods]]
 modId="kuma_example"
 version="${version}"
