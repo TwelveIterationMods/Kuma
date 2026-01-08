@@ -1,6 +1,6 @@
 dependencies {
     compileOnly project(path: ":common")
-    implementation project(path: ":fabric", configuration: "namedElements")
+    implementation project(path: ":fabric")
 
     compileOnly libs.controllingCommon
     // modLocalRuntime "curse.maven:searchables-858542:7348865"
