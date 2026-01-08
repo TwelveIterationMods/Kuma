@@ -53,7 +53,7 @@ jobs:
         uses: TwelveIterations/bump-version@v1
         with:
           version: ${{ steps.extract-version.outputs.version }}
-          bump: patch
+          bump: revision
         id: bump-version
       - name: Updating version properties
         run: |
