@@ -3,7 +3,7 @@ package net.blay09.mods.kuma.fabric;
 import net.blay09.mods.kuma.AbstractManagedKeyMappingBuilder;
 import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.api.*;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
@@ -22,7 +22,7 @@ public class FabricManagedKeyMappingBuilder extends AbstractManagedKeyMappingBui
         final var keyMapping = managedKeyMapping.register();
 
         FabricKeyMappingContexts.setKeyMappingContext(keyMapping, context);
-        KeyBindingHelper.registerKeyBinding(keyMapping);
+        KeyMappingHelper.registerKeyMapping(keyMapping);
         return managedKeyMapping;
     }
 }
