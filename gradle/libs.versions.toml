@@ -1,5 +1,5 @@
 [versions]
-minecraft = "26.1"
+minecraft = "26.1-snapshot-2"
 neoForm = "26.1-snapshot-2-1"
 neoForge = "26.1.0.0-alpha.5+snapshot-2"
 forge = "61.0.1"
