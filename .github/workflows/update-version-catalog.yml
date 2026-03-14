@@ -24,7 +24,7 @@ jobs:
           app-id: ${{ vars.AUTOMATIONS_APP_ID }}
           private-key: ${{ secrets.AUTOMATIONS_PRIVATE_KEY }}
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
       - name: Get GitHub App User ID
@@ -89,37 +89,37 @@ jobs:
         run: |
           # Update Minecraft Version
           sed -i 's|^\s*minecraft\s*=\s*".*"|minecraft = "${{ steps.minecraft-version.outputs.version }}"|' gradle/libs.versions.toml
-          
+
           # Update Fabric API
           if [ -n "${{ steps.fabric-api.outputs.version }}" ]; then
             sed -i 's|^\s*fabricApi\s*=\s*".*"|fabricApi = "${{ steps.fabric-api.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Update Fabric Loader
           if [ -n "${{ steps.fabric-loader.outputs.version }}" ]; then
             sed -i 's|^\s*fabricLoader\s*=\s*".*"|fabricLoader = "${{ steps.fabric-loader.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Update NeoForm
           if [ -n "${{ steps.neoform.outputs.version }}" ]; then
             sed -i 's|^\s*neoForm\s*=\s*".*"|neoForm = "${{ steps.neoform.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Update NeoForge
           if [ -n "${{ steps.neoforge.outputs.version }}" ]; then
             sed -i 's|^\s*neoForge\s*=\s*".*"|neoForge = "${{ steps.neoforge.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Update Forge
           if [ -n "${{ steps.forge.outputs.version }}" ]; then
             sed -i 's|^\s*forge\s*=\s*".*"|forge = "${{ steps.forge.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Update Balm
           if [ -n "${{ steps.balm.outputs.version }}" ]; then
             sed -i 's|^\s*balm\s*=\s*".*"|balm = "${{ steps.balm.outputs.version }}"|' gradle/libs.versions.toml
           fi
-          
+
           # Check if there are changes
           if git diff --quiet gradle/libs.versions.toml; then
             echo "updated=false" >> "$GITHUB_OUTPUT"
@@ -132,16 +132,16 @@ jobs:
         run: |
           TARGET_BRANCH="${{ steps.minecraft-version.outputs.version }}"
           CURRENT_BRANCH="${{ github.ref_name }}"
-          
+
           echo "target_branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
           echo "current_branch=$CURRENT_BRANCH" >> "$GITHUB_OUTPUT"
-          
+
           # Check if target branch exists remotely
           if git ls-remote --exit-code --heads origin "$TARGET_BRANCH"; then
             echo "branch_exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "branch_exists=false" >> "$GITHUB_OUTPUT"
-            
+
             # Create the branch if it doesn't exist
             if [ "$TARGET_BRANCH" != "$CURRENT_BRANCH" ]; then
               git checkout -b "$TARGET_BRANCH"
@@ -154,19 +154,19 @@ jobs:
         run: |
           # Create and checkout branch
           git checkout -b automations/version-catalog-${{ github.run_number }}
-          
+
           # Add and commit changes
           git add gradle/libs.versions.toml
           git commit -m "Update version catalog"
-          
+
           # Push branch to remote
           git push origin automations/version-catalog-${{ github.run_number }}
-          
+
           # Create pull request using GitHub CLI
           gh pr create \
             --title "Update version catalog" \
             --body "## Version Catalog Updates
-            
+
           This PR updates the version catalog to use the following versions:
           - **Fabric API**: ${{ steps.fabric-api.outputs.version }}
           - **Fabric Loader**: ${{ steps.fabric-loader.outputs.version }}
@@ -174,7 +174,7 @@ jobs:
           - **NeoForge**: ${{ steps.neoforge.outputs.version }}
           - **Forge**: ${{ steps.forge.outputs.version }}
           - **Balm**: ${{ steps.balm.outputs.version }}
-          
+
           This PR was automatically created by the Update Version Catalog workflow." \
             --base ${{ steps.branch-check.outputs.target_branch }} \
             --head automations/version-catalog-${{ github.run_number }}
@@ -184,12 +184,12 @@ jobs:
         if: steps.update-catalog.outputs.updated == 'true' && (inputs.commit_directly == true || steps.branch-check.outputs.branch_exists == 'false')
         run: |
           TARGET_BRANCH="${{ steps.branch-check.outputs.target_branch }}"
-          
+
           # Switch to target branch if different from current
           if [ "$TARGET_BRANCH" != "${{ steps.branch-check.outputs.current_branch }}" ]; then
             git checkout "$TARGET_BRANCH"
           fi
-          
+
           git add gradle/libs.versions.toml
           git commit -m "Update version catalog"
           git push origin "$TARGET_BRANCH"
