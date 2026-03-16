@@ -90,63 +90,6 @@ public class Kuma {
     }
 
     /**
-     * Checks if the runtime supports multiple key mappings to be bound to the same key. On some platforms, only the first key mapping will receive input events if multiple key mappings are bound to the same key.
-     *
-     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
-     * @return True if the runtime supports multiple key bindings, false otherwise.
-     */
-    @Deprecated
-    public static boolean areMultiBindingsSupported() {
-        return true;
-    }
-
-    /**
-     * Checks if the runtime supports key modifiers.
-     *
-     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
-     * @return True if the runtime supports key modifiers, false otherwise.
-     */
-    @Deprecated
-    public static boolean areModifiersSupported() {
-        return true;
-    }
-
-    /**
-     * Checks if the runtime supports multiple key modifiers for a key mapping at the same time. Most platforms only support one key modifier at a time.
-     *
-     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
-     * @return True if the runtime supports multiple key modifiers, false otherwise.
-     */
-    @Deprecated
-    public static boolean areMultiModifiersSupported() {
-        return true;
-    }
-
-    /**
-     * Checks if the runtime supports custom key modifiers. Custom key modifiers are modifiers that are not the standard Alt, Control, or Shift modifiers. Most platforms do not support these kind of modifiers.
-     *
-     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
-     * @return True if the runtime supports custom key modifiers, false otherwise.
-     */
-    @Deprecated
-    public static boolean areCustomModifiersSupported() {
-        return true;
-    }
-
-    /**
-     * Checks if the specified input binding is supported by the runtime.
-     *
-     * @param binding The input binding to check.
-     * @param context The key conflict context.
-     * @deprecated Kuma supports all capabilities on all platforms now. This will always be true.
-     * @return True if the input binding is supported, false otherwise.
-     */
-    @Deprecated
-    public static boolean isBindingSupported(InputBinding binding, KeyConflictContext context) {
-        return true;
-    }
-
-    /**
      * Gets the key modifiers for the specified key mapping.
      *
      * @param keyMapping The key mapping to get the modifiers for.

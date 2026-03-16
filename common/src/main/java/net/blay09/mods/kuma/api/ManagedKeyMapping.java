@@ -246,18 +246,6 @@ public interface ManagedKeyMapping {
         Builder withDefault(InputBinding binding);
 
         /**
-         * Add a fallback default input binding for this key mapping, to be used if the primary default binding or previous default bindings are not supported by the current runtime.
-         *
-         * @param binding The fallback default input binding to add to this key mapping.
-         * @return This builder instance, for chaining.
-         * @deprecated Kuma supports all capabilities on all platforms now. Fallback bindings will never be used.
-         */
-        @Deprecated
-        default Builder withFallbackDefault(InputBinding binding) {
-            return this;
-        }
-
-        /**
          * Specify a custom storage provider for storing this key's modifiers and extra data.
          * Omit this call to use the default storage provided by Kuma.
          *
@@ -274,18 +262,6 @@ public interface ManagedKeyMapping {
          * @return This builder instance, for chaining.
          */
         Builder handleWorldInput(WorldInputEventHandler handler);
-
-        /**
-         * Has no effect.
-         *
-         * @return This builder instance, for chaining.
-         * @see #skipRegistration()
-         * @deprecated Kuma supports all capabilities on all platforms now, making this method obsolete. Use {@link #skipRegistration()} to explicitly create a virtual key mapping.
-         */
-        @Deprecated
-        default Builder forceVirtual() {
-            return this;
-        }
 
         /**
          * Skips registration of this key mapping. This can be used for virtual key mappings that should not show up in the Controls menu.
