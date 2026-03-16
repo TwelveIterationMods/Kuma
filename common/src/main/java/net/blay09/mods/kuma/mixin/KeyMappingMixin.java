@@ -6,6 +6,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(KeyMapping.class)
 public class KeyMappingMixin implements KumaKeyMapping {
+
+    @Shadow
+    private int clickCount;
 
     @Unique
     @Nullable
@@ -109,6 +113,13 @@ public class KeyMappingMixin implements KumaKeyMapping {
     public void isDefault(CallbackInfoReturnable<Boolean> cir) {
         if (kuma$isManaged() && !kuma$getModifiers().equals(kuma$getDefaultModifiers())) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "consumeClick", at = @At("HEAD"))
+    public void consumeClick(CallbackInfoReturnable<Boolean> cir) {
+        if (kuma$isManaged() && !Kuma.areModifiersActive(kuma$getModifiers())) {
+            clickCount = 0;
         }
     }
 
