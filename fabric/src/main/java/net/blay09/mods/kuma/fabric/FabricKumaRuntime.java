@@ -36,4 +36,9 @@ public class FabricKumaRuntime implements KumaRuntime {
 
         return defaultStorage;
     }
+
+    @Override
+    public boolean isModInstalled(String modId) {
+        return FabricLoader.getInstance().isModLoaded(modId);
+    }
 }

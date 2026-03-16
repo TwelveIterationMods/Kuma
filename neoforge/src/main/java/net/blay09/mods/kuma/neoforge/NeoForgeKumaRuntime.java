@@ -7,6 +7,7 @@ import net.blay09.mods.kuma.api.ManagedKeyMapping;
 import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import org.jspecify.annotations.Nullable;
 
@@ -35,6 +36,11 @@ public class NeoForgeKumaRuntime implements KumaRuntime {
         }
 
         return defaultStorage;
+    }
+
+    @Override
+    public boolean isModInstalled(String modId) {
+        return ModList.get().isLoaded(modId);
     }
 
 }

@@ -200,4 +200,11 @@ public class Kuma {
         }
         return modifiers;
     }
+
+    /**
+     * For internal use.
+     */
+    public static KumaRuntime __getRuntime() {
+        return runtime;
+    }
 }

@@ -12,4 +12,6 @@ public interface KumaRuntime {
     KeyModifiers getNativeKeyModifiers(KeyMapping keyMapping);
 
     KeyMappingStorage getDefaultStorage();
+
+    boolean isModInstalled(String modId);
 }
