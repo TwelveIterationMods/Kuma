@@ -8,6 +8,7 @@ import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLPaths;
 import org.jspecify.annotations.Nullable;
 
@@ -40,7 +41,12 @@ public class NeoForgeKumaRuntime implements KumaRuntime {
 
     @Override
     public boolean isModInstalled(String modId) {
-        return ModList.get().isLoaded(modId);
+        final var modList = ModList.get();
+        if (modList != null) {
+            return modList.isLoaded(modId);
+        }
+        final var loader = FMLLoader.getCurrentOrNull();
+        return loader != null && loader.getLoadingModList().getModFileById(modId) != null;
     }
 
 }
