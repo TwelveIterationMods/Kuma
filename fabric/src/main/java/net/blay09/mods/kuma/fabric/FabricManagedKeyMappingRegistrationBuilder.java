@@ -1,15 +1,15 @@
 package net.blay09.mods.kuma.fabric;
 
-import net.blay09.mods.kuma.AbstractManagedKeyMappingBuilder;
+import net.blay09.mods.kuma.AbstractManagedKeyMappingRegistrationBuilder;
 import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.api.*;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
-public class FabricManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuilder {
+public class FabricManagedKeyMappingRegistrationBuilder extends AbstractManagedKeyMappingRegistrationBuilder {
 
-    public FabricManagedKeyMappingBuilder(Identifier id) {
+    public FabricManagedKeyMappingRegistrationBuilder(Identifier id) {
         super(id);
     }
 

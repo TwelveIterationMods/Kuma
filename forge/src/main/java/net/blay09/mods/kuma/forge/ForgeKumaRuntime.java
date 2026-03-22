@@ -1,6 +1,7 @@
 package net.blay09.mods.kuma.forge;
 
 import net.blay09.mods.kuma.KumaRuntime;
+import net.blay09.mods.kuma.WrappedManagedKeyMappingBuilder;
 import net.blay09.mods.kuma.api.KeyMappingStorage;
 import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.ManagedKeyMapping;
@@ -20,6 +21,11 @@ public class ForgeKumaRuntime implements KumaRuntime {
     @Override
     public ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
         return new ForgeManagedKeyMappingBuilder(id);
+    }
+
+    @Override
+    public ManagedKeyMapping.WrapperBuilder wrapKeyMapping(KeyMapping keyMapping) {
+        return new WrappedManagedKeyMappingBuilder(keyMapping);
     }
 
     @Override

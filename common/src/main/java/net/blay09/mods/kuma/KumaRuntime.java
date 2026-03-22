@@ -7,7 +7,9 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
 public interface KumaRuntime {
-    ManagedKeyMapping.Builder createKeyMapping(Identifier id);
+    ManagedKeyMapping.RegistrationBuilder createKeyMapping(Identifier id);
+
+    ManagedKeyMapping.WrapperBuilder wrapKeyMapping(KeyMapping keyMapping);
 
     KeyModifiers getNativeKeyModifiers(KeyMapping keyMapping);
 

@@ -1,6 +1,7 @@
 package net.blay09.mods.kuma.neoforge;
 
 import net.blay09.mods.kuma.KumaRuntime;
+import net.blay09.mods.kuma.WrappedManagedKeyMappingBuilder;
 import net.blay09.mods.kuma.api.KeyMappingStorage;
 import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.ManagedKeyMapping;
@@ -20,8 +21,13 @@ public class NeoForgeKumaRuntime implements KumaRuntime {
     private KeyMappingStorage defaultStorage;
 
     @Override
-    public ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
-        return new NeoForgeManagedKeyMappingBuilder(id);
+    public ManagedKeyMapping.RegistrationBuilder createKeyMapping(Identifier id) {
+        return new NeoForgeManagedKeyMappingRegistrationBuilder(id);
+    }
+
+    @Override
+    public ManagedKeyMapping.WrapperBuilder wrapKeyMapping(KeyMapping keyMapping) {
+        return new WrappedManagedKeyMappingBuilder(keyMapping);
     }
 
     @Override

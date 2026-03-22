@@ -1,20 +1,12 @@
 package net.blay09.mods.kuma;
 
 import net.blay09.mods.kuma.api.*;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
-import java.util.function.Function;
-
-public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapping.Builder {
+public abstract class AbstractManagedKeyMappingBuilder<T> {
 
     protected final Identifier id;
-    protected KeyMapping.Category category;
-    @Nullable
-    protected String name;
-    @Nullable
-    protected KeyConflictContext context;
     protected InputBinding defaultBinding = InputBinding.none();
     @Nullable
     protected WorldInputEventHandler worldInputHandler;
@@ -23,80 +15,39 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
     protected boolean keyRepeat = false;
     protected boolean ignoresScreenFocus = false;
     protected KeyMappingStorage storage = Kuma.getDefaultStorage();
-    protected boolean skipRegistration = false;
 
-    public AbstractManagedKeyMappingBuilder(Identifier id) {
+    protected AbstractManagedKeyMappingBuilder(Identifier id) {
         this.id = id;
-        category = KumaKeyCategories.getDefaultCategory(id.getNamespace());
     }
 
-    @Override
-    public ManagedKeyMapping.Builder overrideName(String name) {
-        this.name = name;
-        return this;
-    }
+    protected abstract T self();
 
-    @Override
-    public ManagedKeyMapping.Builder overrideName(Function<Identifier, String> nameFunction) {
-        this.name = nameFunction.apply(id);
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder overrideCategory(KeyMapping.Category category) {
-        this.category = category;
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder withContext(KeyConflictContext context) {
-        this.context = context;
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder withDefault(InputBinding binding) {
-        this.defaultBinding = binding;
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder withCustomStorage(KeyMappingStorage storage) {
+    public T withCustomStorage(KeyMappingStorage storage) {
         this.storage = storage;
-        return this;
+        return self();
     }
 
-    @Override
-    public ManagedKeyMapping.Builder handleWorldInput(WorldInputEventHandler handler) {
+    public T handleWorldInput(WorldInputEventHandler handler) {
         this.worldInputHandler = handler;
-        return this;
+        return self();
     }
 
-    @Override
-    public ManagedKeyMapping.Builder handleScreenInput(ScreenInputEventHandler handler) {
+    public T handleScreenInput(ScreenInputEventHandler handler) {
         this.screenInputHandler = handler;
-        return this;
+        return self();
     }
 
-    @Override
-    public ManagedKeyMapping.Builder skipRegistration() {
-        skipRegistration = true;
-        return this;
-    }
-
-    @Override
-    public ManagedKeyMapping.Builder enableKeyRepeat() {
+    public T enableKeyRepeat() {
         keyRepeat = true;
-        return this;
+        return self();
     }
 
-    @Override
-    public ManagedKeyMapping.Builder ignoreScreenFocus() {
+    public T ignoreScreenFocus() {
         ignoresScreenFocus = true;
-        return this;
+        return self();
     }
 
-    private KeyConflictContext determineContext() {
+    protected KeyConflictContext determineContext() {
         if (worldInputHandler != null && screenInputHandler == null) {
             return KeyConflictContext.WORLD;
         }
@@ -105,24 +56,4 @@ public abstract class AbstractManagedKeyMappingBuilder implements ManagedKeyMapp
         }
         return KeyConflictContext.UNIVERSAL;
     }
-
-    @Override
-    public ManagedKeyMapping build() {
-        if (name == null) {
-            name = String.format("key.%s.%s", id.getNamespace(), id.getPath());
-        }
-        if (context == null) {
-            context = determineContext();
-        }
-        final var managedKeyMapping = skipRegistration ? createVirtualKeyMapping(id, context) : createVanillaKeyMapping(id, name, defaultBinding, context);
-        managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
-        ManagedKeyMappingRegistry.register(managedKeyMapping);
-        return managedKeyMapping;
-    }
-
-    protected ManagedKeyMapping createVirtualKeyMapping(Identifier id, KeyConflictContext context) {
-        return new ManagedVirtualKeyMapping(id, context, screenInputHandler, worldInputHandler, keyRepeat, ignoresScreenFocus, defaultBinding, storage);
-    }
-
-    protected abstract ManagedKeyMapping createVanillaKeyMapping(Identifier id, String name, InputBinding binding, KeyConflictContext context);
 }
