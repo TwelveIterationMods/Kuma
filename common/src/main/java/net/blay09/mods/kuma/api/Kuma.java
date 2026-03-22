@@ -47,12 +47,7 @@ public class Kuma {
      * @return True if the specified context is active, false otherwise.
      */
     public static boolean isContextActive(KeyConflictContext context) {
-        final var client = Minecraft.getInstance();
-        return switch (context) {
-            case SCREEN -> client.screen != null;
-            case WORLD -> client.screen == null && client.level != null;
-            default -> true;
-        };
+        return context.isActive();
     }
 
     /**
