@@ -54,8 +54,8 @@ at https://maven.twelveiterations.com/service/rest/repository/browse/maven-publi
 In your `gradle.properties`:
 
 ```ini
-kuma_version = 21.4.5+1.21.4
-kuma_version_range = [21.4,21.5)
+kuma_version = 21.11.12
+kuma_version_range = [21.11,22)
 ```
 
 For Common / Mojmap:
