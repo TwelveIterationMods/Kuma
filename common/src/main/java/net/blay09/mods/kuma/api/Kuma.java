@@ -18,14 +18,26 @@ public class Kuma {
     private static final KumaRuntime runtime = KumaRuntimeSpi.create();
 
     /**
-     * Creates a new {@link ManagedKeyMapping.Builder} instance with a specified id.
+     * Creates a new {@link ManagedKeyMapping.RegistrationBuilder} instance with a specified id.
      * The returned builder can be used to configure and register a new key mapping.
      *
      * @param id The resource location that uniquely identifies the key mapping.
-     * @return A new {@link ManagedKeyMapping.Builder} instance.
+     * @return A new {@link ManagedKeyMapping.RegistrationBuilder} instance.
      */
-    public static ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
+    public static ManagedKeyMapping.RegistrationBuilder createKeyMapping(Identifier id) {
         return runtime.createKeyMapping(id);
+    }
+
+    /**
+     * Creates a {@link ManagedKeyMapping.WrapperBuilder} for an existing {@link KeyMapping}.
+     * The returned builder uses the existing mapping's current key or mouse button as its default and
+     * allows customizing only wrapper-specific behavior such as handlers, storage, repeat, focus, and default modifiers.
+     *
+     * @param keyMapping the existing key mapping to wrap
+     * @return a builder that will turn the supplied key mapping into a Kuma-managed mapping on {@code build()}
+     */
+    public static ManagedKeyMapping.WrapperBuilder wrap(KeyMapping keyMapping) {
+        return runtime.wrapKeyMapping(keyMapping);
     }
 
     /**
@@ -35,12 +47,7 @@ public class Kuma {
      * @return True if the specified context is active, false otherwise.
      */
     public static boolean isContextActive(KeyConflictContext context) {
-        final var client = Minecraft.getInstance();
-        return switch (context) {
-            case SCREEN -> client.screen != null;
-            case WORLD -> client.screen == null && client.level != null;
-            default -> true;
-        };
+        return context.isActive();
     }
 
     /**

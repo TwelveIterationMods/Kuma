@@ -6,6 +6,8 @@ import net.blay09.mods.kuma.api.KeyModifier;
 import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.Kuma;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 
 public class FabricKumaExample implements ClientModInitializer {
@@ -40,5 +42,10 @@ public class FabricKumaExample implements ClientModInitializer {
                     return true;
                 })
                 .build();
+
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            final var managedSwapOffHand = Kuma.wrap(client.options.keySwapOffhand).build();
+            managedSwapOffHand.setBinding(InputBinding.key(InputConstants.KEY_F, KeyModifiers.of(KeyModifier.CONTROL)));
+        });
     }
 }

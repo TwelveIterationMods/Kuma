@@ -1,6 +1,6 @@
 package net.blay09.mods.kuma.neoforge;
 
-import net.blay09.mods.kuma.AbstractManagedKeyMappingBuilder;
+import net.blay09.mods.kuma.AbstractManagedKeyMappingRegistrationBuilder;
 import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.api.InputBinding;
 import net.blay09.mods.kuma.api.KeyConflictContext;
@@ -8,9 +8,9 @@ import net.blay09.mods.kuma.api.ManagedKeyMapping;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 
-public class NeoForgeManagedKeyMappingBuilder extends AbstractManagedKeyMappingBuilder {
+public class NeoForgeManagedKeyMappingRegistrationBuilder extends AbstractManagedKeyMappingRegistrationBuilder {
 
-    public NeoForgeManagedKeyMappingBuilder(Identifier id) {
+    public NeoForgeManagedKeyMappingRegistrationBuilder(Identifier id) {
         super(id);
     }
 

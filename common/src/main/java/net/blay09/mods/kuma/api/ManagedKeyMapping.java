@@ -210,41 +210,7 @@ public interface ManagedKeyMapping {
 
     KeyMappingStorage getStorage();
 
-    /**
-     * A builder interface for creating instances of {@link ManagedKeyMapping}.
-     * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
-     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(net.minecraft.resources.Identifier id)}.
-     */
-    interface Builder {
-        Builder overrideName(String name);
-
-        Builder overrideName(Function<Identifier, String> nameFunction);
-
-        /**
-         * Sets the category for this key mapping. The category is used to group related key mappings together in the controls menu.
-         * By default, the category is set to <code>key.categories.[namespace].default</code> where <code>[namespace]</code> is the namespace of the key mapping's id
-         *
-         * @param category The category for this key mapping.
-         * @return This builder instance, for chaining.
-         */
-        Builder overrideCategory(KeyMapping.Category category);
-
-        /**
-         * Sets the key conflict context for this key mapping. The conflict context is used to determine what other key mappings can be considered conflicting.
-         *
-         * @param context The key conflict context for this key mapping.
-         * @return This builder instance, for chaining.
-         */
-        Builder withContext(KeyConflictContext context);
-
-        /**
-         * Sets the default input binding for this key mapping.
-         *
-         * @param binding The default input binding to use for this key mapping.
-         * @return This builder instance, for chaining.
-         */
-        Builder withDefault(InputBinding binding);
-
+    interface Builder<T extends Builder<T>> {
         /**
          * Specify a custom storage provider for storing this key's modifiers and extra data.
          * Omit this call to use the default storage provided by Kuma.
@@ -252,7 +218,7 @@ public interface ManagedKeyMapping {
          * @param storage The storage provider to use for this key mapping.
          * @return This builder instance, for chaining.
          */
-        Builder withCustomStorage(KeyMappingStorage storage);
+        T withCustomStorage(KeyMappingStorage storage);
 
         /**
          * Adds a handler for world input events that are associated with this managed key mapping.
@@ -261,14 +227,7 @@ public interface ManagedKeyMapping {
          * @param handler The handler to be called for world input events.
          * @return This builder instance, for chaining.
          */
-        Builder handleWorldInput(WorldInputEventHandler handler);
-
-        /**
-         * Skips registration of this key mapping. This can be used for virtual key mappings that should not show up in the Controls menu.
-         *
-         * @return This builder instance, for chaining.
-         */
-        Builder skipRegistration();
+        T handleWorldInput(WorldInputEventHandler handler);
 
         /**
          * Adds a handler for screen input events that are associated with this managed key mapping.
@@ -277,7 +236,7 @@ public interface ManagedKeyMapping {
          * @param handler The handler to be called for screen input events.
          * @return This builder instance, for chaining.
          */
-        Builder handleScreenInput(ScreenInputEventHandler handler);
+        T handleScreenInput(ScreenInputEventHandler handler);
 
         /**
          * By default, screen handlers are not fired if a widget on a screen has focus (e.g. a text field).
@@ -285,7 +244,14 @@ public interface ManagedKeyMapping {
          *
          * @return This builder instance, for chaining.
          */
-        Builder ignoreScreenFocus();
+        T ignoreScreenFocus();
+
+        /**
+         * Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         *
+         * @return This builder instance, for chaining.
+         */
+        T enableKeyRepeat();
 
         /**
          * Builds and returns the configured ManagedKeyMapping instance.
@@ -293,13 +259,63 @@ public interface ManagedKeyMapping {
          * @return The built ManagedKeyMapping instance.
          */
         ManagedKeyMapping build();
+    }
+
+    /**
+     * A builder interface for creating instances of {@link ManagedKeyMapping}.
+     * This builder allows configuring various properties of the key mapping, such as the input binding, event handlers, and conflict context.
+     * You can obtain an instance of this builder by calling {@link Kuma#createKeyMapping(net.minecraft.resources.Identifier id)}.
+     */
+    interface RegistrationBuilder extends Builder<RegistrationBuilder> {
+        RegistrationBuilder overrideName(String name);
+
+        RegistrationBuilder overrideName(Function<Identifier, String> nameFunction);
 
         /**
-         * Enabling key repeat will cause handle*Input() handlers to be called repeatedly if the key is held down.
+         * Sets the category for this key mapping. The category is used to group related key mappings together in the controls menu.
+         * By default, the category is set to <code>key.categories.[namespace].default</code> where <code>[namespace]</code> is the namespace of the key mapping's id
+         *
+         * @param category The category for this key mapping.
+         * @return This builder instance, for chaining.
+         */
+        RegistrationBuilder overrideCategory(KeyMapping.Category category);
+
+        /**
+         * Sets the key conflict context for this key mapping. The conflict context is used to determine what other key mappings can be considered conflicting.
+         *
+         * @param context The key conflict context for this key mapping.
+         * @return This builder instance, for chaining.
+         */
+        RegistrationBuilder withContext(KeyConflictContext context);
+
+        /**
+         * Sets the default input binding for this key mapping.
+         *
+         * @param binding The default input binding to use for this key mapping.
+         * @return This builder instance, for chaining.
+         */
+        RegistrationBuilder withDefault(InputBinding binding);
+
+        /**
+         * Skips registration of this key mapping. This can be used for virtual key mappings that should not show up in the Controls menu.
          *
          * @return This builder instance, for chaining.
          */
-        Builder enableKeyRepeat();
+        RegistrationBuilder skipRegistration();
+    }
+
+    /**
+     * A builder interface for wrapping existing {@link KeyMapping} instances with Kuma management.
+     * You can obtain an instance of this builder by calling {@link Kuma#wrap(KeyMapping)}.
+     */
+    interface WrapperBuilder extends Builder<WrapperBuilder> {
+        /**
+         * Sets the default modifiers for the wrapped key mapping while keeping its existing key or mouse button.
+         *
+         * @param modifiers The default modifiers to use for the wrapped key mapping.
+         * @return This builder instance, for chaining.
+         */
+        WrapperBuilder withDefaultModifiers(KeyModifiers modifiers);
     }
 
 }
