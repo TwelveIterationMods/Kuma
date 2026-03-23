@@ -132,7 +132,7 @@ class ExampleMod {
         Kuma.createKeyMapping(new Identifier("example", "example_key_1"))
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL)))
                 .handleScreenInput((event) -> {
-                    // TODO Add your press logic here
+                    // Add your press logic here
                     return true;
                 })
                 .build(); // Don't forget to call build() at the end!
@@ -142,7 +142,7 @@ class ExampleMod {
                 .withDefault(InputBinding.mouse(InputConstants.MOUSE_BUTTON_LEFT,
                         KeyModifiers.ofCustom(InputConstants.getKey(InputConstants.KEY_SPACE, -1))))
                 .handleScreenInput((event) -> {
-                    // TODO Add your press logic here
+                    // Add your press logic here
                     return true;
                 })
                 .build(); // Don't forget to call build() at the end!
@@ -154,11 +154,11 @@ class ExampleMod {
                 .withDefault(InputBinding.key(InputConstants.KEY_G, KeyModifiers.of(KeyModifier.CONTROL, KeyModifier.SHIFT)))
                 .withContext(KeyConflictContext.UNIVERSAL) // This is normally just inferred from the supplied input handlers.
                 .handleScreenInput((event) -> {
-                    // TODO Add your press logic here
+                    // Add your press logic here
                     return true;
                 })
                 .handleWorldInput((event) -> {
-                    // TODO Add your press logic here
+                    // Add your press logic here
                     return true;
                 })
                 .build(); // Don't forget to call build() at the end!
