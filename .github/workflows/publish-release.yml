@@ -17,11 +17,52 @@ on:
         required: true
         type: boolean
         default: true
+      maven:
+        description: 'Maven'
+        required: true
+        type: boolean
+        default: true
+      modrinth:
+        description: 'Modrinth'
+        required: true
+        type: boolean
+        default: false
+      curseforge:
+        description: 'CurseForge'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
+  verify-resources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v5
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
+          distribution: temurin
+      - name: Make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: Run data generation
+        run: ./gradlew :fabric:runData
+      - name: Check for uncommitted datagen changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated resources are out of date. Please run data generation and commit the changes."
+            git diff
+            exit 1
+          fi
+      - name: Validate en_us.json file
+        uses: TwelveIterations/validate-minecraft-lang@v1
   create-release:
     runs-on: ubuntu-latest
     environment: Releases
+    needs: verify-resources
     outputs:
       ref: v${{ steps.bump-version.outputs.version }}
       version: ${{ steps.bump-version.outputs.version }}
@@ -71,12 +112,10 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const settingsGradle = fs.readFileSync('settings.gradle', 'utf8');
-            const includePattern = /^(?!\s*\/\/)\s*include\s*\(\s*(['"]([^'"]+)['"](?:,\s*['"]([^'"]+)['"])*\s*)\)/gm;
-            const includes = [...settingsGradle.matchAll(includePattern)].flatMap(match => match[0].match(/['"]([^'"]+)['"]/g).map(item => item.replace(/['"]/g, '')));
-            const includeFabric = includes.includes('fabric') && ${{inputs.fabric}};
-            const includeForge = includes.includes('forge') && ${{inputs.forge}};
-            const includeNeoForge = includes.includes('neoforge') && ${{inputs.neoforge}};
+            const gradleProperties = fs.readFileSync('gradle.properties', 'utf8');
+            const includeFabric = gradleProperties.match(/^(?!#)include_fabric\s*=\s*true/m) && ${{inputs.fabric}};
+            const includeForge = gradleProperties.match(/^(?!#)include_forge\s*=\s*true/m) && ${{inputs.forge}};
+            const includeNeoForge = gradleProperties.match(/^(?!#)include_neoforge\s*=\s*true/m) && ${{inputs.neoforge}};
             return {
               loader: [includeFabric ? 'fabric' : false, includeForge ? 'forge' : false, includeNeoForge ? 'neoforge' : false].filter(Boolean),
             }
@@ -86,19 +125,19 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const settingsGradle = fs.readFileSync('settings.gradle', 'utf8');
-            const includePattern = /^(?!\s*\/\/)\s*include\s*\(\s*(['"]([^'"]+)['"](?:,\s*['"]([^'"]+)['"])*\s*)\)/gm;
-            const includes = [...settingsGradle.matchAll(includePattern)].flatMap(match => match[0].match(/['"]([^'"]+)['"]/g).map(item => item.replace(/['"]/g, '')));
-            const includeFabric = includes.includes('fabric') && ${{inputs.fabric}};
-            const includeForge = includes.includes('forge') && ${{inputs.forge}};
-            const includeNeoForge = includes.includes('neoforge') && ${{inputs.neoforge}};
             const gradleProperties = fs.readFileSync('gradle.properties', 'utf8');
+            const includeFabric = gradleProperties.match(/^(?!#)include_fabric\s*=\s*true/m) && ${{inputs.fabric}};
+            const includeForge = gradleProperties.match(/^(?!#)include_forge\s*=\s*true/m) && ${{inputs.forge}};
+            const includeNeoForge = gradleProperties.match(/^(?!#)include_neoforge\s*=\s*true/m) && ${{inputs.neoforge}};
             const curseForgeProjectId = gradleProperties.match(/^(?!#)curseforge_project_id\s*=\s*(.+)/m);
             const modrinthProjectId = gradleProperties.match(/^(?!#)modrinth_project_id\s*=\s*(.+)/m);
             const mavenReleases = gradleProperties.match(/^(?!#)maven_releases\s*=\s*(.+)/m);
+            const publishCurseForge = curseForgeProjectId && ${{inputs.curseforge}};
+            const publishModrinth = modrinthProjectId && ${{inputs.modrinth}};
+            const publishMaven = mavenReleases && ${{inputs.maven}};
             return {
               loader: ['common', includeFabric ? 'fabric' : false, includeForge ? 'forge' : false, includeNeoForge ? 'neoforge' : false].filter(Boolean),
-              site: [curseForgeProjectId ? 'curseforge' : '', modrinthProjectId ? 'modrinth' : '', mavenReleases ? 'publish' : ''].filter(Boolean),
+              site: [publishCurseForge ? 'curseforge' : false, publishModrinth ? 'modrinth' : false, publishMaven ? 'publish' : false].filter(Boolean),
               exclude: [
                 {loader: 'common', site: 'curseforge'},
                 {loader: 'common', site: 'modrinth'}
@@ -121,9 +160,6 @@ jobs:
           cache: 'gradle'
       - name: Make gradle wrapper executable
         run: chmod +x ./gradlew
-      - name: Workaround for FG7
-        run: ./gradlew
-        if: matrix.loader == 'forge'
       - name: Build common artifact
         run: ./gradlew :common:build '-Pversion=${{needs.create-release.outputs.version}}'
       - name: Upload common artifact
