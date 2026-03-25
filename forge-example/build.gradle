@@ -3,7 +3,7 @@ plugins {
     alias libs.plugins.forgeGradle
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
 
 minecraft {
     mappings channel: 'official', version: libs.minecraft.get().version

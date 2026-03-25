@@ -8,6 +8,7 @@ import net.blay09.mods.kuma.api.ManagedKeyMapping;
 import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +20,7 @@ public class ForgeKumaRuntime implements KumaRuntime {
     private KeyMappingStorage defaultStorage;
 
     @Override
-    public ManagedKeyMapping.Builder createKeyMapping(Identifier id) {
+    public ManagedKeyMapping.RegistrationBuilder createKeyMapping(Identifier id) {
         return new ForgeManagedKeyMappingBuilder(id);
     }
 
@@ -41,6 +42,11 @@ public class ForgeKumaRuntime implements KumaRuntime {
         }
 
         return defaultStorage;
+    }
+
+    @Override
+    public boolean isModInstalled(String modId) {
+        return ModList.isLoaded(modId);
     }
 
 }
