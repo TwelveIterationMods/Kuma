@@ -1,11 +1,8 @@
 package net.blay09.mods.kuma;
 
 import net.blay09.mods.kuma.api.*;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public class ManagedVirtualKeyMapping extends AbstractManagedKeyMapping {
 

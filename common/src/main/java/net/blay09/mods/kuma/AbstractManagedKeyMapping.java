@@ -2,7 +2,6 @@ package net.blay09.mods.kuma;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.api.*;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
@@ -11,8 +10,6 @@ import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping, TickableKeyMapping {
 

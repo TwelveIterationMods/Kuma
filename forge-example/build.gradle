@@ -19,6 +19,7 @@ minecraft {
     }
 }
 
+apply from: rootProject.file('repositories.gradle')
 repositories {
     maven minecraft.mavenizer
     maven fg.forgeMaven
@@ -32,6 +33,7 @@ dependencies {
     implementation minecraft.dependency("net.minecraftforge:forge:$mcVersion-$forgeVersion")
     annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.0'
 }
+apply from: 'dependencies.gradle'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
@@ -44,6 +46,3 @@ tasks.named('jar', Jar) {
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
-
-apply from: rootProject.file('repositories.gradle')
-apply from: 'dependencies.gradle'

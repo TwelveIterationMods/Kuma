@@ -40,6 +40,7 @@ repositories {
             includeGroup "mezz.jei"
             includeGroup "info.journeymap"
             includeGroup "mysticdrew"
+            includeGroupAndSubgroups "com.blamejared"
         }
     }
 

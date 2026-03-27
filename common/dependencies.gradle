@@ -1,4 +1,5 @@
 dependencies {
+    compileOnly libs.asm
     compileOnly libs.controllingCommon
     compileOnly libs.mixinExtras
 }

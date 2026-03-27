@@ -14,7 +14,7 @@
     "issues": "https://github.com/TwelveIterations/KumaAPI/issues"
   },
   "license": "${license}",
-  "icon": "${mod_id}.png",
+  "icon": "kuma_api.png",
 
   "environment": "*",
   "entrypoints": {
@@ -23,8 +23,8 @@
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json",
-    "${mod_id}.fabric.mixins.json"
+    "kuma_api.mixins.json",
+    "kuma_api.fabric.mixins.json"
   ],
 
   "depends": {

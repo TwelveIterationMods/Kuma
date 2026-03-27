@@ -7,7 +7,6 @@ import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.Kuma;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 
 public class FabricKumaExample implements ClientModInitializer {

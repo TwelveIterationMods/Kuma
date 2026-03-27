@@ -2,6 +2,7 @@ package net.blay09.mods.kuma.api;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -15,20 +16,20 @@ import java.util.Objects;
  */
 public class KeyConflictContext {
 
-    public static KeyConflictContext UNIVERSAL = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "universal")) {
+    public static final KeyConflictContext UNIVERSAL = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "universal")) {
         @Override
         public boolean conflictsWith(KeyConflictContext other) {
             return true;
         }
     };
 
-    public static KeyConflictContext SCREEN = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "screen")) {
+    public static final KeyConflictContext SCREEN = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "screen")) {
         @Override
         public boolean isActive() {
             return Minecraft.getInstance().screen != null;
         }
     };
-    public static KeyConflictContext WORLD = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "world")) {
+    public static final KeyConflictContext WORLD = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "world")) {
         @Override
         public boolean isActive() {
             final var client = Minecraft.getInstance();
@@ -55,7 +56,7 @@ public class KeyConflictContext {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (KeyConflictContext) obj;
