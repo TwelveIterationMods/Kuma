@@ -31,10 +31,14 @@ public class ManagedVanillaKeyMapping extends AbstractManagedKeyMapping {
 
     @Override
     public InputBinding getBinding() {
-        return mapping != null ? InputBinding.of(mapping) : InputBinding.none();
+        return mapping != null ? InputBinding.of(mapping) : getDefaultBinding();
     }
 
     public KeyMapping register() {
+        if (mapping != null) {
+            return mapping;
+        }
+
         mapping = mappingSupplier.get();
         if (mapping instanceof KumaKeyMapping kumaKeyMapping) {
             kumaKeyMapping.kuma$setManagedKeyMapping(this);
@@ -42,6 +46,7 @@ public class ManagedVanillaKeyMapping extends AbstractManagedKeyMapping {
             kumaKeyMapping.kuma$setDefaultModifiers(getDefaultBinding().modifiers());
             kumaKeyMapping.kuma$setModifiers(getDefaultBinding().modifiers());
         }
+        getStorage().loadKeyMapping(this);
         return mapping;
     }
 

@@ -71,7 +71,10 @@ public abstract class AbstractManagedKeyMappingRegistrationBuilder extends Abstr
             context = determineContext();
         }
         final var managedKeyMapping = skipRegistration ? createVirtualKeyMapping(id, context) : createVanillaKeyMapping(id, name, defaultBinding, context);
-        managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
+        // If we're skipping registration, we load modifiers early. Otherwise we do it after registration.
+        if (skipRegistration) {
+            managedKeyMapping.getStorage().loadKeyMapping(managedKeyMapping);
+        }
         ManagedKeyMappingRegistry.register(managedKeyMapping);
         return managedKeyMapping;
     }

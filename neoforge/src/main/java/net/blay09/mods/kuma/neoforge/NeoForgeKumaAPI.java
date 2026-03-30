@@ -2,6 +2,7 @@ package net.blay09.mods.kuma.neoforge;
 
 import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
+import net.blay09.mods.kuma.NativeKeyModifierReconciler;
 import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
 import net.blay09.mods.kuma.api.WorldInputEvent;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.event.lifecycle.ClientStartedEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(value = "kuma_api", dist = Dist.CLIENT)
@@ -26,6 +28,14 @@ public class NeoForgeKumaAPI {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
+                }
+            }
+        });
+
+        NeoForge.EVENT_BUS.addListener((ClientStartedEvent _) -> {
+            for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
+                    NativeKeyModifierReconciler.reconcile(vanillaManagedKeyMapping.register());
                 }
             }
         });
