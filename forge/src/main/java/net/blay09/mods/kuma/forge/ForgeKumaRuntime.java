@@ -5,6 +5,7 @@ import net.blay09.mods.kuma.WrappedManagedKeyMappingBuilder;
 import net.blay09.mods.kuma.api.KeyMappingStorage;
 import net.blay09.mods.kuma.api.KeyModifiers;
 import net.blay09.mods.kuma.api.ManagedKeyMapping;
+import net.blay09.mods.kuma.mixin.KeyMappingAccessor;
 import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
@@ -32,6 +33,11 @@ public class ForgeKumaRuntime implements KumaRuntime {
     @Override
     public KeyModifiers getNativeKeyModifiers(KeyMapping keyMapping) {
         return ForgeKeyModifiers.fromNeoForge(keyMapping.getKeyModifier());
+    }
+
+    @Override
+    public void setNativeKeyModifiers(KeyMapping keyMapping, KeyModifiers modifiers) {
+        keyMapping.setKeyModifierAndCode(ForgeKeyModifiers.toNeoForge(modifiers), ((KeyMappingAccessor) keyMapping).getKey());
     }
 
     @Override

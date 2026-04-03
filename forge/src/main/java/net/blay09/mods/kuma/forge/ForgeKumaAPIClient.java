@@ -2,6 +2,7 @@ package net.blay09.mods.kuma.forge;
 
 import net.blay09.mods.kuma.ManagedKeyMappingRegistry;
 import net.blay09.mods.kuma.ManagedVanillaKeyMapping;
+import net.blay09.mods.kuma.NativeKeyModifierReconciler;
 import net.blay09.mods.kuma.TickableKeyMapping;
 import net.blay09.mods.kuma.api.Kuma;
 import net.blay09.mods.kuma.api.ScreenInputEvent;
@@ -17,6 +18,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 public class ForgeKumaAPIClient {
     public static void init(BusGroup modBusGroup) {
@@ -24,6 +26,14 @@ public class ForgeKumaAPIClient {
             for (final var managedKeyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (managedKeyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
                     event.register(vanillaManagedKeyMapping.register());
+                }
+            }
+        });
+
+        FMLLoadCompleteEvent.getBus(modBusGroup).addListener(_ -> {
+            for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
+                if (keyMapping instanceof ManagedVanillaKeyMapping vanillaManagedKeyMapping) {
+                    NativeKeyModifierReconciler.reconcile(vanillaManagedKeyMapping.register());
                 }
             }
         });
