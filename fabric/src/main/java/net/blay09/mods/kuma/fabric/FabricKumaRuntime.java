@@ -34,6 +34,10 @@ public class FabricKumaRuntime implements KumaRuntime {
     }
 
     @Override
+    public void setNativeKeyModifiers(KeyMapping keyMapping, KeyModifiers modifiers) {
+    }
+
+    @Override
     public KeyMappingStorage getDefaultStorage() {
         if (defaultStorage == null) {
             final var configDir = FabricLoader.getInstance().getConfigDir().toFile();

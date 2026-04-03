@@ -1,5 +1,6 @@
 package net.blay09.mods.kuma.mixin;
 
+import net.blay09.mods.kuma.NativeKeyModifierReconciler;
 import net.blay09.mods.kuma.api.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.input.KeyEvent;
@@ -69,6 +70,7 @@ public class KeyMappingMixin implements KumaKeyMapping {
 
     @Override
     public KeyModifiers kuma$getModifiers() {
+        NativeKeyModifierReconciler.reconcile((KeyMapping) (Object) this);
         return kuma$modifiers;
     }
 
