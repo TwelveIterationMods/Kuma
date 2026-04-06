@@ -9,7 +9,6 @@ import net.blay09.mods.kuma.mixin.KeyMappingAccessor;
 import net.blay09.mods.kuma.storage.json.SharedJsonKeyMappingStorage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.jspecify.annotations.Nullable;
 
@@ -52,7 +51,7 @@ public class ForgeKumaRuntime implements KumaRuntime {
 
     @Override
     public boolean isModInstalled(String modId) {
-        return ModList.isLoaded(modId);
+        return false;
     }
 
 }
