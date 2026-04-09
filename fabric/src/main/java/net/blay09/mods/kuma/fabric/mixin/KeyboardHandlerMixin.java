@@ -21,7 +21,7 @@ public class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress(JILnet/minecraft/client/input/KeyEvent;)V", at = @At("HEAD"), cancellable = true)
     public void keyPress(long window, int action, KeyEvent event, CallbackInfo callbackInfo) {
-        if (window == minecraft.getWindow().handle() && minecraft.screen == null) {
+        if (window == minecraft.getWindow().handle() && minecraft.gui.screen() == null) {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
                 if (keyMapping.wasDown() && !keyMapping.isKeyRepeatEnabled()) {
                     continue;

@@ -26,14 +26,14 @@ public class KeyConflictContext {
     public static final KeyConflictContext SCREEN = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "screen")) {
         @Override
         public boolean isActive() {
-            return Minecraft.getInstance().screen != null;
+            return Minecraft.getInstance().gui.screen() != null;
         }
     };
     public static final KeyConflictContext WORLD = new KeyConflictContext(Identifier.fromNamespaceAndPath("kuma", "world")) {
         @Override
         public boolean isActive() {
             final var client = Minecraft.getInstance();
-            return client.screen == null && client.level != null;
+            return client.gui.screen() == null && client.level != null;
         }
     };
 
