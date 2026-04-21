@@ -9,9 +9,9 @@
     "BlayTheNinth"
   ],
   "contact": {
-    "homepage": "https://mods.twelveiterations.com/mc/kuma",
-    "sources": "https://github.com/TwelveIterationMods/Kuma",
-    "issues": "https://github.com/TwelveIterationMods/Kuma/issues"
+    "homepage": "https://mods.twelveiterations.com/minecraft/kuma",
+    "sources": "https://github.com/TwelveIterations/Kuma",
+    "issues": "https://github.com/TwelveIterations/Kuma/issues"
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
