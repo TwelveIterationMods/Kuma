@@ -127,8 +127,9 @@ public class NeoForgeKumaAPI {
                     final var window = client.getWindow();
                     int mouseX = Mth.floor(client.mouseHandler.xpos() * (double) window.getGuiScaledWidth() / (double) window.getScreenWidth());
                     int mouseY = Mth.floor(client.mouseHandler.ypos() * (double) window.getGuiScaledHeight() / (double) window.getScreenHeight());
-                    if (keyMapping.ignoresScreenFocus() || !event.getScreen().isFocused()) {
-                        if (keyMapping.handleScreenInput(new ScreenInputEvent(event.getScreen(), event.getKeyEvent(), mouseX, mouseY, keyMapping))) {
+                    final var inputEvent = new ScreenInputEvent(event.getScreen(), event.getKeyEvent(), mouseX, mouseY, keyMapping);
+                    if (keyMapping.ignoresScreenFocus() || !inputEvent.hasFocusedElement()) {
+                        if (keyMapping.handleScreenInput(inputEvent)) {
                             event.setCanceled(true);
                             return;
                         }
