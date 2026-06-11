@@ -49,7 +49,7 @@ public class NeoForgeKumaAPI {
         });
 
         NeoForge.EVENT_BUS.addListener((InputEvent.MouseButton.Pre event) -> {
-            if (Minecraft.getInstance().screen != null) {
+            if (Minecraft.getInstance().gui.screen() != null) {
                 return;
             }
 
@@ -68,7 +68,7 @@ public class NeoForgeKumaAPI {
         });
 
         NeoForge.EVENT_BUS.addListener((InputEvent.Key event) -> {
-            if (Minecraft.getInstance().screen != null) {
+            if (Minecraft.getInstance().gui.screen() != null) {
                 return;
             }
 
