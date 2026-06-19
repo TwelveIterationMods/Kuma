@@ -47,7 +47,7 @@ public class ForgeKumaAPIClient {
         });
 
         InputEvent.MouseButton.Pre.BUS.addListener((event) -> {
-            if (Minecraft.getInstance().screen != null) {
+            if (Minecraft.getInstance().gui.screen() != null) {
                 return false;
             }
 
@@ -67,7 +67,7 @@ public class ForgeKumaAPIClient {
         });
 
         InputEvent.Key.BUS.addListener((event) -> {
-            if (Minecraft.getInstance().screen != null) {
+            if (Minecraft.getInstance().gui.screen() != null) {
                 return;
             }
 
