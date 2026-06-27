@@ -1,5 +1,1 @@
-- Updated to Minecraft 26.1
-- Added `Kuma.wrap()` to turn an existing `KeyMapping` into a Kuma-managed one
-- Changed `KeyConflictContext` from enum to extensible class
-- Fixed `consumeClick()` not respecting key modifiers
-- Fixed Controlling mixin logging an error if Controlling is not installed
+- Updated to Minecraft 26.3
