@@ -30,13 +30,13 @@ public class KeyEntryMixin {
     }
 
     @WrapOperation(
-            method = "refreshEntry",
+            method = "updateChangeButtonMessage",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/KeyMapping;getTranslatedKeyMessage()Lnet/minecraft/network/chat/Component;"
             )
     )
-    private Component refreshEntryGetTranslatedKeyMessage(KeyMapping instance, Operation<Component> original) {
+    private Component updateChangeButtonMessageGetTranslatedKeyMessage(KeyMapping instance, Operation<Component> original) {
         final var originalMessage = original.call(instance);
         if (instance instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
             return kumaKeyMapping.kuma$getModifiers().getTranslatedKeyMessage(instance, originalMessage);
