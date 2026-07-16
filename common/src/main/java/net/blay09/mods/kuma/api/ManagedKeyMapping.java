@@ -114,7 +114,7 @@ public interface ManagedKeyMapping {
      * @return True if the key conflict context, modifiers, and input match, false otherwise.
      */
     default boolean isActiveAndMatchesKey(KeyEvent event) {
-        return isContextActive() && areModifiersActive() && matchesKey(event.key(), event.scancode(), event.modifiers());
+        return isContextActive() && areModifiersActive() && matchesKey(event.key(), event.keycode(), event.modifiers());
     }
 
     /**

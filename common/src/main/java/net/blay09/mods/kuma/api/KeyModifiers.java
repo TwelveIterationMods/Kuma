@@ -64,7 +64,7 @@ public class KeyModifiers {
      * @return This {@link KeyModifiers} instance, for method chaining.
      */
     public KeyModifiers addCustomModifier(int keyCode) {
-        customModifiers.add(InputConstants.Type.KEYSYM.getOrCreate(keyCode));
+        customModifiers.add(InputConstants.Type.KEYBOARD.getOrCreate(keyCode));
         return this;
     }
 

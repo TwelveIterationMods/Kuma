@@ -84,12 +84,12 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping, Ti
     }
 
     @Override
-    public boolean matchesKey(int key, int scanCode, int modifiers) {
+    public boolean matchesKey(int key, int keyCode, int modifiers) {
         if (isUnbound()) {
             return false;
         }
         final var keyBinding = getKey();
-        return keyBinding.getType().equals(InputConstants.Type.KEYSYM) && keyBinding.getValue() == key;
+        return keyBinding.getType().equals(InputConstants.Type.KEYBOARD) && keyBinding.getValue() == key;
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class AbstractManagedKeyMapping implements ManagedKeyMapping, Ti
         }
 
         return switch (input) {
-            case KeyEvent event -> matchesKey(event.key(), event.scancode(), event.modifiers());
+            case KeyEvent event -> matchesKey(event.key(), event.keycode(), event.modifiers());
             case MouseButtonEvent event -> matchesMouse(event.button());
             case MouseButtonInfo event -> matchesMouse(event.button());
             default -> false;

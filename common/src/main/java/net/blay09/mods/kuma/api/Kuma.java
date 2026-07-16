@@ -7,8 +7,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Util;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * Provides utility methods for managing key bindings and input handling in the Kuma mod.
@@ -66,9 +64,8 @@ public class Kuma {
         if (modifiers.contains(KeyModifier.SHIFT) && !hasShiftDown()) {
             return false;
         }
-        final var window = Minecraft.getInstance().getWindow();
         for (final var key : modifiers.getCustomModifiers()) {
-            if (!InputConstants.isKeyDown(window, key.getValue())) {
+            if (!InputConstants.isKeyDown(key.getValue())) {
                 return false;
             }
         }
@@ -76,24 +73,18 @@ public class Kuma {
     }
 
     public static boolean hasAltDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LALT)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RALT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LALT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RALT);
     }
 
     public static boolean hasControlDown() {
-        final var window = Minecraft.getInstance().getWindow();
-        if (Util.getPlatform() == Util.OS.OSX) {
-            return InputConstants.isKeyDown(window, InputConstants.KEY_LSUPER)
-                    || InputConstants.isKeyDown(window, InputConstants.KEY_RSUPER);
-        }
-
-        return InputConstants.isKeyDown(window, InputConstants.KEY_LCONTROL)
-                || InputConstants.isKeyDown(window, InputConstants.KEY_RCONTROL);
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL)
+                || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     public static boolean hasShiftDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT)
-                || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RSHIFT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     /**
@@ -127,8 +118,8 @@ public class Kuma {
         final var window = Minecraft.getInstance().getWindow();
         if (type.equals(InputConstants.Type.MOUSE) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
             return GLFW.glfwGetMouseButton(window.handle(), key.getValue()) == GLFW.GLFW_PRESS;
-        } else if (type.equals(InputConstants.Type.KEYSYM) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
-            return InputConstants.isKeyDown(window, key.getValue());
+        } else if (type.equals(InputConstants.Type.KEYBOARD) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
+            return InputConstants.isKeyDown(key.getValue());
         }
         return false;
     }
