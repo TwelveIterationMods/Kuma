@@ -139,13 +139,13 @@ public class Kuma {
     public static @InputWithModifiers.Modifiers int getActiveModifierFlags() {
         int modifiers = 0;
         if (hasShiftDown()) {
-            modifiers |= 1;
+            modifiers |= InputConstants.MOD_SHIFT;
         }
         if (hasControlDown()) {
-            modifiers |= 2;
+            modifiers |= InputConstants.MOD_CONTROL;
         }
         if (hasAltDown()) {
-            modifiers |= 4;
+            modifiers |= InputConstants.MOD_ALT;
         }
         return modifiers;
     }
