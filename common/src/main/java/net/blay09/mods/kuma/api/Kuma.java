@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.blay09.mods.kuma.KumaRuntime;
 import net.blay09.mods.kuma.KumaRuntimeSpi;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.resources.Identifier;
+import org.lwjgl.sdl.SDLMouse;
 
 /**
  * Provides utility methods for managing key bindings and input handling in the Kuma mod.
@@ -115,13 +115,21 @@ public class Kuma {
      */
     public static boolean isDown(InputConstants.Key key) {
         final var type = key.getType();
-        final var window = Minecraft.getInstance().getWindow();
         if (type.equals(InputConstants.Type.MOUSE) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
-            return GLFW.glfwGetMouseButton(window.handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            return isMouseButtonDown(key.getValue());
         } else if (type.equals(InputConstants.Type.KEYBOARD) && key.getValue() != InputConstants.UNKNOWN.getValue()) {
             return InputConstants.isKeyDown(key.getValue());
         }
         return false;
+    }
+
+    private static boolean isMouseButtonDown(int button) {
+        if (button <= 0 || button > InputConstants.MOUSE_BUTTON_8) {
+            return false;
+        }
+
+        final int state = SDLMouse.SDL_GetMouseState(null, null);
+        return (state & (1 << (button - 1))) != 0;
     }
 
     public static KeyMappingStorage getDefaultStorage() {
