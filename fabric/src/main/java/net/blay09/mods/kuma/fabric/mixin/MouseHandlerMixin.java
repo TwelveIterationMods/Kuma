@@ -20,11 +20,11 @@ public class MouseHandlerMixin {
     private Minecraft minecraft;
 
     @Inject(method = "onButton(JLnet/minecraft/client/input/MouseButtonInfo;I)V", at = @At("HEAD"), cancellable = true)
-    public void keyPress(long window, MouseButtonInfo button, int press, CallbackInfo callbackInfo) {
-        if (window == minecraft.getWindow().handle() && minecraft.gui.screen() == null && press == 1) {
+    public void keyPress(long handle, MouseButtonInfo rawButtonInfo, int action, CallbackInfo callbackInfo) {
+        if (handle == minecraft.getWindow().handle() && minecraft.gui.screen() == null && action == 1) {
             for (final var keyMapping : ManagedKeyMappingRegistry.getKeyMappings()) {
-                if (keyMapping.isActiveAndMatchesMouse(button)) {
-                    keyMapping.handleWorldInput(new WorldInputEvent(button, keyMapping));
+                if (keyMapping.isActiveAndMatchesMouse(rawButtonInfo)) {
+                    keyMapping.handleWorldInput(new WorldInputEvent(rawButtonInfo, keyMapping));
                     callbackInfo.cancel();
                     return;
                 }

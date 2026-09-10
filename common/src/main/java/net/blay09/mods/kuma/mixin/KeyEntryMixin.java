@@ -23,9 +23,9 @@ public class KeyEntryMixin {
     private Button resetButton;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void init(KeyBindsList keyBindsList, KeyMapping keyMapping, final Component component, CallbackInfo ci) {
-        if (keyMapping instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
-            KeyBindsListHooks.updateResetButton(resetButton, keyMapping);
+    public void init(KeyBindsList this$0, KeyMapping key, final Component name, CallbackInfo ci) {
+        if (key instanceof KumaKeyMapping kumaKeyMapping && kumaKeyMapping.kuma$isManaged()) {
+            KeyBindsListHooks.updateResetButton(resetButton, key);
         }
     }
 

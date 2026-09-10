@@ -80,8 +80,8 @@ public class KeyMappingMixin implements KumaKeyMapping {
     }
 
     @Inject(method = "same", at = @At("HEAD"), cancellable = true)
-    public void same(KeyMapping binding, CallbackInfoReturnable<Boolean> cir) {
-        if (binding instanceof KumaKeyMapping other) {
+    public void same(KeyMapping that, CallbackInfoReturnable<Boolean> cir) {
+        if (that instanceof KumaKeyMapping other) {
             if (!kuma$getConflictContext().conflictsWith(other.kuma$getConflictContext())) {
                 cir.setReturnValue(false);
             } else if (!kuma$getModifiers().equals(other.kuma$getModifiers())) {
@@ -90,7 +90,7 @@ public class KeyMappingMixin implements KumaKeyMapping {
         }
     }
 
-    @Inject(method = "matches", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "matches(Lnet/minecraft/client/input/KeyEvent;)Z", at = @At("HEAD"), cancellable = true)
     public void matches(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
         if (kuma$isManaged() && !kuma$getModifiers().test(event)) {
             cir.setReturnValue(false);
